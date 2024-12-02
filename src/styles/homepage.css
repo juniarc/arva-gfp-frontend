@@ -1,0 +1,7 @@
+.swiper-pagination-bullet-active {
+  @apply bg-secondary;
+}
+
+.swiper-slide {
+  width: auto;
+}
