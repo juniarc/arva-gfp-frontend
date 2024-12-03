@@ -13,7 +13,7 @@ interface ProductListByCategoryProps {
 }
 export default function ProductListByCategory({ products, category }: ProductListByCategoryProps) {
   return (
-    <div className="mt-6">
+    <div className="">
       <div className="flex items-center justify-between mx-10 mb-8">
         <h3 className="capitalize">{category} Products</h3>
         <Link href="*" className="text-primary">
@@ -21,7 +21,7 @@ export default function ProductListByCategory({ products, category }: ProductLis
         </Link>
       </div>
       <div className="mx-10">
-        <Swiper slidesPerView={"auto"} spaceBetween={20}>
+        <Swiper slidesPerView={"auto"}>
           {products.map((product, index) => (
             <SwiperSlide key={index} className="w-auto pb-10">
               <ProductItem {...product} />

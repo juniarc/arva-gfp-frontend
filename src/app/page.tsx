@@ -20,7 +20,7 @@ export default async function Page() {
       <section className="w-full">
         <HomeCategories />
       </section>
-      <section className="w-full">
+      <section className="w-full mt-6">
         <ProductListByCategory products={popularProducts} category="popular" />
       </section>
       <section className="w-full">
