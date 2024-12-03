@@ -6,9 +6,8 @@ import { LuX, LuMinus, LuPlus } from "react-icons/lu";
 import { CartItem, Product } from "@/types/types";
 import Image from "next/image";
 import LineDivider from "../dividers/LineDivider";
-import SuccessAlert from "../alerts/SuccessAlert";
-
-interface AddToCartModalProps {
+import Link from "next/link";
+interface BuyNowModalProps {
   isOpen: boolean;
   handleCloseModal: () => void;
   id: number;
@@ -21,7 +20,7 @@ interface AddToCartModalProps {
   unit: string;
   discount: number;
 }
-export default function AddToCartModal({
+export default function BuyNowModal({
   isOpen,
   handleCloseModal,
   id,
@@ -33,24 +32,17 @@ export default function AddToCartModal({
   stocks,
   unit,
   discount,
-}: AddToCartModalProps) {
+}: BuyNowModalProps) {
   const [selectedVariant, setSelectedVariant] = useState<string | null>(variants[0]);
   const [quantity, setQuantity] = useState<number>(1);
   const [totalPrice, setTotalPrice] = useState<number>(price);
-  const [showAlert, setShowAlert] = useState<boolean>(false);
 
   useEffect(() => {
     setTotalPrice(price * quantity);
   }, [quantity, price]);
   const handleSelectVariant = (variant: string) => setSelectedVariant(variant);
 
-  const handleAddToCart = () => {
-    setShowAlert(true);
-
-    setTimeout(() => {
-      setShowAlert(false);
-    }, 2000);
-  };
+  const handleBuyBtn = () => {};
   if (isOpen) {
     return (
       <Dialog open={isOpen} handler={handleCloseModal} className="outline-none relative p-5">
@@ -132,10 +124,9 @@ export default function AddToCartModal({
           </div>
         </DialogBody>
         <DialogFooter className="p-0">
-          <button onClick={handleAddToCart} className="bg-primary text-white py-2 px-10 rounded font-bold w-full text-center">
-            Add To Cart
+          <button onClick={handleBuyBtn} className="bg-primary text-white py-2 px-10 rounded font-bold w-full text-center">
+            Buy Now
           </button>
-          <SuccessAlert isOpen={showAlert} className="" text="Success add to your cart" />
         </DialogFooter>
       </Dialog>
     );
