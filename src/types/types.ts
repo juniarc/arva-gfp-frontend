@@ -25,12 +25,19 @@ export interface Product {
   price: number;
   imageUrl: string;
   category: string;
-  stocks: string;
+  stocks: number;
   unit: string;
-  discount: string;
+  discount: number;
   rating: number;
   isWishlist: boolean;
   shippingInfo: ShippingInfo;
   shop: Shop;
   sold: number;
+  variants: string[];
+}
+
+export interface CartItem extends Product {
+  selectedVariant: string;
+  quantity: number;
+  totalPrice: number;
 }
