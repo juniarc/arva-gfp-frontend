@@ -1,13 +1,8 @@
+const withMT = require("@material-tailwind/react/utils/withMT");
 import type { Config } from "tailwindcss";
-import * as flowbite from "flowbite-react/tailwind";
 
-export default {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/interfaces/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    flowbite.content(),
-  ],
+export default withMT({
+  content: ["./src/pages/**/*.{js,ts,jsx,tsx,mdx}", "./src/interfaces/components/**/*.{js,ts,jsx,tsx,mdx}", "./src/app/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
       colors: {
@@ -64,5 +59,4 @@ export default {
       },
     },
   },
-  plugins: [flowbite.plugin()],
-} satisfies Config;
+}) satisfies Config;

@@ -1,22 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
-import { Modal } from "flowbite-react";
-import ReactDOM from "react-dom";
-
+import { Dialog, DialogHeader, DialogBody } from "@material-tailwind/react";
 export default function AddToCartModal({ isOpen, handleCloseModal }: { isOpen: boolean; handleCloseModal: () => void }) {
   if (isOpen) {
-    return ReactDOM.createPortal(
-      <Modal show={isOpen} onClose={handleCloseModal}>
-        <Modal.Header>Modal title</Modal.Header>
-        <Modal.Body>
+    return (
+      <Dialog open={isOpen} handler={handleCloseModal} className="outline-none">
+        <DialogHeader>
+          <h2>Modal title</h2>
+        </DialogHeader>
+        <DialogBody>
           <p>Modal body text goes here.</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <button onClick={handleCloseModal}>Close</button>
-        </Modal.Footer>
-      </Modal>,
-      document.getElementById("modal-root")!,
+        </DialogBody>
+      </Dialog>
     );
   }
 }

@@ -6,7 +6,7 @@ import LineDivider from "../../dividers/LineDivider";
 export default function CartItem() {
   return (
     <>
-      <div className="w-full flex gap-5 items-start tes">
+      <div className="w-full flex gap-5 items-start">
         <div className="w-15 min-w-15 h-15 overflow-hidden">
           <Image src={dummyPhotoProduct} alt="Product Image" className="w-full h-full object-cover object-center rounded" />
         </div>

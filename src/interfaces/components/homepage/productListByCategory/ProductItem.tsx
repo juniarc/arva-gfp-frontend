@@ -11,7 +11,7 @@ import AddToCartModal from "../../modals/AddToCartModal";
 export default function ProductItem({ id, name, price, imageUrl, category, discount, shop, rating, sold }: Product) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   return (
-    <div className="shadow-lg w-56 h-[330px] bg-white rounded-lg flex flex-col relative">
+    <div className="shadow-md w-56 h-[330px] bg-white rounded-lg flex flex-col relative mr-10">
       <div className="w-full h-[176px] overflow-hidden">
         <Image
           src={`${imageUrl}`}
