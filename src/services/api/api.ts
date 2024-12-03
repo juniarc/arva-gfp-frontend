@@ -24,7 +24,17 @@ const api = (() => {
     }
   }
 
-  return { getAllProducts, getAllProductsByCategory };
+  async function getProductById(id: number): Promise<Product | undefined> {
+    try {
+      const response: Product = await mockApiRequest("/products", { id: id });
+      return response;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
+
+  return { getAllProducts, getAllProductsByCategory, getProductById };
 })();
 
 export default api;
