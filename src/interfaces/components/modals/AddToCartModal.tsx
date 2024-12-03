@@ -47,9 +47,9 @@ export default function AddToCartModal({
   if (isOpen) {
     return (
       <Dialog open={isOpen} handler={handleCloseModal} className="outline-none relative p-5">
-        <div className="absolute top-5 right-5">
+        <button onClick={handleCloseModal} className="absolute top-5 right-5 z-10">
           <LuX />
-        </div>
+        </button>
         <DialogBody className="text-black font-normal">
           <div className="flex gap-6 items-start ">
             <div className="w-2/4 aspect-square">
@@ -91,11 +91,27 @@ export default function AddToCartModal({
           <div className="flex justify-between items-center w-full">
             <p className="font-semibold mb-5">Quantity</p>
             <div className="text-dark-gray flex items-center border-solid border-gray border w-fit rounded-lg py-1 px-10">
-              <button onClick={() => setQuantity(quantity - 1)}>
+              <button
+                onClick={() => {
+                  if (quantity > 1) setQuantity(quantity - 1);
+                }}
+              >
                 <LuMinus />
               </button>
-              <input type="number" value={quantity} onChange={(e) => setQuantity(Number(e.target.value))} className="w-55 text-center text-black" />
-              <button onClick={() => setQuantity(quantity + 1)}>
+              <input
+                type="number"
+                minLength={1}
+                maxLength={stocks}
+                value={quantity}
+                onChange={(e) => setQuantity(Number(e.target.value))}
+                className="w-55 text-center text-black"
+                disabled
+              />
+              <button
+                onClick={() => {
+                  if (quantity < stocks) setQuantity(quantity + 1);
+                }}
+              >
                 <LuPlus />
               </button>
             </div>
