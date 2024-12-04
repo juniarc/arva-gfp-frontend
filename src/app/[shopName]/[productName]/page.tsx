@@ -7,6 +7,7 @@ import ProductListByCategory from "@/interfaces/components/homepage/productListB
 import api from "@/services/api/api";
 import uriHelpers from "@/utils/uriHelpers";
 import React from "react";
+import FloatingDrawer from "@/interfaces/components/productDetailPage/FloatingDrawer";
 
 const dummyReviews = [
   {
@@ -76,6 +77,17 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
         <section className="w-full">
           <ProductListByCategory products={popularProducts} category="Recommended" />
         </section>
+        <FloatingDrawer
+          id={product.id}
+          category={product.category}
+          imageUrl={product.imageUrl}
+          name={product.name}
+          price={product.price}
+          discount={product.discount}
+          unit={product.unit}
+          stocks={product.stocks}
+          variants={product.variants}
+        />
       </main>
     );
   }
