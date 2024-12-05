@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 
-export default function LoginImage() {
+export default function RegisterImage() {
   return (
     <div className="h-full">
       <div className= "w-[340px]">
@@ -11,6 +11,3 @@ export default function LoginImage() {
     </div>
   );
 }
-
-
-/*<div className="h-full bg-cover bg-center relative" style={{ backgroundImage: "url('/images/loginimage.jpg')" }}>*/
