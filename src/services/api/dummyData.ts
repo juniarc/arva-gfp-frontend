@@ -1,4 +1,4 @@
-import { Product } from "@/types/types";
+import { Product, User } from "@/types/types";
 
 const products: Product[] = [
   {
@@ -55,7 +55,7 @@ const products: Product[] = [
       packageHeight: 2,
       packageWidth: 2,
       packageLength: 2,
-      shippingFee: 5,
+      shippingFee: 5000,
     },
     shop: {
       id: 2,
@@ -510,7 +510,7 @@ const products: Product[] = [
       packageHeight: 3,
       packageWidth: 2,
       packageLength: 3,
-      shippingFee: 7,
+      shippingFee: 7000,
     },
     sold: 10,
     shop: {
@@ -557,6 +557,65 @@ export const mockApiRequest = (
         }
 
         resolve(result);
+      } else {
+        reject(new Error("Endpoint not found"));
+      }
+    }, delay);
+  });
+};
+
+const user: User = {
+  id: 1,
+  name: "John Doe",
+  email: "tMmGg@example.com",
+  imageUrl: "exampple.com",
+  username: "username",
+  phoneNumber: "08123456789",
+  addressLabel: "",
+  addressStreet: "Jl. Contoh",
+  addressSubdistrict: "Kel. Contoh",
+  addressDistrict: "Kec. Contoh",
+  addressCity: "Kota Contoh",
+  addressProvince: "Provinsi Contoh",
+  zipCode: "12345",
+};
+
+export const mockApiRequestUser = (endpoint: string, delay = 300): Promise<User> => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (endpoint === "/user") {
+        let result = user;
+
+        resolve(result);
+      } else {
+        reject(new Error("Endpoint not found"));
+      }
+    }, delay);
+  });
+};
+
+export const mockApiRequestPostUser = (endpoint: string, data: Partial<User>, delay = 300): Promise<User> => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (endpoint === "/user") {
+        const updatedUser = {
+          ...data,
+          id: 1,
+          name: data.name || "",
+          email: data.email || "tMmGg@example.com",
+          imageUrl: data.imageUrl || "exampple.com",
+          username: data.username || "username",
+          phoneNumber: data.phoneNumber || "08123456789",
+          addressLabel: data.addressLabel || "",
+          addressStreet: data.addressStreet || "Jl. Contoh",
+          addressSubdistrict: data.addressSubdistrict || "Kel. Contoh",
+          addressDistrict: data.addressDistrict || "Kec. Contoh",
+          addressCity: data.addressCity || "Kota Contoh",
+          addressProvince: data.addressProvince || "Provinsi Contoh",
+          zipCode: data.zipCode || "12345",
+        };
+
+        resolve(updatedUser);
       } else {
         reject(new Error("Endpoint not found"));
       }

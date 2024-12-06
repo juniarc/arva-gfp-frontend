@@ -41,3 +41,19 @@ export interface CartItem extends Product {
   quantity: number;
   totalPrice: number;
 }
+
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  username: string;
+  imageUrl: string | null;
+  phoneNumber: string | null;
+  addressLabel: string | null;
+  addressStreet: string | null;
+  addressSubdistrict: string | null;
+  addressDistrict: string | null;
+  addressCity: string | null;
+  addressProvince: string | null;
+  zipCode: string | null;
+}
