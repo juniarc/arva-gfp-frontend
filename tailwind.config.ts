@@ -19,7 +19,7 @@ export default withMT({
         "light-gray": "#F3F3F3",
       },
       screens: {
-        mobile: { min: "640px", max: "1024px" },
+        tablet: { min: "640px", max: "1024px" },
         desktop: { min: "1024px" },
       },
       spacing: {

@@ -60,6 +60,7 @@ export default async function ProductDetailPage({ params }: { params: Promise<{ 
   const product = await api.getProductById(1);
   const popularProducts = (await api.getAllProducts(6)) || [];
   const fruitProducts = (await api.getAllProductsByCategory("fruit", 6)) || [];
+
   if (product) {
     return (
       <main className="w-full">

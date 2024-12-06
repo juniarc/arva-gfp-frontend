@@ -29,7 +29,7 @@ export default function HomeHero() {
           <SwiperSlide key={index}>
             <Link href="/">
               <div>
-                <Image src={image} quality={5} className="w-full h-60 object-cover object-center rounded-lg" alt="Banner" />
+                <Image src={image} quality={5} className="w-full h-60 tablet:h-[330px] object-cover object-center rounded-lg" alt="Banner" />
               </div>
             </Link>
           </SwiperSlide>

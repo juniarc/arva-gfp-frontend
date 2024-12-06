@@ -5,10 +5,12 @@ import { MdOutlineShoppingBag } from "react-icons/md";
 import CartDrawer from "./CartDrawer";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import useDeviceCategory from "@/app/hooks/useDeviceCategory";
 
 gsap.registerPlugin(useGSAP);
 
 export default function CartNav() {
+  const [isTablet, isDekstop] = useDeviceCategory();
   const cartDrawerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -34,10 +36,12 @@ export default function CartNav() {
     <div>
       <button
         onClick={handleOpenDrawer}
-        className="w-15 h-15 border-solid border border-white rounded text-white flex items-center justify-center relative"
+        className="w-15 h-15 tablet:w-30 tablet:h-30 border-solid border border-white rounded text-white flex items-center justify-center relative"
       >
-        <MdOutlineShoppingBag size={19} />
-        <span className="absolute top-1 right-1 min-w-6 min-h-6 bg-red rounded align-middle text-center text-[0.5rem]">5</span>
+        <MdOutlineShoppingBag size={isTablet ? 32 : isDekstop ? 24 : 19} />
+        <span className="absolute top-1 right-1 min-w-6 min-h-6 tablet:min-h-13 tablet:min-w-13 bg-red rounded align-middle text-center text-[0.5rem] tablet:text-sm tablet:p-1">
+          5
+        </span>
       </button>
       <CartDrawer overlayRef={overlayRef} cartDrawerRef={cartDrawerRef} handleCloseDrawer={handleCloseDrawer} isOpen={isOpen} />
     </div>

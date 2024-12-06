@@ -81,11 +81,11 @@ export default function BuynowPageChild({ user, product, quantity }: BuynowPageC
           handleSelectedShipping={handleSelectedShipping}
           shippingOptions={product.shop.shippingOptions}
         />
-        <LineDivider className="my-5" />
+        <LineDivider className="my-5 tablet:my-10" />
       </section>
       <section>
         <VoucherSection />
-        <LineDivider className="my-5" />
+        <LineDivider className="my-5 tablet:my-10" />
       </section>
       <section>
         <PaymentMehtod handleSelectedPayment={handlePaymentMethod} selectedPayment={paymentMethod} />

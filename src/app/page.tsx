@@ -17,7 +17,7 @@ export default async function Page() {
       <section className="w-full">
         <HomeHero />
       </section>
-      <section className="w-full">
+      <section className="w-full tablet:pt-5">
         <HomeCategories />
       </section>
       <section className="w-full mt-6">

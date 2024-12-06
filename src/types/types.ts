@@ -55,5 +55,5 @@ export interface User {
   addressDistrict: string | null;
   addressCity: string | null;
   addressProvince: string | null;
-  zipCode: string | null;
+  zipCode: number | null;
 }
