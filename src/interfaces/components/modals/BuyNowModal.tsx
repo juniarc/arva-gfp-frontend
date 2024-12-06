@@ -49,38 +49,38 @@ export default function BuyNowModal({
   };
   if (isOpen) {
     return (
-      <Dialog open={isOpen} handler={handleCloseModal} className="outline-none relative p-5">
+      <Dialog open={isOpen} handler={handleCloseModal} className="outline-none relative p-5 tablet:p-15">
         <button onClick={handleCloseModal} className="absolute top-5 right-5 z-10">
-          <LuX />
+          <LuX className="tablet:text-[2rem]" />
         </button>
         <DialogBody className="text-black font-normal">
-          <div className="flex gap-6 items-start ">
+          <div className="flex gap-6 tablet:gap-10 items-start ">
             <div className="w-2/4 aspect-square">
               <Image src={imageUrl} width={224} height={176} alt="Product Image" className="w-full h-full object-cover object-center rounded-lg" />
             </div>
             <div className="font-normal w-4/5 flex flex-col gap-4">
-              <p className="text-dark-gray text-[0.5rem] capitalize">{category}</p>
+              <p className="text-dark-gray text-[0.5rem] capitalize tablet:text-sm">{category}</p>
               <p className="text-base ">{name}</p>
               <div className="flex items-center gap-5">
                 <div className="flex items-center">
-                  <p className="font-semibold text-primary">Rp. {price}</p>
-                  <p className="text-xss text-dark-gray">/ {unit}</p>
+                  <p className="font-semibold text-primary tablet:text-[1.375rem]">Rp. {price}</p>
+                  <p className="text-xss text-dark-gray tablet:text-[1.375rem]">/ {unit}</p>
                 </div>
                 <p className="text-red text-base bg-light-red px-3">{discount} %</p>
               </div>
-              <p className="text-xs">Stocks : {stocks}</p>
+              <p className="text-xs tablet:text-sm">Stocks : {stocks}</p>
             </div>
           </div>
-          <LineDivider className="my-6" />
+          <LineDivider className="my-6 tablet:my-10" />
           {variants.length !== 0 && (
             <>
               <div>
-                <p className="font-semibold mb-5">Variants</p>
+                <p className="font-semibold mb-5 tablet:text-[1.375rem]">Variants</p>
                 <div className="grid grid-cols-4 gap-5 w-full">
                   {variants.map((variant, index) => (
                     <button
                       onClick={() => handleSelectVariant(variant)}
-                      className={`bg-gray text-xs py-2 px-10 rounded capitalize ${selectedVariant === variant ? "bg-secondary font-semibold" : ""}`}
+                      className={`bg-gray text-xs tablet:text-base py-2 px-10 rounded capitalize  ${selectedVariant === variant ? "bg-secondary font-semibold" : ""}`}
                       key={index}
                     >
                       {variant}
@@ -92,7 +92,7 @@ export default function BuyNowModal({
             </>
           )}
           <div className="flex justify-between items-center w-full">
-            <p className="font-semibold mb-5">Quantity</p>
+            <p className="font-semibold mb-5 tablet:text-[1.375rem]">Quantity</p>
             <div className="text-dark-gray flex items-center border-solid border-gray border w-fit rounded-lg py-1 px-10">
               <button
                 onClick={() => {
@@ -119,16 +119,19 @@ export default function BuyNowModal({
               </button>
             </div>
           </div>
-          <LineDivider className="my-6" />
+          <LineDivider className="my-6 tablet:my-10" />
 
           <div>
-            <p className="font-bold text-base w-full text-end">
+            <p className="font-bold text-base tablet:text-[1.375rem] w-full text-end">
               Total <span>Rp. {totalPrice}</span>
             </p>
           </div>
         </DialogBody>
         <DialogFooter className="p-0">
-          <button onClick={handleBuyBtn} className="bg-primary text-white py-2 px-10 rounded font-bold w-full text-center">
+          <button
+            onClick={handleBuyBtn}
+            className="bg-primary text-white tablet:text-[1.375rem] tablet:mt-5 py-2 px-10 rounded font-bold w-full text-center"
+          >
             Buy Now
           </button>
         </DialogFooter>

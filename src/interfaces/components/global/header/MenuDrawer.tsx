@@ -17,10 +17,10 @@ export default function MenuDrawer({ overlayRef, menuDrawerRef, handleCloseDrawe
       <div ref={overlayRef} className={`w-screen h-screen bg-black opacity-30 absolute top-0 right-0 ${isOpen ? "block" : "hidden"}`}></div>
       <div ref={menuDrawerRef} className={`w-56 h-screen bg-white absolute translate-x-full top-0 right-0 ${isOpen ? "block" : "hidden"}`}>
         <div className="relative w-full h-full ">
-          <button onClick={handleCloseDrawer} className="absolute top-5 right-5 w-15 h-15 flex items-center justify-center">
-            <LuX className="text-base text-white" />
+          <button onClick={handleCloseDrawer} className="absolute top-5 right-5 w-15 h-15 tablet:h-30 tablet:w-30 flex items-center justify-center">
+            <LuX className="text-base text-white tablet:text-[2rem]" />
           </button>
-          <div className="w-full h-55 bg-primary px-10 pt-15 pb-10 flex items-center gap-10">
+          <div className="w-full h-55 tablet:h-[150px] bg-primary px-10 pt-15 tablet:pt-30 pb-10 flex items-center gap-10">
             <div className="w-30 h-30 rounded-full overflow-hidden">
               <Image src={dummyPhotoProfile} className="w-full h-full object-cover object-center" alt="Profile Image" />
             </div>

@@ -13,7 +13,7 @@ interface ProductListByCategoryProps {
 }
 export default function ProductListByCategory({ products, category }: ProductListByCategoryProps) {
   return (
-    <div className="">
+    <div>
       <div className="flex items-center justify-between mx-10 mb-8">
         <h3 className="capitalize">{category} Products</h3>
         <Link href="*" className="text-primary">

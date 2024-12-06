@@ -7,6 +7,7 @@ export const customeTheme = {
         },
         input: {
           color: "text-black",
+          fontSize: "tablet:text-base",
         },
         label: {
           color: "peer-placeholder-shown:text-blue-gray-500",
@@ -30,6 +31,13 @@ export const customeTheme = {
               },
               after: {
                 borderColor: "peer-placeholder-shown:after:border-transparent peer-focus:after:border-black ",
+              },
+            },
+          },
+          size: {
+            md: {
+              input: {
+                // fontSize: "tablet:text-base",
               },
             },
           },
@@ -87,6 +95,9 @@ export const customeTheme = {
             width: "w-10",
             height: "h-10",
           },
+        },
+        menu: {
+          fontSize: "tablet:text-base",
         },
       },
     },

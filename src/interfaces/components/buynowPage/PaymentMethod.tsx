@@ -16,7 +16,7 @@ export default function PaymentMehtod({ handleSelectedPayment, selectedPayment }
     <div className="mt-5">
       <div className="flex items-center justify-between">
         <h4>Payment Method</h4>
-        <button onClick={() => setIsOpen(true)} className="text-xs underline text-primary">
+        <button onClick={() => setIsOpen(true)} className="text-xs tablet:text-base underline text-primary">
           See all
         </button>
         <PaymentOptionsModal
@@ -27,7 +27,7 @@ export default function PaymentMehtod({ handleSelectedPayment, selectedPayment }
         />
       </div>
       <div>
-        <div className="flex items-center justify-between mt-5">
+        <div className="flex items-center justify-between mt-5 tablet:mt-10">
           <span className="flex items-center gap-5">
             <div className="w-16 aspect-square">
               <Image
@@ -40,12 +40,12 @@ export default function PaymentMehtod({ handleSelectedPayment, selectedPayment }
             </div>
             <p>{selectedPayment.name}</p>
           </span>
-          <div className={"rounded-full border  p-2 flex items-center justify-center border-primary"}>
-            <div className={"bg-primary w-6 h-6 rounded-full"}></div>
+          <div className={"rounded-full border p-2 flex items-center justify-center border-primary"}>
+            <div className={"bg-primary w-6 h-6 tablet:w-10 tablet:h-10 rounded-full"}></div>
           </div>
         </div>
       </div>
-      <LineDivider className="mt-5 mb-10" />
+      <LineDivider className="mt-5 mb-10 tablet:my-10" />
     </div>
   );
 }

@@ -9,8 +9,8 @@ export default async function BuyNowPage({ searchParams }: { searchParams: Promi
   if (!user) throw new Error("User data not found");
   if (!product) throw new Error("Product data not found");
   return (
-    <main className="px-10 pt-5">
-      <h1 className="text-primary text-[1.75rem]">Checkout</h1>
+    <main className="px-10 pt-5 tablet:p-15 ">
+      <h1 className="text-primary text-[1.75rem] tablet:text-[2rem]">Checkout</h1>
       <BuynowPageChild user={user} quantity={Number(quantity)} product={product} />
     </main>
   );

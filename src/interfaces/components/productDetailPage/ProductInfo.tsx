@@ -49,18 +49,18 @@ export default function ProductInfo({
   };
 
   return (
-    <div className="p-10">
-      <div className="w-full  flex flex-col gap-5">
-        <p className="text-dark-gray text-xxs capitalize">{category}</p>
+    <div className="p-10 tablet:px-[150px]">
+      <div className="w-full  flex flex-col gap-5 tablet:gap-10">
+        <p className="text-dark-gray text-xxs tablet:text-sm capitalize">{category}</p>
         <p className="text-base font-semibold">{name}</p>
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-5 tablet:gap-10">
           <div className="flex items-center gap-5">
-            <p className="font-bold text-primary">Rp. {price}</p>
-            <p className="text-dark-gray text-xs capitalize">/{unit}</p>
+            <p className="font-bold text-primary tablet:text-[1.375rem]">Rp. {price}</p>
+            <p className="text-dark-gray text-xs tablet:text-sm capitalize">/{unit}</p>
           </div>
           <p className="text-red text-base bg-light-red px-3">{discount} %</p>
         </div>
-        <div className="flex items-center text-xs gap-4">
+        <div className="flex items-center text-xs tablet:text-base gap-4">
           <div className="flex items-center gap-2">
             <FaStar className="text-yellow" />
             <p>{rating}</p>
@@ -68,14 +68,14 @@ export default function ProductInfo({
           <div>|</div>
           <p>{sold} Sold</p>
         </div>
-        <div className="flex items-center gap-2 text-xs text-dark-gray">
+        <div className="flex items-center gap-2 text-xs tablet:text-base text-dark-gray">
           <FaLocationDot />
           <p className="capitalize">{shopLocation}</p>
         </div>
       </div>
       <div className="mt-10">
         <h3 className="mb-6">Description</h3>
-        <p ref={descRef} className={`text-xs ${descMoreOpen ? "" : "line-clamp-4"}`}>
+        <p ref={descRef} className={`text-xs tablet:text-base ${descMoreOpen ? "" : "line-clamp-4"}`}>
           {description}
           {description}
         </p>

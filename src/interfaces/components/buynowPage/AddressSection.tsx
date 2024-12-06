@@ -36,10 +36,10 @@ export default function AddressSection({
       <h4>Delivery Address</h4>
       <div className="flex justify-between items-center mt-5 gap-5">
         {!addressLabel || !addressStreet || !addressSubdistrict || !addressDistrict || !addressCity || !addressProvince || !zipCode ? (
-          <p className="font-semibold text-sm">Add your address</p>
+          <p className="font-semibold text-sm tablet:text-base">Add your address</p>
         ) : (
           <div>
-            <div className="text-xs font-semibold flex items-center gap-5 capitalize">
+            <div className="text-xs tablet:text-base font-semibold flex items-center gap-5 capitalize">
               <span className="flex items-center gap-2 ">
                 <FaLocationDot className="text-primary" />
                 {addressLabel}
@@ -47,14 +47,14 @@ export default function AddressSection({
               <FaCircle className="text-[0.25rem]" />
               <p>{name}</p>
             </div>
-            <p className="w-full text-ellipsis text-xs mt-5 capitalize">
+            <p className="w-full text-ellipsis text-xs tablet:text-base mt-5 capitalize">
               {addressStreet}, {addressSubdistrict}, {addressDistrict}, {addressCity}, {addressProvince}, {zipCode}
             </p>
           </div>
         )}
         <div>
           <button onClick={handleModalOpen}>
-            <BsChevronRight />
+            <BsChevronRight className="tablet:text-2xl" />
           </button>
           <AddressModal
             isOpen={isOpen}

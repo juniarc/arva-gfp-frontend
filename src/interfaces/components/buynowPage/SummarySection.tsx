@@ -22,35 +22,35 @@ export default function SummarySection({ totalPrice, shippingPrice, appliedVouch
       <h4>Shopping Summary</h4>
       <div className="mt-10">
         <div className="flex justify-between mb-5">
-          <p className="text-dark-gray text-xs">Product Subtotal</p>
-          <p className="font-semibold text-xs">Rp. {productSubtotal}</p>
+          <p className="text-dark-gray text-xs tablet:text-base">Product Subtotal</p>
+          <p className="font-semibold text-xs tablet:text-base">Rp. {productSubtotal}</p>
         </div>
         <div className="flex justify-between mb-5">
-          <p className="text-dark-gray text-xs">Shipping Subtotal</p>
-          <p className="font-semibold text-xs">Rp. {shippingSubtotal}</p>
+          <p className="text-dark-gray text-xs tablet:text-base">Shipping Subtotal</p>
+          <p className="font-semibold text-xs tablet:text-base">Rp. {shippingSubtotal}</p>
         </div>
         <div className="flex justify-between mb-5">
-          <p className="text-dark-gray text-xs">Application Fee</p>
-          <p className="font-semibold text-xs">Rp. {applicationFee}</p>
+          <p className="text-dark-gray text-xs tablet:text-base">Application Fee</p>
+          <p className="font-semibold text-xs tablet:text-base">Rp. {applicationFee}</p>
         </div>
         <div className="flex justify-between mb-5">
-          <p className="text-dark-gray text-xs">Handling Fee</p>
-          <p className="font-semibold text-xs">Rp. {handlingFee}</p>
+          <p className="text-dark-gray text-xs tablet:text-base">Handling Fee</p>
+          <p className="font-semibold text-xs tablet:text-base">Rp. {handlingFee}</p>
         </div>
         <div className="flex justify-between mb-5 text-primary">
-          <p className="text-xs ">Voucher</p>
-          <p className="font-semibold text-xs">- Rp. {voucher}</p>
+          <p className="text-xs tablet:text-base">Voucher</p>
+          <p className="font-semibold text-xs tablet:text-base">- Rp. {voucher}</p>
         </div>
         {isProtected && (
           <div className="flex justify-between mb-5 ">
-            <p className="text-xs text-dark-gray">Protection Fee</p>
-            <p className="font-semibold text-xs">Rp. {protectionFee}</p>
+            <p className="text-xs text-dark-gray tablet:text-base">Protection Fee</p>
+            <p className="font-semibold text-xs tablet:text-base">Rp. {protectionFee}</p>
           </div>
         )}
         <LineDivider />
         <div className="flex justify-between my-5">
-          <p className="text-dark-gray text-xs">Total</p>
-          <p className="font-semibold text-xs">Rp. {total}</p>
+          <p className="text-dark-gray text-xs tablet:text-base font-semibold">Total</p>
+          <p className="font-semibold text-xs tablet:text-base">Rp. {total}</p>
         </div>
         <LineDivider />
       </div>

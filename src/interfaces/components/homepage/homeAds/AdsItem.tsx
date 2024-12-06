@@ -10,7 +10,7 @@ interface AdsItemProps {
 }
 export default function AdsItem({ image, category, teks }: AdsItemProps) {
   return (
-    <div className="relative max-w-[350px] w-[70vw]  h-[126px] flex items-center p-10">
+    <div className="relative max-w-[350px] tablet:max-w-[364px] w-[70vw]  h-[126px] tablet:h-[155px] flex items-center p-10">
       <div className="w-full h-full absolute top-0 left-0 overflow-hidden">
         <Image src={image} width={350} height={126} alt={category} className="w-full h-full object-cover object-center rounded-lg" />
       </div>

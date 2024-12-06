@@ -34,8 +34,11 @@ export default function SearchNav() {
 
   return (
     <div>
-      <button onClick={handleOpenDrawer} className="w-15 h-15 border-solid border border-white rounded text-white flex items-center justify-center">
-        <LuSearch />
+      <button
+        onClick={handleOpenDrawer}
+        className="w-15 h-15 tablet:w-30 tablet:h-30 border-solid border border-white rounded text-white flex items-center justify-center"
+      >
+        <LuSearch className="tablet:text-[2rem]" />
       </button>
       <SearchDrawer ref={searchDrawerRef} isOpen={isOpen} />
     </div>

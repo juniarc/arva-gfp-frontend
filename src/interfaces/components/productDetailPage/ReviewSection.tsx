@@ -24,15 +24,15 @@ export default function ReviewSection({ reviews }: ReviewSectionProps) {
   };
 
   return (
-    <div className="p-10">
+    <div className="p-10 tablet:px-[150px]">
       <div>
         <h3>Product Reviews</h3>
-        <div className="flex items-center text-xs text-dark-gray gap-3 mt-5">
-          <span className="flex items-center gap-2 text-xs text-black font-semibold">
+        <div className="flex items-center text-xs tablet:text-base text-dark-gray gap-3 mt-5">
+          <span className="flex items-center gap-2 text-xs tablet:text-base text-black font-semibold">
             <FaStar className="text-yellow" /> {totalRating}
           </span>
           <p>from {reviews.length} ratings</p>
-          <FaCircle className="text-[0.25rem]" />
+          <FaCircle className="text-[0.25rem] " />
           <span>{reviews.length} reviews</span>
         </div>
       </div>
@@ -41,7 +41,10 @@ export default function ReviewSection({ reviews }: ReviewSectionProps) {
           <ReviewItem key={index} {...review} />
         ))}
       </div>
-      <button onClick={handleShowMoreButton} className="w-full bg-secondary text-xs flex items-center justify-center py-5 rounded mt-5">
+      <button
+        onClick={handleShowMoreButton}
+        className="w-full bg-secondary text-xs tablet:text-base flex items-center justify-center py-5 rounded mt-5"
+      >
         <span className="flex items-center gap-2">
           <p className="font-light">{showMoreOpen ? "Hide description" : "Read description"}</p>
           <BsChevronDown className={showMoreOpen ? "rotate-180" : ""} />
