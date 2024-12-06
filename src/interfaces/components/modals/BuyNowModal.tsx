@@ -7,6 +7,7 @@ import { CartItem, Product } from "@/types/types";
 import Image from "next/image";
 import LineDivider from "../dividers/LineDivider";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 interface BuyNowModalProps {
   isOpen: boolean;
   handleCloseModal: () => void;
@@ -33,6 +34,7 @@ export default function BuyNowModal({
   unit,
   discount,
 }: BuyNowModalProps) {
+  const router = useRouter();
   const [selectedVariant, setSelectedVariant] = useState<string | null>(variants[0]);
   const [quantity, setQuantity] = useState<number>(1);
   const [totalPrice, setTotalPrice] = useState<number>(price);
@@ -42,7 +44,9 @@ export default function BuyNowModal({
   }, [quantity, price]);
   const handleSelectVariant = (variant: string) => setSelectedVariant(variant);
 
-  const handleBuyBtn = () => {};
+  const handleBuyBtn = () => {
+    router.push(`/buy-now?id=${id}&quantity=${quantity}`);
+  };
   if (isOpen) {
     return (
       <Dialog open={isOpen} handler={handleCloseModal} className="outline-none relative p-5">

@@ -43,16 +43,20 @@ const dummyReviews = [
     imageUrl: "https://fastly.picsum.photos/id/576/200/200.jpg?hmac=pkNsIvSErgVpup1XYfj_NAE5ySK9YL7DmYlGGTTjScw",
   },
 ];
-export async function generateMetadata({ params }: { params: Promise<{ productName: string; shopName: string }> }) {
-  const urlName = (await params).productName;
-  const name = uriHelpers.formatUrlToString(urlName);
+export async function generateMetadata({ params }: { params: Promise<{ productInfo: string }> }) {
+  const urlName = (await params).productInfo;
+  const rawProductName = urlName.replace(/-\d+$/, ""); // Menghapus `-id` dari akhir string
+  const name = uriHelpers.formatUrlToString(rawProductName);
   return {
     title: `${name} - Arva`,
     description: `Explore our premium collection of ${name} on Arva.`,
   };
 }
 
-export default async function ProductDetailPage({ params }: { params: Promise<{ productName: string; shopName: string }> }) {
+export default async function ProductDetailPage({ params }: { params: Promise<{ productInfo: string; shopName: string }> }) {
+  const urlName = (await params).productInfo;
+  const idMatch = urlName.match(/-(\d+)$/);
+  const id = idMatch ? idMatch[1] : null;
   const product = await api.getProductById(1);
   const popularProducts = (await api.getAllProducts(6)) || [];
   const fruitProducts = (await api.getAllProductsByCategory("fruit", 6)) || [];
