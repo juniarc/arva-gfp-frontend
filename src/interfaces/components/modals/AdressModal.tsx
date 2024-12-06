@@ -7,6 +7,7 @@ import LineDivider from "../dividers/LineDivider";
 import { customeTheme } from "@/interfaces/theme/customTheme";
 import SuccessAlert from "../alerts/SuccessAlert";
 import { mockApiRequestPostUser } from "@/services/api/dummyData";
+import { User } from "@/types/types";
 
 interface AddressMoadlProps {
   isOpen: boolean;
@@ -20,7 +21,7 @@ interface AddressMoadlProps {
   addressDistrict: string | null;
   addressCity: string | null;
   addressProvince: string | null;
-  zipCode: string | null;
+  zipCode: number | null;
 }
 
 const DropdownWithSpinner = ({ label, options, isLoading, onSelect }: any) => {
@@ -66,6 +67,7 @@ export default function AddressModal({
   const [streetValue, setStreetValue] = useState<string>("");
   const [recipientValue, setRecipientValue] = useState<string>("");
   const [phoneValue, setPhoneValue] = useState<string>("");
+  const [zipCodeValue, setZipCodeValue] = useState<number>(0);
 
   const [provinces, setProvinces] = useState([]);
   const [cities, setCities] = useState([]);
@@ -124,9 +126,10 @@ export default function AddressModal({
       selectedProvince.trim() !== "" &&
       selectedCity.trim() !== "" &&
       selectedDistrict.trim() !== "" &&
-      selectedSubdistrict.trim() !== ""
+      selectedSubdistrict.trim() !== "" &&
+      zipCodeValue !== 0
     );
-  }, [labelValue, streetValue, recipientValue, phoneValue, selectedProvince, selectedCity, selectedDistrict, selectedSubdistrict]);
+  }, [labelValue, streetValue, zipCode, recipientValue, phoneValue, selectedProvince, selectedCity, selectedDistrict, selectedSubdistrict]);
 
   useEffect(() => {
     if (isCompleted) {
@@ -148,7 +151,8 @@ export default function AddressModal({
         addressDistrict: selectedDistrict.toLowerCase(),
         addressCity: selectedCity.toLowerCase(),
         addressProvince: selectedProvince.toLowerCase(),
-        zipCode: phoneValue,
+        zipCode: zipCodeValue,
+        phoneNumber: phoneValue,
       };
       console.log("updated");
       handleUpdateAddress(user);
@@ -160,9 +164,9 @@ export default function AddressModal({
     }
   };
   return (
-    <Dialog open={isOpen} handler={handleCloseModal} className="outline-none relative p-5 min-h-[360px]">
-      <button onClick={handleCloseModal} className="absolute top-5 right-5 z-10">
-        <LuX />
+    <Dialog open={isOpen} handler={handleCloseModal} className="outline-none relative p-5 tablet:p-15 min-h-[360px]">
+      <button onClick={handleCloseModal} className="absolute top-5 right-5 tablet:top-15 tablet:right-15 z-10 tablet:p-3">
+        <LuX className="tablet:text-2xl" />
       </button>
       <ThemeProvider value={customeTheme}>
         <DialogBody className="text-black font-normal">
@@ -175,9 +179,10 @@ export default function AddressModal({
                 onChange={(e) => setLabelValue(e.target.value)}
                 crossOrigin={undefined}
                 maxLength={maxLength}
+                className="tablet:text-base"
               />
               <div className="w-full flex justify-end mt-2">
-                <span className="text-xs text-dark-gray">
+                <span className="text-xs tablet:text-sm text-dark-gray">
                   {labelValue.length}/{maxLength}
                 </span>
               </div>
@@ -248,6 +253,23 @@ export default function AddressModal({
                 />
               )}
             </div>
+            {selectedSubdistrict && (
+              <div className="mt-10">
+                <Input
+                  label="Zip Code"
+                  value={zipCodeValue}
+                  onChange={(e) => setZipCodeValue(Number(e.target.value))}
+                  crossOrigin={undefined}
+                  maxLength={6}
+                  type="number"
+                />
+                <div className="w-full flex justify-end mt-2">
+                  <span className="text-xs text-dark-gray">
+                    {zipCodeValue}/{6}
+                  </span>
+                </div>
+              </div>
+            )}
             {selectedSubdistrict && (
               <div className="mt-10">
                 <Textarea label="Address Street" value={streetValue} onChange={(e) => setStreetValue(e.target.value)} maxLength={streetMaxLength} />

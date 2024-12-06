@@ -27,7 +27,7 @@ export default function ProductItem({ id, name, price, imageUrl, category, disco
         />
       </div>
       <div className="w-full flex-grow p-5 flex flex-col justify-between">
-        <p className="text-dark-gray text-[0.5rem] capitalize">{category}</p>
+        <p className="text-dark-gray text-[0.5rem] tablet:text-xs capitalize">{category}</p>
         <Link href={`/${formatedShopnameForUrl}/${formatedProductnameForUrl}-${id}`} className="text-base max-h-21 line-clamp-2">
           {name}
         </Link>
