@@ -14,7 +14,7 @@ import { Autoplay, Pagination } from "swiper/modules";
 export default function HomeHero() {
   const heroImages = [dummyBanner1, dummyBanner2, dummyBanner3];
   return (
-    <div className="w-full p-10 pb-5">
+    <div className="w-full p-10 pb-5 desktop:p-0 desktop:h-[460px]">
       <Swiper
         pagination={true}
         modules={[Pagination, Autoplay]}
@@ -29,7 +29,12 @@ export default function HomeHero() {
           <SwiperSlide key={index}>
             <Link href="/">
               <div>
-                <Image src={image} quality={5} className="w-full h-60 tablet:h-[330px] object-cover object-center rounded-lg" alt="Banner" />
+                <Image
+                  src={image}
+                  quality={5}
+                  className="w-full h-60 desktop:h-[460px] tablet:h-[330px] object-cover object-center rounded-lg"
+                  alt="Banner"
+                />
               </div>
             </Link>
           </SwiperSlide>

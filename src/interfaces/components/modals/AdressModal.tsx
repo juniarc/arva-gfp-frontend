@@ -67,7 +67,7 @@ export default function AddressModal({
   const [streetValue, setStreetValue] = useState<string>("");
   const [recipientValue, setRecipientValue] = useState<string>("");
   const [phoneValue, setPhoneValue] = useState<string>("");
-  const [zipCodeValue, setZipCodeValue] = useState<number>(0);
+  const [zipCodeValue, setZipCodeValue] = useState<string>("");
 
   const [provinces, setProvinces] = useState([]);
   const [cities, setCities] = useState([]);
@@ -127,7 +127,7 @@ export default function AddressModal({
       selectedCity.trim() !== "" &&
       selectedDistrict.trim() !== "" &&
       selectedSubdistrict.trim() !== "" &&
-      zipCodeValue !== 0
+      zipCodeValue !== ""
     );
   }, [labelValue, streetValue, zipCode, recipientValue, phoneValue, selectedProvince, selectedCity, selectedDistrict, selectedSubdistrict]);
 
@@ -164,12 +164,15 @@ export default function AddressModal({
     }
   };
   return (
-    <Dialog open={isOpen} handler={handleCloseModal} className="outline-none relative p-5 tablet:p-15 min-h-[360px]">
-      <button onClick={handleCloseModal} className="absolute top-5 right-5 tablet:top-15 tablet:right-15 z-10 tablet:p-3">
-        <LuX className="tablet:text-2xl" />
+    <Dialog open={isOpen} handler={handleCloseModal} className="outline-none relative p-5 tablet:p-15 desktop:p-10 min-h-[360px] ">
+      <button
+        onClick={handleCloseModal}
+        className="absolute top-5 right-5 tablet:top-15 tablet:right-15 z-10 tablet:p-3 desktop:w-15 desktop:h-15 desktop:top-15 desktop:right-15"
+      >
+        <LuX className="tablet:text-2xl desktop:text-2xl" />
       </button>
       <ThemeProvider value={customeTheme}>
-        <DialogBody className="text-black font-normal">
+        <DialogBody className="text-black font-normal max-h-[70vh] overflow-y-auto">
           <h3 className=" mb-10">Address Detail</h3>
           <div className="h-full">
             <div>
@@ -258,14 +261,14 @@ export default function AddressModal({
                 <Input
                   label="Zip Code"
                   value={zipCodeValue}
-                  onChange={(e) => setZipCodeValue(Number(e.target.value))}
+                  onChange={(e) => setZipCodeValue(e.target.value)}
                   crossOrigin={undefined}
                   maxLength={6}
-                  type="number"
+                  type="text"
                 />
                 <div className="w-full flex justify-end mt-2">
                   <span className="text-xs text-dark-gray">
-                    {zipCodeValue}/{6}
+                    {zipCodeValue.length}/{6}
                   </span>
                 </div>
               </div>

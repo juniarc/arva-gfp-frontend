@@ -11,14 +11,17 @@ import VoucherSection from "@/interfaces/components/buynowPage/VoucherSection";
 import LineDivider from "@/interfaces/components/dividers/LineDivider";
 import { mockApiRequestPostUser } from "@/services/api/dummyData";
 import { Product, User } from "@/types/types";
+import BuynowPage from "./BuynowPage";
+import BuynowPageDesktop from "./desktop/BuynowPageDesktop";
 
-interface BuynowPageChildProps {
+interface BuynowPageWrapperProps {
   user: User;
   product: Product;
   quantity: number;
+  deviceType: string | undefined;
 }
 
-export default function BuynowPageChild({ user, product, quantity }: BuynowPageChildProps) {
+export default function BuynowPageWrapper({ user, product, quantity, deviceType }: BuynowPageWrapperProps) {
   const [currentUser, setCurrentUser] = useState(user);
   const handleFetchUpdatedUser = async (updatedAddress: any) => {
     try {
@@ -60,40 +63,40 @@ export default function BuynowPageChild({ user, product, quantity }: BuynowPageC
     return currentUser && productQuantity >= 1 && selectedShipping !== "" && paymentMethod && paymentMethod.name !== "";
   }, [currentUser, productQuantity, selectedShipping, paymentMethod]);
 
+  if (deviceType === "mobile") {
+    return (
+      <BuynowPage
+        isCompleted={isCompleted}
+        handleCheckbox={handleCheckbox}
+        handleFetchUpdatedUser={handleFetchUpdatedUser}
+        handleQuantityChange={handleQuantityChange}
+        handleSelectedPayment={handlePaymentMethod}
+        handleSelectedShipping={handleSelectedShipping}
+        selectedShipping={selectedShipping}
+        paymentMethod={paymentMethod}
+        productQuantity={productQuantity}
+        totalPrice={totalPrice}
+        currentUser={currentUser}
+        product={product}
+        isProtected={isProtected}
+      />
+    );
+  }
   return (
-    <>
-      <section>
-        <AddressSection {...currentUser} handleUpdateAddress={handleFetchUpdatedUser} />
-      </section>
-      <section>
-        <ProductsInfo
-          handleCheckbox={handleCheckbox}
-          isChecked={isProtected}
-          product={product}
-          productQuantity={productQuantity}
-          totalPrice={totalPrice}
-          handleQuantityChange={handleQuantityChange}
-        />
-      </section>
-      <section>
-        <ShippingSection
-          selectedShipping={selectedShipping}
-          handleSelectedShipping={handleSelectedShipping}
-          shippingOptions={product.shop.shippingOptions}
-        />
-        <LineDivider className="my-5 tablet:my-10" />
-      </section>
-      <section>
-        <VoucherSection />
-        <LineDivider className="my-5 tablet:my-10" />
-      </section>
-      <section>
-        <PaymentMehtod handleSelectedPayment={handlePaymentMethod} selectedPayment={paymentMethod} />
-      </section>
-      <section>
-        <SummarySection totalPrice={totalPrice} shippingPrice={1000} appliedVoucher={null} isProtected={isProtected} />
-      </section>
-      <PaynowBtn isCompleted={isCompleted} />
-    </>
+    <BuynowPageDesktop
+      isCompleted={isCompleted}
+      handleCheckbox={handleCheckbox}
+      handleFetchUpdatedUser={handleFetchUpdatedUser}
+      handleQuantityChange={handleQuantityChange}
+      handleSelectedPayment={handlePaymentMethod}
+      handleSelectedShipping={handleSelectedShipping}
+      selectedShipping={selectedShipping}
+      paymentMethod={paymentMethod}
+      productQuantity={productQuantity}
+      totalPrice={totalPrice}
+      currentUser={currentUser}
+      product={product}
+      isProtected={isProtected}
+    />
   );
 }

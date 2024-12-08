@@ -63,12 +63,12 @@ export default function AddToCartModal({
               <Image src={imageUrl} width={224} height={176} alt="Product Image" className="w-full h-full object-cover object-center rounded-lg" />
             </div>
             <div className="font-normal w-4/5 flex flex-col gap-4">
-              <p className="text-dark-gray text-[0.5rem] tablet:text-xs capitalize">{category}</p>
-              <p className="text-base tablet:text-[1.375rem]">{name}</p>
+              <p className="text-dark-gray text-[0.5rem] tablet:text-xs desktop:text-base capitalize">{category}</p>
+              <p className="text-base tablet:text-[1.375rem] desktop:text-base">{name}</p>
               <div className="flex items-center gap-5">
                 <div className="flex items-center ">
-                  <p className="font-semibold text-primary tablet:text-[1.375rem]">Rp. {price}</p>
-                  <p className="text-xss text-dark-gray tablet:text-[1.375rem]">/ {unit}</p>
+                  <p className="font-semibold text-primary tablet:text-[1.375rem] desktop:text-xl">Rp. {price}</p>
+                  <p className="text-xss text-dark-gray tablet:text-[1.375rem] desktop:text-base">/ {unit}</p>
                 </div>
                 <p className="text-red text-base bg-light-red px-3 ">{discount} %</p>
               </div>

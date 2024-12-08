@@ -15,8 +15,8 @@ export default function PaymentMehtod({ handleSelectedPayment, selectedPayment }
   return (
     <div className="mt-5">
       <div className="flex items-center justify-between">
-        <h4>Payment Method</h4>
-        <button onClick={() => setIsOpen(true)} className="text-xs tablet:text-base underline text-primary">
+        <h4 className="desktop:mb-5">Payment Method</h4>
+        <button onClick={() => setIsOpen(true)} className="text-xs tablet:text-base desktop:text-base underline text-primary">
           See all
         </button>
         <PaymentOptionsModal
@@ -41,11 +41,11 @@ export default function PaymentMehtod({ handleSelectedPayment, selectedPayment }
             <p>{selectedPayment.name}</p>
           </span>
           <div className={"rounded-full border p-2 flex items-center justify-center border-primary"}>
-            <div className={"bg-primary w-6 h-6 tablet:w-10 tablet:h-10 rounded-full"}></div>
+            <div className={"bg-primary w-6 h-6 tablet:w-10 tablet:h-10 desktop:w-10 desktop:h-10 rounded-full"}></div>
           </div>
         </div>
       </div>
-      <LineDivider className="mt-5 mb-10 tablet:my-10" />
+      <LineDivider className="mt-5 mb-10 tablet:my-10 desktop:my-10" />
     </div>
   );
 }
