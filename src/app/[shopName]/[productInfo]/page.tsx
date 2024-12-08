@@ -1,13 +1,9 @@
 import "@/styles/detailProductpage.css";
-import ImagesSection from "@/interfaces/components/productDetailPage/ImagesSection";
-import ProductInfo from "@/interfaces/components/productDetailPage/ProductInfo";
-import ReviewSection from "@/interfaces/components/productDetailPage/ReviewSection";
-import ShopInfo from "@/interfaces/components/productDetailPage/ShopInfo";
-import ProductListByCategory from "@/interfaces/components/homepage/productListByCategory/ProductListByCategory";
+import { cookies } from "next/headers";
 import api from "@/services/api/api";
 import uriHelpers from "@/utils/uriHelpers";
-import React from "react";
-import FloatingDrawer from "@/interfaces/components/productDetailPage/FloatingDrawer";
+import ProductDetailPage from "@/interfaces/components/productDetailPage/ProductDetailPage";
+import ProductDetailPageDesktop from "@/interfaces/components/productDetailPage/desktop/ProductDetailPageDesktop";
 
 const dummyReviews = [
   {
@@ -53,47 +49,24 @@ export async function generateMetadata({ params }: { params: Promise<{ productIn
   };
 }
 
-export default async function ProductDetailPage({ params }: { params: Promise<{ productInfo: string; shopName: string }> }) {
+export default async function Page({ params }: { params: Promise<{ productInfo: string; shopName: string }> }) {
+  const cookiesList = await cookies();
+  const viewport = cookiesList.get("viewport")?.value || undefined;
   const urlName = (await params).productInfo;
   const idMatch = urlName.match(/-(\d+)$/);
   const id = idMatch ? idMatch[1] : null;
-  const product = await api.getProductById(1);
-  const popularProducts = (await api.getAllProducts(6)) || [];
-  const fruitProducts = (await api.getAllProductsByCategory("fruit", 6)) || [];
+  const product = await api.getProductById(Number(id));
+  const popularProducts = (await api.getAllProducts(5)) || [];
+  const fruitProducts = (await api.getAllProductsByCategory("fruit", 5)) || [];
 
   if (product) {
+    if (viewport === "mobile") {
+      return (
+        <ProductDetailPage productDetail={product} popularProducts={popularProducts} fruitProducts={fruitProducts} dummyReviews={dummyReviews} />
+      );
+    }
     return (
-      <main className="w-full">
-        <section className="w-full">
-          <ImagesSection imageUrl={product.imageUrl} />
-        </section>
-        <section>
-          <ProductInfo {...product} shopLocation={product.shop.location} />
-        </section>
-        <section>
-          <ShopInfo {...product.shop} />
-        </section>
-        <section>
-          <ReviewSection reviews={dummyReviews} />
-        </section>
-        <section className="w-full">
-          <ProductListByCategory products={fruitProducts} category={product.shop.name} />
-        </section>
-        <section className="w-full">
-          <ProductListByCategory products={popularProducts} category="Recommended" />
-        </section>
-        <FloatingDrawer
-          id={product.id}
-          category={product.category}
-          imageUrl={product.imageUrl}
-          name={product.name}
-          price={product.price}
-          discount={product.discount}
-          unit={product.unit}
-          stocks={product.stocks}
-          variants={product.variants}
-        />
-      </main>
+      <ProductDetailPageDesktop productDetail={product} popularProducts={popularProducts} fruitProducts={fruitProducts} dummyReviews={dummyReviews} />
     );
   }
 }

@@ -25,7 +25,7 @@ export default function HomeAds() {
     },
   ];
   return (
-    <div className="mx-10 mb-10">
+    <div className="mx-10 mb-10 desktop:mx-0">
       <Swiper slidesPerView={"auto"} spaceBetween={15}>
         {adsData.map((item, index) => (
           <SwiperSlide key={index} className="w-auto">

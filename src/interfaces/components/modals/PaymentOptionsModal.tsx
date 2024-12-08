@@ -32,9 +32,12 @@ const paymentMethods = [
 export default function PaymentOptionsModal({ isOpen, handleCloseModal, handleSelectedPayment, selectedPayment }: PaymentOptionsModalProps) {
   if (isOpen) {
     return (
-      <Dialog open={isOpen} handler={handleCloseModal} className="outline-none relative p-5 tablet:p-15">
-        <button onClick={handleCloseModal} className="absolute top-5 right-5 tablet:w-15 tablet:h-15 tablet:top-15 tablet:right-15 tablet:p-3 z-10">
-          <LuX className="tablet:text-2xl" />
+      <Dialog open={isOpen} handler={handleCloseModal} className="outline-none relative p-5 tablet:p-15 desktop:p-10">
+        <button
+          onClick={handleCloseModal}
+          className="absolute top-5 right-5 tablet:w-15 tablet:h-15 tablet:top-15 tablet:right-15 desktop:w-15 desktop:h-15 desktop:top-15 desktop:right-15 tablet:p-3 z-10"
+        >
+          <LuX className="tablet:text-2xl desktop:text-2xl" />
         </button>
         <DialogBody className="text-black font-normal">
           <h3 className=" mb-10">Payment Method Options</h3>
@@ -65,7 +68,7 @@ export default function PaymentOptionsModal({ isOpen, handleCloseModal, handleSe
                       className={`rounded-full border  p-2 flex items-center justify-center ${selectedPayment.name === option.name ? "border-primary" : "border-gray"}`}
                     >
                       <div
-                        className={`${selectedPayment.name === option.name ? "bg-primary" : ""} w-6 h-6 tablet:w-10 tablet:h-10 rounded-full`}
+                        className={`${selectedPayment.name === option.name ? "bg-primary" : ""} w-6 h-6 tablet:w-10 tablet:h-10 desktop:w-10 desktop:h-10 rounded-full`}
                       ></div>
                     </div>
                   </div>

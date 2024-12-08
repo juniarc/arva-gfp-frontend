@@ -24,16 +24,16 @@ export default function ReviewSection({ reviews }: ReviewSectionProps) {
   };
 
   return (
-    <div className="p-10 tablet:px-[150px]">
+    <div className="p-10 desktop:p-0 tablet:px-[150px]">
       <div>
         <h3>Product Reviews</h3>
         <div className="flex items-center text-xs tablet:text-base text-dark-gray gap-3 mt-5">
-          <span className="flex items-center gap-2 text-xs tablet:text-base text-black font-semibold">
+          <span className="flex items-center gap-2 desktop:gap-5 text-xs tablet:text-base desktop:text-base text-black font-semibold">
             <FaStar className="text-yellow" /> {totalRating}
           </span>
           <p>from {reviews.length} ratings</p>
           <FaCircle className="text-[0.25rem] " />
-          <span>{reviews.length} reviews</span>
+          <span className="desktop:text-base">{reviews.length} reviews</span>
         </div>
       </div>
       <div className="flex flex-col gap-5 mt-6">

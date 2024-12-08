@@ -36,7 +36,7 @@ export default function ProductsInfo({ product, productQuantity, totalPrice, han
             <p className="font-semibold">Shop' Name</p>
           </div>
           <div className="flex items-start gap-5 tablet:gap-10 mt-5 tablet:mt-10">
-            <div className="w-[100px] tablet:w-[122px] aspect-square ">
+            <div className="w-[100px] tablet:w-[122px] desktop:w-[126px] aspect-square ">
               <Image
                 src={product.imageUrl}
                 width={92}
@@ -45,10 +45,13 @@ export default function ProductsInfo({ product, productQuantity, totalPrice, han
                 alt="Product Image"
               />
             </div>
-            <div className="font-normal w-4/5 flex flex-col gap-4">
+            <div className="font-normal w-4/5 desktop:w-full flex flex-col gap-4">
               <p>{product.name}</p>
               <p className="text-dark-gray">Variants</p>
-              <p className="font-semibold tablet:text-[1.375rem]">Rp. {totalPrice}</p>
+              <p className="font-semibold tablet:text-[1.375rem] desktop:text-2xl">Rp. {totalPrice}</p>
+              <p>
+                Total units: {productQuantity} {product.unit}
+              </p>
             </div>
           </div>
           <div className="w-full flex justify-end">
@@ -72,7 +75,7 @@ export default function ProductsInfo({ product, productQuantity, totalPrice, han
                     handleQuantityChange(newQuantity);
                   }
                 }}
-                className="w-30 text-center text-black"
+                className="w-30 desktop:w-55 text-center text-black pl-3"
                 disabled
               />
               <button
@@ -88,10 +91,10 @@ export default function ProductsInfo({ product, productQuantity, totalPrice, han
         </div>
       </div>
       <div className="flex items-center justify-between mt-10">
-        <span className="text-dark-gray text-xs tablet:text-base flex gap-2 items-center underline">
+        <span className="text-dark-gray text-xs tablet:text-base desktop:text-base flex gap-2 items-center underline">
           <GoShieldCheck /> Total damage protection 3 months
         </span>
-        <div className="text-xs tablet:text-base text-dark-gray flex gap-5 items-center">
+        <div className="text-xs tablet:text-base desktop:text-base text-dark-gray flex gap-5 items-center">
           <span>(Rp. 2000)</span>
           <Checkbox checked={isChecked} onChange={handleCheckbox} className="w-12 h-12 checked:bg-primary" crossOrigin={undefined} />
         </div>

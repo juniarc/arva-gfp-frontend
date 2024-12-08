@@ -2,6 +2,8 @@
 
 import React, { useState, useRef } from "react";
 import { MdOutlineShoppingBag } from "react-icons/md";
+import ShopIcon from "@/../public/icons/shopping-bag-white.svg";
+import Image from "next/image";
 import CartDrawer from "./CartDrawer";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -38,7 +40,7 @@ export default function CartNav() {
         onClick={handleOpenDrawer}
         className="w-15 h-15 tablet:w-30 tablet:h-30 border-solid border border-white rounded text-white flex items-center justify-center relative"
       >
-        <MdOutlineShoppingBag size={isTablet ? 32 : isDekstop ? 24 : 19} />
+        <Image src={ShopIcon} alt="Shop icon" width={isTablet ? 33 : 24} height={isTablet ? 33 : 24} />
         <span className="absolute top-1 right-1 min-w-6 min-h-6 tablet:min-h-13 tablet:min-w-13 bg-red rounded align-middle text-center text-[0.5rem] tablet:text-sm tablet:p-1">
           5
         </span>
