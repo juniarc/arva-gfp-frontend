@@ -12,7 +12,7 @@ interface ShopInfoProps {
 }
 export default function ShopInfo({ name, imageUrl, location }: ShopInfoProps) {
   return (
-    <div className="px-10 flex items-center justify-between tablet:px-[150px]">
+    <div className="px-10 desktop:p-0 flex items-center justify-between desktop:justify-normal desktop:gap-20 tablet:px-[150px]">
       <div className="flex items-center gap-5 tablet:gap-10">
         <div className="h-[65px] tablet:h-[72px] aspect-square">
           <Image src={imageUrl} width={60} height={60} alt="Shop Image" className="w-full h-full object-cover object-center rounded-full" />

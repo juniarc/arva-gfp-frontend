@@ -36,9 +36,13 @@ p {
   font-size: 0.875rem;
 }
 
-.tes {
-  box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.05);
+.header-desktop {
+  border-bottom: 1px solid #d9d9d9;
 }
+
+/* .tes {
+  box-shadow: 0px 0px 10px 4px rgba(0, 0, 0, 0.05);
+} */
 
 @media screen and (min-width: 640px) and (max-width: 1024px) {
   h2 {
@@ -54,5 +58,22 @@ p {
   }
   p {
     font-size: 0.9375rem;
+  }
+}
+
+@media screen and (min-width: 1025px) {
+  h2 {
+    font-size: 2.25rem;
+  }
+
+  h3 {
+    font-size: 1.875rem;
+  }
+
+  h4 {
+    font-size: 1.5rem;
+  }
+  p {
+    font-size: 1rem;
   }
 }
