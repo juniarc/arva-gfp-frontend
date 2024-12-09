@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse, userAgent } from "next/server";
 
-const protectedRoutes = ["/my-shop,, /my-shop/:shopId, /buy-now"];
+const protectedRoutes = ["/my-shop", "/my-shop/:shopId", "/buy-now"];
 const publicRoutes = ["/login", "/signup", "/", "/:shopName/:productInfo", "/buy-now", "/:shopInfo"];
 
 export function middleware(request: NextRequest) {
@@ -8,6 +8,12 @@ export function middleware(request: NextRequest) {
   const url = request.nextUrl;
   const isProtectedRoutes = protectedRoutes.includes(url.pathname);
   const isPublicRoutes = protectedRoutes.includes(url.pathname);
+
+  const isLoggedIn = request.cookies.get("authToken");
+
+  // if (!isLoggedIn && isProtectedRoutes) {
+  //   return NextResponse.redirect(new URL("/login", request.url));
+  // }
 
   // Viewport cookies
   const { device } = userAgent(request);
