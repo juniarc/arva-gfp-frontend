@@ -7,7 +7,7 @@ import Image from "next/image";
 import CartDrawer from "./CartDrawer";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import useDeviceCategory from "@/app/hooks/useDeviceCategory";
+import useDeviceCategory from "@/hooks/useDeviceCategory";
 
 gsap.registerPlugin(useGSAP);
 

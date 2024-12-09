@@ -1,5 +1,5 @@
 import { Product, User } from "@/types/types";
-import { mockApiRequest, mockApiRequestUser } from "./dummyData";
+import { mockApiRequest, mockApiRequestShop, mockApiRequestUser } from "./dummyData";
 
 const api = (() => {
   const BASE_URL = "https//";
@@ -44,7 +44,17 @@ const api = (() => {
     }
   }
 
-  return { getAllProducts, getAllProductsByCategory, getProductById, getUser };
+  async function getShop() {
+    try {
+      const response: User = await mockApiRequestShop("/shop");
+      return response;
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
+
+  return { getAllProducts, getAllProductsByCategory, getProductById, getUser, getShop };
 })();
 
 export default api;

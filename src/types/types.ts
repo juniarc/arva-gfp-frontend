@@ -57,3 +57,24 @@ export interface User {
   addressProvince: string | null;
   zipCode: number | null;
 }
+
+export interface Shop {
+  id: number;
+  userId: number;
+  name: string;
+  imageUrl: string;
+  phoneNumber: string;
+  addressLabel: string;
+  addressStreet: string;
+  addressSubdistrict: string;
+  addressDistrict: string;
+  addressCity: string;
+  addressProvince: string;
+  zipCode: number;
+  openingHours: string;
+  closingHours: string;
+  shippingOptions: string[];
+  createdAt: string;
+  description: string;
+  products: Product[];
+}
