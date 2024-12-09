@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse, userAgent } from "next/server";
 
+const protectedRoutes = ["/my-shop,, /my-shop/:shopId, /buy-now"];
+const publicRoutes = ["/login", "/signup", "/", "/:shopName/:productInfo", "/buy-now", "/:shopInfo"];
+
 export function middleware(request: NextRequest) {
   const response = NextResponse.next();
   const url = request.nextUrl;
+  const isProtectedRoutes = protectedRoutes.includes(url.pathname);
+  const isPublicRoutes = protectedRoutes.includes(url.pathname);
 
   // Viewport cookies
   const { device } = userAgent(request);
@@ -13,14 +18,15 @@ export function middleware(request: NextRequest) {
   });
 
   // Viewport user untuk my-shop
-  const token = request.cookies.get("token")?.value || null;
-  if (url.pathname.startsWith("/my-shop") && !token) {
-    return NextResponse.redirect(new URL("/", request.url));
-  }
+  // const dummyToken = "fake-token";
+  // const token = request.cookies.set("token", dummyToken);
+  // if (url.pathname.startsWith("/my-shop") && !token && isProtectedRoutes) {
+  //   return NextResponse.redirect(new URL("/", request.url));
+  // }
 
   return response;
 }
 
 export const config = {
-  matcher: ["/", "/:shopName/:productInfo", "/buy-now", "/:shopName"],
+  matcher: ["/", "/:shopName/:productInfo", "/buy-now", "/:shopName", "/((?!api|_next/static|_next/image|.*\\.png$).*)"],
 };
