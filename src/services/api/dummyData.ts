@@ -577,7 +577,76 @@ const user: User = {
   addressDistrict: "Kec. Contoh",
   addressCity: "Kota Contoh",
   addressProvince: "Provinsi Contoh",
-  zipCode: "12345",
+  zipCode: 12345,
+};
+
+const shop = {
+  id: 1,
+  userId: 1,
+  name: "Shop 1",
+  imageUrl: "https://fastly.picsum.photos/id/44/200/200.jpg?hmac=W5KcqhapHjBgEIHGQpQnX6o9jdOXQEVCKEdGIohjisY",
+  phoneNumber: "08123456789",
+  addressLabel: "",
+  addressStreet: "Jl. Contoh",
+  addressSubdistrict: "Kel. Contoh",
+  addressDistrict: "Kec. Contoh",
+  addressCity: "Kota Contoh",
+  addressProvince: "Provinsi Contoh",
+  zipCode: 12345,
+  openingHours: "10:00",
+  closingHours: "18:00",
+  shippingOptions: ["JNE", "J&T"],
+  createdAt: "2023-01-01",
+  description:
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo",
+  products: [
+    {
+      id: 14,
+      name: "Papaya",
+      category: "fruit",
+      variants: ["Red", "Yellow", "Green"],
+
+      description: "Ripe and sweet papayas, packed with nutrients.",
+      price: 130,
+      imageUrl: "https://fastly.picsum.photos/id/44/200/200.jpg?hmac=W5KcqhapHjBgEIHGQpQnX6o9jdOXQEVCKEdGIohjisY",
+      stocks: 150,
+      unit: "kg",
+      discount: 5,
+      rating: 4.1,
+      isWishlist: false,
+      shippingInfo: {
+        packageWeight: 2,
+        packageHeight: 3,
+        packageWidth: 2,
+        packageLength: 3,
+        shippingFee: 7,
+      },
+      sold: 10,
+    },
+    {
+      id: 14,
+      name: "Papaya",
+      category: "fruit",
+      variants: ["Red", "Yellow", "Green"],
+
+      description: "Ripe and sweet papayas, packed with nutrients.",
+      price: 130,
+      imageUrl: "https://fastly.picsum.photos/id/44/200/200.jpg?hmac=W5KcqhapHjBgEIHGQpQnX6o9jdOXQEVCKEdGIohjisY",
+      stocks: 150,
+      unit: "kg",
+      discount: 5,
+      rating: 4.1,
+      isWishlist: false,
+      shippingInfo: {
+        packageWeight: 2,
+        packageHeight: 3,
+        packageWidth: 2,
+        packageLength: 3,
+        shippingFee: 7,
+      },
+      sold: 10,
+    },
+  ],
 };
 
 export const mockApiRequestUser = (endpoint: string, delay = 300): Promise<User> => {
@@ -585,6 +654,20 @@ export const mockApiRequestUser = (endpoint: string, delay = 300): Promise<User>
     setTimeout(() => {
       if (endpoint === "/user") {
         let result = user;
+
+        resolve(result);
+      } else {
+        reject(new Error("Endpoint not found"));
+      }
+    }, delay);
+  });
+};
+
+export const mockApiRequestShop = (endpoint: string, delay = 300): any => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (endpoint === "/shop") {
+        let result = shop;
 
         resolve(result);
       } else {
@@ -612,7 +695,7 @@ export const mockApiRequestPostUser = (endpoint: string, data: Partial<User>, de
           addressDistrict: data.addressDistrict || "Kec. Contoh",
           addressCity: data.addressCity || "Kota Contoh",
           addressProvince: data.addressProvince || "Provinsi Contoh",
-          zipCode: data.zipCode || "12345",
+          zipCode: data.zipCode || 12345,
         };
 
         resolve(updatedUser);
