@@ -15,9 +15,20 @@ interface ProductsInfoProps {
   handleQuantityChange: (newQuantity: number) => void;
   isChecked: boolean;
   handleCheckbox: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  variantId: number;
+  variantName: string | null;
 }
 
-export default function ProductsInfo({ product, productQuantity, totalPrice, handleQuantityChange, isChecked, handleCheckbox }: ProductsInfoProps) {
+export default function ProductsInfo({
+  product,
+  productQuantity,
+  totalPrice,
+  handleQuantityChange,
+  variantId,
+  variantName,
+  isChecked,
+  handleCheckbox,
+}: ProductsInfoProps) {
   return (
     <div className="mt-10">
       <h4 className="mb-5">Checkout Items</h4>
@@ -26,7 +37,7 @@ export default function ProductsInfo({ product, productQuantity, totalPrice, han
           <div className="flex items-center gap-5 mb-5">
             <div className="w-12 aspect-square">
               <Image
-                src={product.imageUrl}
+                src={product.imageUrl[0]}
                 width={20}
                 height={20}
                 className="w-full h-full object-cover object-center rounded-full"
@@ -38,7 +49,7 @@ export default function ProductsInfo({ product, productQuantity, totalPrice, han
           <div className="flex items-start gap-5 tablet:gap-10 mt-5 tablet:mt-10">
             <div className="w-[100px] tablet:w-[122px] desktop:w-[126px] aspect-square ">
               <Image
-                src={product.imageUrl}
+                src={product.imageUrl[0]}
                 width={92}
                 height={92}
                 className="w-full h-full object-cover object-center rounded-lg"
@@ -47,7 +58,7 @@ export default function ProductsInfo({ product, productQuantity, totalPrice, han
             </div>
             <div className="font-normal w-4/5 desktop:w-full flex flex-col gap-4">
               <p>{product.name}</p>
-              <p className="text-dark-gray">Variants</p>
+              <p className="text-dark-gray">{variantName}</p>
               <p className="font-semibold tablet:text-[1.375rem] desktop:text-2xl">Rp. {totalPrice}</p>
               <p>
                 Total units: {productQuantity} {product.unit}

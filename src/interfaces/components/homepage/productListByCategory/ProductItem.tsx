@@ -18,7 +18,7 @@ export default function ProductItem({ id, name, price, imageUrl, category, disco
     <div className="shadow-md w-56 h-[330px] desktop:h-auto desktop:w-full bg-white rounded-lg flex flex-col relative mr-10">
       <div className="w-full h-[176px] overflow-hidden">
         <Image
-          src={`${imageUrl}`}
+          src={`${imageUrl[0]}`}
           width={224}
           height={176}
           quality={100}
@@ -45,7 +45,7 @@ export default function ProductItem({ id, name, price, imageUrl, category, disco
         </div>
         <div className="flex items-center gap-2 text-xs text-dark-gray">
           <FaLocationDot className="desktop:text-xs" />
-          <p className="capitalize desktop:text-xs">{shop.location}</p>
+          <p className="capitalize desktop:text-xs">{shop.addressCity}</p>
         </div>
       </div>
       <div className="absolute bottom-5 right-5">

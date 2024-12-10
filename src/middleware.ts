@@ -15,6 +15,11 @@ export function middleware(request: NextRequest) {
   //   return NextResponse.redirect(new URL("/login", request.url));
   // }
 
+  const userId = 1;
+  response.cookies.set("userId", userId.toString(), {
+    httpOnly: true,
+  });
+
   // Viewport cookies
   const { device } = userAgent(request);
   const viewport = device.type === "mobile" ? "mobile" : "desktop";
