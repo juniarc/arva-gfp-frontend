@@ -22,9 +22,13 @@ interface BuynowPageProps {
   isCompleted: boolean;
   currentUser: User;
   product: Product;
+  variantId: number;
+  variantName: string | null;
 }
 
 export default function BuynowPage({
+  variantId,
+  variantName,
   currentUser,
   product,
   isCompleted,
@@ -39,6 +43,7 @@ export default function BuynowPage({
   selectedShipping,
   handleSelectedShipping,
 }: BuynowPageProps) {
+  console.log(product.shop.shippingChannel);
   return (
     <main className="px-10 pt-5 tablet:p-15 ">
       <h1 className="text-primary text-[1.75rem] tablet:text-[2rem]">Checkout</h1>
@@ -47,19 +52,21 @@ export default function BuynowPage({
       </section>
       <section>
         <ProductsInfo
+          variantId={variantId}
           handleCheckbox={handleCheckbox}
           isChecked={isProtected}
           product={product}
           productQuantity={productQuantity}
           totalPrice={totalPrice}
           handleQuantityChange={handleQuantityChange}
+          variantName={variantName}
         />
       </section>
       <section>
         <ShippingSection
           selectedShipping={selectedShipping}
           handleSelectedShipping={handleSelectedShipping}
-          shippingOptions={product.shop.shippingOptions}
+          shippingOptions={product.shop.shippingChannel}
         />
         <LineDivider className="my-5 tablet:my-10" />
       </section>

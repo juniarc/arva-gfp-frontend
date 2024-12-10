@@ -5,6 +5,7 @@ import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { MdOutlineShoppingBag } from "react-icons/md";
 import AddToCartModal from "../modals/AddToCartModal";
 import BuyNowModal from "../modals/BuyNowModal";
+import { Variants } from "@/types/types";
 
 interface FloatingRawerProps {
   id: number;
@@ -12,7 +13,7 @@ interface FloatingRawerProps {
   price: number;
   imageUrl: string;
   category: string;
-  variants: string[];
+  variants: Variants[];
   stocks: number;
   unit: string;
   discount: number;
@@ -50,11 +51,11 @@ export default function FloatingDrawer({ id, name, price, imageUrl, category, va
           </div>
         </div>
       </div>
-      <AddToCartModal
+      {/* <AddToCartModal
         isOpen={isAddToCartModalOpen}
         handleCloseModal={handleCloseATCModal}
         {...{ id, name, price, imageUrl, category, variants, stocks, unit, discount }}
-      />
+      /> */}
       <BuyNowModal
         isOpen={isBuyNowModalOpen}
         handleCloseModal={hanldeCloseBuyNowModal}

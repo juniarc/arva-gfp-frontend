@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react";
 import { LuX, LuMinus, LuPlus } from "react-icons/lu";
-import { CartItem, Product } from "@/types/types";
+import { CartItem, Product, Variants } from "@/types/types";
 import Image from "next/image";
 import LineDivider from "../dividers/LineDivider";
 import Link from "next/link";
@@ -16,7 +16,7 @@ interface BuyNowModalProps {
   price: number;
   imageUrl: string;
   category: string;
-  variants: string[];
+  variants: Variants[];
   stocks: number;
   unit: string;
   discount: number;
@@ -35,17 +35,28 @@ export default function BuyNowModal({
   discount,
 }: BuyNowModalProps) {
   const router = useRouter();
-  const [selectedVariant, setSelectedVariant] = useState<string | null>(variants[0]);
+  const [selectedVariant, setSelectedVariant] = useState<Variants | null>({
+    id: null,
+    name: "",
+    price: null,
+  });
   const [quantity, setQuantity] = useState<number>(1);
   const [totalPrice, setTotalPrice] = useState<number>(price);
 
   useEffect(() => {
-    setTotalPrice(price * quantity);
+    if (selectedVariant?.price) {
+      setTotalPrice(selectedVariant.price * quantity);
+    } else {
+      setTotalPrice(price * quantity);
+    }
   }, [quantity, price]);
-  const handleSelectVariant = (variant: string) => setSelectedVariant(variant);
+  const handleSelectVariant = (variant: Variants) => setSelectedVariant(variant);
+  console.log(selectedVariant);
 
   const handleBuyBtn = () => {
-    router.push(`/buy-now?id=${id}&quantity=${quantity}`);
+    router.push(
+      `/buy-now?id=${id}&variantId=${selectedVariant?.id}&variantName=${selectedVariant?.name}&price=${selectedVariant?.price}&quantity=${quantity}`,
+    );
   };
   if (isOpen) {
     return (
@@ -80,10 +91,10 @@ export default function BuyNowModal({
                   {variants.map((variant, index) => (
                     <button
                       onClick={() => handleSelectVariant(variant)}
-                      className={`bg-gray text-xs tablet:text-base py-2 px-10 rounded capitalize  ${selectedVariant === variant ? "bg-secondary font-semibold" : ""}`}
+                      className={`bg-gray text-xs tablet:text-base py-2 px-10 rounded capitalize  ${selectedVariant?.name === variant.name ? "bg-secondary font-semibold" : ""}`}
                       key={index}
                     >
-                      {variant}
+                      {variant.name}
                     </button>
                   ))}
                 </div>

@@ -19,9 +19,14 @@ interface BuynowPageWrapperProps {
   product: Product;
   quantity: number;
   deviceType: string | undefined;
+  variantId: number;
 }
 
-export default function BuynowPageWrapper({ user, product, quantity, deviceType }: BuynowPageWrapperProps) {
+export default function BuynowPageWrapper({ user, product, variantId, quantity, deviceType }: BuynowPageWrapperProps) {
+  const selectedVariant = product.variants.find((variant) => variant.id === variantId);
+  if (!selectedVariant) {
+    throw new Error("Selected variant not found");
+  }
   const [currentUser, setCurrentUser] = useState(user);
   const handleFetchUpdatedUser = async (updatedAddress: any) => {
     try {
@@ -79,6 +84,8 @@ export default function BuynowPageWrapper({ user, product, quantity, deviceType 
         currentUser={currentUser}
         product={product}
         isProtected={isProtected}
+        variantId={variantId}
+        variantName={selectedVariant.name}
       />
     );
   }
