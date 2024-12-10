@@ -21,6 +21,7 @@ interface ProductInfoProps {
   sold: number;
   rating: number;
   shopLocation: string;
+  isWishlist: boolean;
 }
 
 export default function ProductInfo({

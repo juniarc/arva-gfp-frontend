@@ -6,16 +6,32 @@ export interface ShippingInfo {
   shippingFee: number;
 }
 
+export interface Variants {
+  id: number | null;
+  name: string | null;
+  price: number | null;
+}
+
 export interface Shop {
   id: number;
   name: string;
+  phoneNumber: string;
+  email: string;
   description: string;
   imageUrl: string;
   createdAt: string;
   shippingOptions: string[];
-  location: string;
   openingHours: string;
   closingHours: string;
+  productList: Product[];
+  addressLabel: string;
+  addressProvince: string;
+  addressCity: string;
+  addressDistrict: string;
+  addressSubdistrict: string;
+  addressStreet: string;
+  shippingChannel: string[];
+  zipCode: number;
 }
 
 export interface Product {
@@ -23,7 +39,7 @@ export interface Product {
   name: string;
   description: string;
   price: number;
-  imageUrl: string;
+  imageUrl: string[];
   category: string;
   stocks: number;
   unit: string;
@@ -31,15 +47,10 @@ export interface Product {
   rating: number;
   isWishlist: boolean;
   shippingInfo: ShippingInfo;
-  shop: Shop;
+  shop: { id: number; name: string; imageUrl: string; addressCity: string; shippingChannel: string[] };
   sold: number;
-  variants: string[];
-}
-
-export interface CartItem extends Product {
-  selectedVariant: string;
-  quantity: number;
-  totalPrice: number;
+  variants: Variants[];
+  tags: string[];
 }
 
 export interface User {
@@ -77,4 +88,31 @@ export interface Shop {
   createdAt: string;
   description: string;
   products: Product[];
+}
+
+export interface CartItem {
+  id: number;
+  userId: number;
+  product: {
+    id: number;
+    name: string;
+    category: string;
+    imageUrl: string;
+    stocks: number;
+  };
+  shop: {
+    shopId: number;
+    shopName: string;
+    imageUrl: string;
+    addressCity: string;
+    shippingChannel: string[];
+  };
+  selectedVariant: {
+    variantId: number;
+    variantName: string;
+    price: number;
+  };
+  quantity: number;
+  createdAt: string;
+  updatedAt: string;
 }

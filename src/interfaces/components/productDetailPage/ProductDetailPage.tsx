@@ -11,7 +11,7 @@ import FloatingDrawer from "@/interfaces/components/productDetailPage/FloatingDr
 import { Product } from "@/types/types";
 
 interface ProductDetailPageProps {
-  productDetail: Product;
+  productDetail: any;
   popularProducts: Product[];
   fruitProducts: Product[];
   dummyReviews: any;
@@ -24,7 +24,7 @@ export default function ProductDetailPage({ productDetail, popularProducts, frui
           <ImagesSection imageUrl={productDetail.imageUrl} />
         </section>
         <section>
-          <ProductInfo {...productDetail} shopLocation={productDetail.shop.location} />
+          <ProductInfo {...productDetail} shopLocation={productDetail.shop.addressCity} />
         </section>
         <section>
           <ShopInfo {...productDetail.shop} />
@@ -41,7 +41,7 @@ export default function ProductDetailPage({ productDetail, popularProducts, frui
         <FloatingDrawer
           id={productDetail.id}
           category={productDetail.category}
-          imageUrl={productDetail.imageUrl}
+          imageUrl={productDetail.imageUrl[0]}
           name={productDetail.name}
           price={productDetail.price}
           discount={productDetail.discount}
