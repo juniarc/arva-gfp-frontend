@@ -9,6 +9,7 @@ import uriHelpers from "@/utils/uriHelpers";
 import React from "react";
 import FloatingDrawer from "@/interfaces/components/productDetailPage/FloatingDrawer";
 import { Product } from "@/types/types";
+import { WishlistProvider } from "@/hooks/WishlistContext";
 
 interface ProductDetailPageProps {
   productDetail: any;
@@ -17,6 +18,7 @@ interface ProductDetailPageProps {
   dummyReviews: any;
 }
 export default function ProductDetailPage({ productDetail, popularProducts, fruitProducts, dummyReviews }: ProductDetailPageProps) {
+  console.log(productDetail);
   if (productDetail) {
     return (
       <main className="w-full">
@@ -38,17 +40,23 @@ export default function ProductDetailPage({ productDetail, popularProducts, frui
         <section className="w-full">
           <ProductListByCategory products={popularProducts} category="Recommended" />
         </section>
-        <FloatingDrawer
-          id={productDetail.id}
-          category={productDetail.category}
-          imageUrl={productDetail.imageUrl[0]}
-          name={productDetail.name}
-          price={productDetail.price}
-          discount={productDetail.discount}
-          unit={productDetail.unit}
-          stocks={productDetail.stocks}
-          variants={productDetail.variants}
-        />
+        <WishlistProvider>
+          <FloatingDrawer
+            id={productDetail.id}
+            category={productDetail.category}
+            imageUrl={productDetail.imageUrl[0]}
+            name={productDetail.name}
+            price={productDetail.price}
+            discount={productDetail.discount}
+            unit={productDetail.unit}
+            stocks={productDetail.stocks}
+            variants={productDetail.variants}
+            rating={productDetail.rating}
+            tags={productDetail.tags}
+            sold={productDetail.sold}
+            shop={productDetail.shop}
+          />
+        </WishlistProvider>
       </main>
     );
   }

@@ -6,6 +6,7 @@ import { MdOutlineShoppingBag } from "react-icons/md";
 import AddToCartModal from "../modals/AddToCartModal";
 import BuyNowModal from "../modals/BuyNowModal";
 import { Variants } from "@/types/types";
+import { useWishlist, WishlistProvider } from "@/hooks/WishlistContext";
 
 interface FloatingRawerProps {
   id: number;
@@ -17,23 +18,44 @@ interface FloatingRawerProps {
   stocks: number;
   unit: string;
   discount: number;
+  rating: number;
+  tags: string[];
+  shop: { id: number; name: string; addressCity: string };
+  sold: number;
 }
 
-export default function FloatingDrawer({ id, name, price, imageUrl, category, variants, stocks, unit, discount }: FloatingRawerProps) {
+export default function FloatingDrawer({
+  id,
+  name,
+  price,
+  imageUrl,
+  category,
+  variants,
+  stocks,
+  unit,
+  discount,
+  rating,
+  tags,
+  shop,
+  sold,
+}: FloatingRawerProps) {
   const [isAddToCartModalOpen, setIsAddToCartModalOpen] = useState<boolean>(false);
   const [isBuyNowModalOpen, setIsBuyNowtModalOpen] = useState<boolean>(false);
-  const [isWishlist, setIsWishlist] = useState<boolean>(false);
+  const { wishlist, toggleWishlist } = useWishlist();
   const handleCloseATCModal = () => setIsAddToCartModalOpen(false);
   const hanldeCloseBuyNowModal = () => setIsBuyNowtModalOpen(false);
-  const handleWishlistBtn = () => {
-    setIsWishlist((prev) => !prev);
+  const isWishlsted = (id: number): boolean => {
+    return wishlist.some((item) => item.id === id);
   };
   return (
     <>
       <div className="floating-drawer w-screen bg-white fixed bottom-0 left-0 right-0 z-20">
         <div className="w-full h-full flex items-center justify-between p-5 gap-5">
-          <button onClick={handleWishlistBtn} className="border border-primary border-solid p-5 rounded-lg">
-            {isWishlist ? <FaHeart className="text-xl text-red transition-colors" /> : <FaRegHeart className="text-primary text-xl" />}
+          <button
+            onClick={() => toggleWishlist({ id, name, price, imageUrl, category, variants, stocks, unit, discount, rating, tags, shop, sold })}
+            className="border border-primary border-solid p-5 rounded-lg"
+          >
+            {isWishlsted(id) ? <FaHeart className="text-xl text-red transition-colors" /> : <FaRegHeart className="text-primary text-xl" />}
           </button>
           <div className="w-full flex items-center gap-5">
             <button
