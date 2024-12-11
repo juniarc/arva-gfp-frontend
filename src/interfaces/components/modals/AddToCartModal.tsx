@@ -7,6 +7,7 @@ import { CartItem, Product } from "@/types/types";
 import Image from "next/image";
 import LineDivider from "../dividers/LineDivider";
 import SuccessAlert from "../alerts/SuccessAlert";
+import { Variants } from "@/types/types";
 
 interface AddToCartModalProps {
   isOpen: boolean;
@@ -16,7 +17,7 @@ interface AddToCartModalProps {
   price: number;
   imageUrl: string;
   category: string;
-  variants: string[];
+  variants: Variants[];
   stocks: number;
   unit: string;
   discount: number;
@@ -34,7 +35,7 @@ export default function AddToCartModal({
   unit,
   discount,
 }: AddToCartModalProps) {
-  const [selectedVariant, setSelectedVariant] = useState<string | null>(variants[0]);
+  const [selectedVariant, setSelectedVariant] = useState<Variants | null>(variants[0]);
   const [quantity, setQuantity] = useState<number>(1);
   const [totalPrice, setTotalPrice] = useState<number>(price);
   const [showAlert, setShowAlert] = useState<boolean>(false);
@@ -42,7 +43,7 @@ export default function AddToCartModal({
   useEffect(() => {
     setTotalPrice(price * quantity);
   }, [quantity, price]);
-  const handleSelectVariant = (variant: string) => setSelectedVariant(variant);
+  const handleSelectVariant = (variant: Variants) => setSelectedVariant(variant);
 
   const handleAddToCart = () => {
     setShowAlert(true);
@@ -87,7 +88,7 @@ export default function AddToCartModal({
                       className={`bg-gray text-xs tablet:text-base py-2 px-10 rounded capitalize ${selectedVariant === variant ? "bg-secondary font-semibold" : ""}`}
                       key={index}
                     >
-                      {variant}
+                      {variant.name}
                     </button>
                   ))}
                 </div>

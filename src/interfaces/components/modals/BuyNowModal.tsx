@@ -51,7 +51,6 @@ export default function BuyNowModal({
     }
   }, [quantity, price]);
   const handleSelectVariant = (variant: Variants) => setSelectedVariant(variant);
-  console.log(selectedVariant);
 
   const handleBuyBtn = () => {
     router.push(
