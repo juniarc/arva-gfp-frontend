@@ -1,7 +1,4 @@
 import AddressSection from "../buynowPage/AddressSection";
-import ShippingSection from "../buynowPage/ShippingSection";
-import LineDivider from "../dividers/LineDivider";
-import VoucherSection from "../buynowPage/VoucherSection";
 import PaymentMehtod from "../buynowPage/PaymentMethod";
 import { CartItem, User } from "@/types/types";
 import ProductsInfo from "./ProductsInfo";

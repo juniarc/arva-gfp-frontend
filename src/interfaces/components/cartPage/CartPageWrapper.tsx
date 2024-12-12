@@ -3,13 +3,15 @@ import { useEffect, useState } from "react";
 import { CartItem } from "@/types/types";
 import CartPage from "./CartPage";
 import { useRouter } from "next/navigation";
+import CartPageDesktop from "./desktop/CartPageDekstop";
 
 interface CartPageWrapperProps {
   separatedByShop: any;
   cart: CartItem[];
+  viewport: string | undefined;
 }
 
-export default function CartPageWrapper({ separatedByShop, cart }: CartPageWrapperProps) {
+export default function CartPageWrapper({ separatedByShop, cart, viewport }: CartPageWrapperProps) {
   const router = useRouter();
   const [userCart, setUserCart] = useState<CartItem[]>(cart);
   const initializeCheckedState = () => {
@@ -87,8 +89,23 @@ export default function CartPageWrapper({ separatedByShop, cart }: CartPageWrapp
       setUserCart(updatedCart);
     }
   };
+  if (viewport === "mobile")
+    return (
+      <CartPage
+        separatedByShop={separatedByShop}
+        handleProductCheckboxChange={handleProductCheckboxChange}
+        handleShopCheckboxChange={handleShopCheckboxChange}
+        checkedProducts={checkedProducts}
+        checkedShops={checkedShops}
+        handleBtnCO={handleButtonCO}
+        totalItems={selectedItems.length}
+        totalPrice={totalPrice}
+        handleQuantityChange={handleQuantityChange}
+        cart={userCart}
+      />
+    );
   return (
-    <CartPage
+    <CartPageDesktop
       separatedByShop={separatedByShop}
       handleProductCheckboxChange={handleProductCheckboxChange}
       handleShopCheckboxChange={handleShopCheckboxChange}
