@@ -28,7 +28,6 @@ const WishlistContext = createContext<WishlistContextProps | undefined>(undefine
 
 export const WishlistProvider = ({ children }: { children: React.ReactNode }) => {
   const [wishlist, setWishlist] = useState<ProductItemProps[]>([]);
-  console.log(wishlist);
   useEffect(() => {
     const storedWishlist = localStorage.getItem("wishlist");
     if (storedWishlist) {

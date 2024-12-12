@@ -43,7 +43,6 @@ export default function BuynowPage({
   selectedShipping,
   handleSelectedShipping,
 }: BuynowPageProps) {
-  console.log(product.shop.shippingChannel);
   return (
     <main className="px-10 pt-5 tablet:p-15 ">
       <h1 className="text-primary text-[1.75rem] tablet:text-[2rem]">Checkout</h1>

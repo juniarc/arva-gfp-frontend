@@ -28,3 +28,13 @@ export const startPage = (currentPage, maxIndicators, totalPages) => {
 export const endPage = (startPage, maxIndicators, totalPages) => {
   return Math.min(startPage + maxIndicators, totalPages);
 };
+
+export const calculateAverageRatingShop = (products) => {
+  const validRatings = products.map((product) => product.rating).filter((rating) => typeof rating === "number" && !isNaN(rating));
+
+  const totalRating = validRatings.reduce((sum, rating) => sum + rating, 0);
+
+  const averageRating = validRatings.length > 0 ? totalRating / validRatings.length : 0;
+
+  return { totalRating, averageRating };
+};
