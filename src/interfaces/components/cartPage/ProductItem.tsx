@@ -56,12 +56,12 @@ export default function ProductItem({
           checked={checkedProducts[id]}
           onChange={(e) => handleProductCheckboxChange(id, e.target.checked)}
           crossOrigin={undefined}
-          className="w-10 h-10"
+          className="w-10 h-10 tablet:w-20 tablet:h-20"
         />
       </div>
       <div className="w-full">
-        <div className="pt-3 flex items-start gap-5 w-full">
-          <div className="w-30 h-30 min-w-30 min-h-30">
+        <div className="pt-3 flex items-start gap-5 tablet:gap-10 w-full">
+          <div className="w-30 h-30 tablet:w-[122px] tablet:h-[122px] tablet:min-w-[122px] tablet:min-h-[122px] min-w-30 min-h-30">
             <Image
               src={Foto}
               width={60}
@@ -70,19 +70,20 @@ export default function ProductItem({
               alt="Product image"
             />
           </div>
-          <div className="flex flex-col gap-3 w-full">
+          <div className="flex flex-col gap-3 tablet:gap-5 w-full ">
             <p className="text-dark-gray truncate max-w-[240px]">{product.name}</p>
-            <p className="text-xs text-dark-gray">{selectedVariant.variantName}</p>
-            <p className="font-semibold">Rp. {selectedVariant.price}</p>
+            <p className="text-xs tablet:text-sm text-dark-gray">{selectedVariant.variantName}</p>
+            <p className="font-semibold tablet:text-[1.375rem]">Rp. {selectedVariant.price}</p>
             <div className="flex items-center justify-between mt-5 w-full">
-              <button className="text-dark-gray text-xl">
+              <button className="text-dark-gray text-xl tablet:text-3xl">
                 <FaRegHeart />
               </button>
-              <div className="text-dark-gray flex items-center border-solid border-gray border w-fit rounded-lg py-1 px-5">
+              <div className="text-dark-gray flex items-center border-solid border-gray border w-fit rounded-lg py-1 px-5 tablet:py-3 tablet:px-10">
                 <button
                   onClick={() => {
                     handleQuantityChange(id, currentQuantity - 1, product.stocks);
                   }}
+                  className="tablet:text-[1.375rem]"
                 >
                   <LuMinus />
                 </button>
@@ -97,13 +98,14 @@ export default function ProductItem({
                       handleQuantityChange(id, newQuantity, product.stocks);
                     }
                   }}
-                  className="w-30 text-center text-black"
+                  className="w-30 tablet:w-40 text-center text-black tablet:text-[1.375rem]"
                 />
                 <button
                   onClick={() => {
                     handleQuantityChange(id, currentQuantity + 1, product.stocks);
                   }}
                   disabled={quantity >= product.stocks}
+                  className="tablet:text-[1.375rem]"
                 >
                   <LuPlus />
                 </button>

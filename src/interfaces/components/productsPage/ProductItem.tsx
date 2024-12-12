@@ -28,29 +28,29 @@ export default function ProductItem({ id, name, price, imageUrl, category, disco
           alt="Product Image"
         />
       </div>
-      <div className="w-full flex-grow p-5 flex flex-col justify-between gap-3 desktop:gap-3">
+      <div className="w-full flex-grow p-5 tablet:p-7 flex flex-col justify-between gap-3 desktop:gap-3">
         <p className="text-dark-gray text-[0.5rem] tablet:text-xs capitalize desktop:text-xs">{category}</p>
         <Link href={`/${formatedShopnameForUrl}/${formatedProductnameForUrl}-${id}`} className="text-base max-h-21 line-clamp-2">
           {name}
         </Link>
         <div className="flex items-center gap-5">
-          <p className="font-semibold text-primary">Rp. {price}</p>
-          {discount !== 0 && <p className="text-red bg-light-red px-3 text-xs">{discount} %</p>}
+          <p className="font-semibold text-primary tablet:text-[1.375rem]">Rp. {price}</p>
+          {discount !== 0 && <p className="text-red bg-light-red px-3 tablet:py-2 text-xs tablet:text-[0.9375rem]">{discount} %</p>}
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
-            <FaStar className="text-yellow text-xs" />
-            <p className="text-xs">{rating}</p>
+            <FaStar className="text-yellow text-xs tablet:text-[0.9375rem]" />
+            <p className="text-xs tablet:text-[0.9375rem]">{rating}</p>
           </div>
           <div>|</div>
-          <p className="text-xs">{sold} Sold</p>
+          <p className="text-xs tablet:text-[0.9375rem]">{sold} Sold</p>
         </div>
         <div className="flex items-center gap-2 text-xs text-dark-gray">
-          <FaLocationDot className="text-xs" />
-          <p className="capitalize text-xs">{shop.addressCity}</p>
+          <FaLocationDot className="text-xs tablet:text-[0.9375rem]" />
+          <p className="capitalize text-xs tablet:text-[0.9375rem]">{shop.addressCity}</p>
         </div>
       </div>
-      <div className="absolute bottom-5 right-5">
+      <div className="absolute bottom-5 right-5 tablet:bottom-7 tablet:right-7">
         <button
           onClick={() => setIsOpen(true)}
           data-modal-target="addToCartModal"

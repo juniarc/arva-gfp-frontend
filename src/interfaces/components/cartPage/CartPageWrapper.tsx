@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { CartItem } from "@/types/types";
 import CartPage from "./CartPage";
+import { useRouter } from "next/navigation";
 
 interface CartPageWrapperProps {
   separatedByShop: any;
@@ -9,6 +10,7 @@ interface CartPageWrapperProps {
 }
 
 export default function CartPageWrapper({ separatedByShop, cart }: CartPageWrapperProps) {
+  const router = useRouter();
   const [userCart, setUserCart] = useState<CartItem[]>(cart);
   const initializeCheckedState = () => {
     const initialCheckedProducts: { [key: number]: boolean } = {};
@@ -67,6 +69,7 @@ export default function CartPageWrapper({ separatedByShop, cart }: CartPageWrapp
 
   const handleButtonCO = () => {
     sessionStorage.setItem("selectedItems", JSON.stringify(selectedItems));
+    router.push("/cart/shipment");
     console.log(selectedItems);
   };
 

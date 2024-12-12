@@ -32,8 +32,8 @@ export default function ProductItem({ id, name, price, imageUrl, category, disco
   const formatedProductnameForUrl = uriHelpers.formatStringForUrl(name);
 
   return (
-    <div className="shadow-md max-w-[188px] w-full min-h-[330px] bg-white rounded-lg flex flex-col relative mr-10">
-      <div className="w-full h-[144px] overflow-hidden">
+    <div className="shadow-md max-w-[188px] tablet:max-w-full w-full min-h-[330px] bg-white rounded-lg flex flex-col relative mr-10">
+      <div className="w-full h-[144px] tablet:h-1/2 overflow-hidden">
         <Image
           src={`${imageUrl[0]}`}
           width={188}
@@ -43,46 +43,48 @@ export default function ProductItem({ id, name, price, imageUrl, category, disco
           alt="Product Image"
         />
       </div>
-      <div className="w-full flex-grow p-5 flex flex-col justify-between desktop:gap-3">
+      <div className="w-full flex-grow p-5 tablet:p-7 flex flex-col justify-between desktop:gap-3">
         <p className="text-dark-gray text-[0.5rem]  tablet:text-xs capitalize desktop:text-xs mb-3">{category}</p>
         <Link href={`/${formatedShopnameForUrl}/${formatedProductnameForUrl}-${id}`} className="text-sm max-h-21 mb-3 line-clamp-2">
           {name}
         </Link>
         <div className="flex items-center gap-5 mb-3">
-          <p className="font-semibold text-primary">Rp. {price}</p>
-          <p className="text-red bg-light-red px-3 text-xs">{discount} %</p>
+          <p className="font-semibold text-primary tablet:text-[1.375rem]">Rp. {price}</p>
+          <p className="text-red bg-light-red px-3 text-xs tablet:text-[0.9375rem]">{discount} %</p>
         </div>
         <div className="flex items-center text-xs gap-4 mb-3">
           <div className="flex items-center gap-2">
-            <FaStar className="text-yellow text-xs" />
-            <p className=" text-xs">{rating}</p>
+            <FaStar className="text-yellow text-xs text-[0.9375rem]" />
+            <p className=" text-xs text-[0.9375rem]">{rating}</p>
           </div>
           <div>|</div>
-          <p className="text-xs">{sold} Sold</p>
+          <p className="text-xs text-[0.9375rem]">{sold} Sold</p>
         </div>
-        <div className="flex items-center gap-2 text-xs text-dark-gray">
-          <FaLocationDot className=" text-xs" />
-          <p className="capitalize text-xs">{shop.addressCity}</p>
+        <div className="flex items-center gap-2 text-xs text-[0.9375rem] text-dark-gray">
+          <FaLocationDot className=" text-xs text-[0.9375rem]" />
+          <p className="capitalize text-xs text-[0.9375rem]">{shop.addressCity}</p>
         </div>
-        <div className="flex items-center gap-2 mt-5">
-          <button className="border border-red border-solid rounded h-15 w-15 min-w-15 flex items-center justify-center hover:text-white hover:bg-red">
-            <FaHeart className="text-sm text-red hover:text-white" />
+        <div className="flex items-center gap-2 tablet:gap-5 mt-5 tablet:mt-10">
+          <button className="border border-red border-solid rounded h-15 w-15 min-w-15 tablet:w-20 tablet:min-w-20 tablet:h-20 flex items-center justify-center hover:text-white hover:bg-red">
+            <FaHeart className="text-sm tablet:text-xl text-red hover:text-white" />
           </button>
           <button
             onClick={() => setIsOpen(true)}
             data-modal-target="addToCartModal"
             data-modal-toggle="addToCartModal"
-            className="bg-primary w-full h-15 px-5 rounded flex items-center justify-between hover:bg-primary hover:text-white transition-colors ease-in"
+            className="bg-primary w-full h-15 tablet:h-20 px-5 rounded flex items-center justify-between tablet:justify-center tablet:gap-10 hover:bg-primary hover:text-white transition-colors ease-in"
           >
             <div>
-              <Image src={ShopIcon} className="w-9 h-9" alt="shop Icon" />
+              <Image src={ShopIcon} className="w-9 h-9 tablet:w-12 tablet:h-12" alt="shop Icon" />
             </div>
-            <span className="text-xs font-semibold text-white">Add To Cart</span>
+            <span className="text-xs text-[0.9375rem] font-semibold text-white">Add To Cart</span>
           </button>
           <AddToCartModal
             isOpen={isOpen}
             handleCloseModal={() => setIsOpen(false)}
-            {...{ id, name, price, imageUrl, category, variants, stocks, unit, discount }}
+            {...{ id, name, price, category, stocks, unit, discount }}
+            imageUrl={imageUrl[0]}
+            variants={variants}
           />
         </div>
       </div>
