@@ -50,7 +50,6 @@ export default function ShipmentPageWrapper({ user }: ShipmentPageWrapperProps) 
           return item;
         })
         .filter((item) => item.quantity > 0);
-      console.log(updatedCart);
       setSelectedItems(updatedCart);
     }
   };

@@ -18,7 +18,6 @@ interface ProductDetailPageProps {
   dummyReviews: any;
 }
 export default function ProductDetailPage({ productDetail, popularProducts, fruitProducts, dummyReviews }: ProductDetailPageProps) {
-  console.log(productDetail);
   if (productDetail) {
     return (
       <main className="w-full">
