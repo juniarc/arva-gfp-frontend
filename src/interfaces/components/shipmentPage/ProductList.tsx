@@ -43,7 +43,7 @@ export default function ProductList({
       <div className="mt-5">
         <VoucherSection />
       </div>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between tablet:mt-10">
         <span className="text-dark-gray text-xs tablet:text-base desktop:text-base flex gap-2 items-center underline">
           <GoShieldCheck /> Total damage protection 3 months
         </span>

@@ -12,16 +12,10 @@ interface ProducstPageProps {
 }
 
 export default function ProductsPage({ products, handleFilterBtn }: ProducstPageProps) {
-  // const [displayProducts, setDisplayProducts] = useState<Product[]>(products);
-  // const [selectedFilter, setSelectedFilter] = useState<string>("");
-  // const handleFilterBtn = (filterer: string) => {
-  //   setSelectedFilter(filterer);
-  // };
-  // const filteredProducts = displayProducts.filter((product) => product.category === selectedFilter);
   return (
-    <main className="py-5 px-10 min-h-[90vh]">
+    <main className="py-5 px-10 tablet:p-15 min-h-[90vh]">
       <div className="w-full flex justify-between gap-5">
-        <RecommendFilter />
+        <RecommendFilter handleFilterBtn={handleFilterBtn} />
         <FilterAndSort handleFilterBtn={handleFilterBtn} />
       </div>
       <section>

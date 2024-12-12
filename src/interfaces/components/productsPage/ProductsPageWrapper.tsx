@@ -15,5 +15,5 @@ export default function ProductsPageWrapper({ products }: ProductsPageWrapperPro
     setSelectedFilter(filterer);
   };
   const filteredProducts = displayProducts.filter((product) => product.category === selectedFilter);
-  return <ProductsPage products={products} handleFilterBtn={handleFilterBtn} />;
+  return <ProductsPage products={filteredProducts} handleFilterBtn={handleFilterBtn} />;
 }

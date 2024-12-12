@@ -37,7 +37,7 @@ export default function ProductList({ products }: ProductListProps) {
 
   return (
     <div className="mt-10">
-      <div className="grid grid-cols-2 gap-5 w-full">
+      <div className="grid grid-cols-2 gap-5 w-full tablet:grid-cols-3">
         {Array.isArray(paginatedData) ? (
           paginatedData[currentPage].map((item: Product, index: number) => <ProductItem {...item} key={index} />)
         ) : (
@@ -46,7 +46,7 @@ export default function ProductList({ products }: ProductListProps) {
       </div>
       <div className="w-full flex items-center justify-center gap-10 mt-10">
         <button onClick={handlePrev} disabled={currentPage === 0}>
-          <BsChevronLeft />
+          <BsChevronLeft className="tablet:text-xl" />
         </button>
         <div className="flex items-center gap-5">
           {pageIndicators.map((page, index) => (
@@ -61,7 +61,7 @@ export default function ProductList({ products }: ProductListProps) {
           ))}
         </div>
         <button onClick={handleNext} disabled={currentPage === totalPages - 1}>
-          <BsChevronRight />
+          <BsChevronRight className="tablet:text-xl" />
         </button>
       </div>
     </div>
