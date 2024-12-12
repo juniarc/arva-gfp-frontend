@@ -60,25 +60,25 @@ export default function ProductItem({
         />
       </div>
       <div className="w-full">
-        <div className="pt-3 flex items-start gap-5 tablet:gap-10 w-full">
-          <div className="w-30 h-30 tablet:w-[122px] tablet:h-[122px] tablet:min-w-[122px] tablet:min-h-[122px] min-w-30 min-h-30">
+        <div className="pt-3 flex items-start gap-5 tablet:gap-10 desktop:gap-10 w-full">
+          <div className="w-30 h-30 tablet:w-[122px] tablet:h-[122px] desktop:w-[126px] desktop:h-[126px] tablet:min-w-[122px] tablet:min-h-[122px] desktop:min-w-[126px] desktop:min-h-[126px] min-w-30 min-h-30">
             <Image
               src={Foto}
-              width={60}
-              height={30}
+              width={126}
+              height={126}
               className="w-full h-full overflow-hidden object-cover object-center rounded-lg"
               alt="Product image"
             />
           </div>
-          <div className="flex flex-col gap-3 tablet:gap-5 w-full ">
-            <p className="text-dark-gray truncate max-w-[240px]">{product.name}</p>
-            <p className="text-xs tablet:text-sm text-dark-gray">{selectedVariant.variantName}</p>
-            <p className="font-semibold tablet:text-[1.375rem]">Rp. {selectedVariant.price}</p>
-            <div className="flex items-center justify-between mt-5 w-full">
+          <div className="flex flex-col gap-3 tablet:gap-5 desktop:gap-5 w-full ">
+            <p className=" truncate max-w-[240px]">{product.name}</p>
+            <p className="text-xs tablet:text-sm desktop:text-base text-dark-gray">{selectedVariant.variantName}</p>
+            <p className="font-semibold tablet:text-[1.375rem] desktop:text-2xl">Rp. {selectedVariant.price}</p>
+            <div className="flex items-center justify-between mt-5 desktop:mt-10 w-full">
               <button className="text-dark-gray text-xl tablet:text-3xl">
                 <FaRegHeart />
               </button>
-              <div className="text-dark-gray flex items-center border-solid border-gray border w-fit rounded-lg py-1 px-5 tablet:py-3 tablet:px-10">
+              <div className="text-dark-gray flex items-center border-solid border-gray border w-fit rounded-lg py-1 px-5 tablet:py-3 tablet:px-10 desktop:px-10 desktop:py-3">
                 <button
                   onClick={() => {
                     handleQuantityChange(id, currentQuantity - 1, product.stocks);
@@ -98,7 +98,7 @@ export default function ProductItem({
                       handleQuantityChange(id, newQuantity, product.stocks);
                     }
                   }}
-                  className="w-30 tablet:w-40 text-center text-black tablet:text-[1.375rem]"
+                  className="w-30 tablet:w-40 desktop:w-36 text-center text-black tablet:text-[1.375rem] desktop:text-[1.375rem]"
                 />
                 <button
                   onClick={() => {

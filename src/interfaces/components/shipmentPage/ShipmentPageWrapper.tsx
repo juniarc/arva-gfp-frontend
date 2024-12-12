@@ -4,11 +4,13 @@ import { useEffect, useMemo, useState } from "react";
 import { CartItem, User } from "@/types/types";
 import ShipmentPage from "./ShipmentPage";
 import { mockApiRequestPostUser } from "@/services/api/dummyData";
+import ShipmentPageDesktop from "./desktop/ShipmentPageDesktop";
 
 interface ShipmentPageWrapperProps {
   user: User;
+  viewport: string | undefined;
 }
-export default function ShipmentPageWrapper({ user }: ShipmentPageWrapperProps) {
+export default function ShipmentPageWrapper({ user, viewport }: ShipmentPageWrapperProps) {
   const [selectedItems, setSelectedItems] = useState<CartItem[]>([]);
   const [currentUser, setCurrentUser] = useState(user);
   const separatedByShop = selectedItems.reduce(
@@ -104,8 +106,28 @@ export default function ShipmentPageWrapper({ user }: ShipmentPageWrapperProps) 
   }, [currentUser, totalItems, selectedShipping, paymentMethod]);
 
   if (selectedItems.length === 0) return null;
+  if (viewport === "mobile")
+    return (
+      <ShipmentPage
+        separatedByShop={separatedByShop}
+        user={currentUser}
+        handleFetchUpdatedUser={handleFetchUpdatedUser}
+        cart={selectedItems}
+        handleQuantityChange={handleQuantityChange}
+        selectedShipping={selectedShipping}
+        handleSelectedShipping={handleSelectedShipping}
+        handleCheckbox={handleCheckboxChange}
+        isProtected={isProtected}
+        paymentMethod={paymentMethod}
+        handleSelectedPayment={handlePaymentMethod}
+        totalItems={totalItems}
+        totalPrice={totalPrice}
+        isCompleted={isCompleted}
+        totalProtectedShop={checkedCount}
+      />
+    );
   return (
-    <ShipmentPage
+    <ShipmentPageDesktop
       separatedByShop={separatedByShop}
       user={currentUser}
       handleFetchUpdatedUser={handleFetchUpdatedUser}

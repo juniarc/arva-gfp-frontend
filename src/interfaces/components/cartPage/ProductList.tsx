@@ -28,7 +28,7 @@ export default function ProductList({
   return (
     <div className="mt-5">
       <div className="flex items-center gap-5">
-        <div className="">
+        <div>
           <Checkbox
             color="blue"
             defaultChecked={checkedShops[shopId]}

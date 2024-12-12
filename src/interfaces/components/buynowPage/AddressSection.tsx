@@ -47,7 +47,7 @@ export default function AddressSection({
               <FaCircle className="text-[0.25rem]" />
               <p>{name}</p>
             </div>
-            <p className="w-full text-ellipsis text-xs tablet:text-base mt-5 capitalize">
+            <p className="w-full text-ellipsis text-xs tablet:text-base desktop:text-base mt-5 capitalize">
               {addressStreet}, {addressSubdistrict}, {addressDistrict}, {addressCity}, {addressProvince}, {zipCode}
             </p>
           </div>
