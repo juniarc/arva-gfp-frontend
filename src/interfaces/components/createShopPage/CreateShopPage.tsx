@@ -45,6 +45,8 @@ export default function CreateShopPage() {
     openingHours: "",
     closingHours: "",
     phonNumber: "",
+    name: "",
+    description: "",
   });
   const [uploadProductValues, setUploadProductValues] = useState({
     imageUrl: [],
@@ -66,7 +68,6 @@ export default function CreateShopPage() {
     tags: [],
   });
   const handleNext = (values: any) => {
-    console.log("next");
     switch (activeStep) {
       case 0:
         setIdentityValues({
@@ -112,7 +113,7 @@ export default function CreateShopPage() {
                     index < activeStep ? "bg-primary border-primary" : index === activeStep ? "border-primary bg-white" : "border-gray-300 bg-white"
                   } w-10 h-10 rounded-full border flex items-center justify-center`}
                 >
-                  <FaCheck className="text-xs" />
+                  <FaCheck className={`text-xs ${index < activeStep ? "text-white" : "hidden"}`} />
                 </div>
               </Step>
             ))}

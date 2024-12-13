@@ -31,6 +31,8 @@ const DropdownWithSpinner = ({ label, options, isLoading, onSelect, name, touche
 };
 
 interface ShopFormTypes {
+  name: string;
+  description: string;
   addressLabel: string;
   addressProvince: string;
   addressCity: string;
@@ -53,6 +55,8 @@ const DynamicThemeProvider = dynamic(() => import("@material-tailwind/react").th
 
 export default function ShopProfile({ initialValues, handleSubmit, handlePrev }: ShopProfileFormProps) {
   const validationSchema = object({
+    name: string().required("Name is required"),
+    description: string().required("Description is required"),
     addressLabel: string().required("Label is required"),
     addressProvince: string().required("Province is required"),
     addressCity: string().required("City is required"),
@@ -127,6 +131,44 @@ export default function ShopProfile({ initialValues, handleSubmit, handlePrev }:
                 <div className="flex flex-col gap-15">
                   <div className="relative">
                     <div className="relative">
+                      <Input
+                        name="name"
+                        label="Shop Name"
+                        value={values.name}
+                        onChange={handleChange}
+                        crossOrigin={undefined}
+                        maxLength={maxLength}
+                        className="tablet:text-base "
+                      />
+                      <p className={`text-red absolute top-full ${touched.addressLabel && errors.addressLabel ? "visible" : ""}`}>
+                        <ErrorMessage name="name" />
+                      </p>
+                      <div className="w-full flex justify-end mt-2">
+                        <span className="text-xs tablet:text-sm text-dark-gray">
+                          {values.addressLabel.length}/{maxLength}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="relative">
+                      <Textarea
+                        name="description"
+                        label="Shop Description"
+                        value={values.addressLabel}
+                        onChange={handleChange}
+                        maxLength={3000}
+                        className="tablet:text-base "
+                      />
+                      <p className={`text-red absolute top-full ${touched.addressLabel && errors.addressLabel ? "visible" : ""}`}>
+                        <ErrorMessage name="description" />
+                      </p>
+                      <div className="w-full flex justify-end mt-2">
+                        <span className="text-xs tablet:text-sm text-dark-gray">
+                          {values.addressLabel.length}/{maxLength}
+                        </span>
+                      </div>
+                    </div>
+                    <LineDivider className="my-5" />
+                    <div className="relative mt-5">
                       <Input
                         name="addressLabel"
                         label="Address Label"
