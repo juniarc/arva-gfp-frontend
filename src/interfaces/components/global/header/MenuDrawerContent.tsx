@@ -38,7 +38,7 @@ export default function MenuDrawerContent() {
           </Link>
         </div>
         <LineDivider className="my-10" />
-        <Link href="*" className="flex items-center gap-8">
+        <Link href="/my-shop" className="flex items-center gap-8">
           <CiShop className="text-xl tablet:text-[2rem]" />
           <p>My Shop</p>
         </Link>

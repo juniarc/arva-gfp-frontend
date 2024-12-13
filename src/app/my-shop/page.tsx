@@ -1,11 +1,13 @@
+import { dummyShop } from "@/services/api/dummyShop";
+import { cookies } from "next/headers";
 import CreateShop from "@/interfaces/components/my-shop/CreateShop";
-import api from "@/services/api/api";
-import { Shop } from "@/types/types";
-
-export default async function MyShop() {
-  //   const shop = await api.getShop();
+import MyShopPageWrapper from "@/interfaces/components/my-shop/MyShopPageWrapper";
+export default async function Page({ params }: { params: Promise<{ shopName: string }> }) {
+  const cookiesList = await cookies();
+  const viewport = cookiesList.get("viewport")?.value || undefined;
   const shop = {
-    id: "",
+    id: 1,
   };
-  return <main className="min-h-svh">{shop?.id ? <p>Your Shop</p> : <CreateShop />}</main>;
+  if (!shop.id) return <CreateShop />;
+  return <MyShopPageWrapper shop={dummyShop} viewport={viewport} />;
 }
