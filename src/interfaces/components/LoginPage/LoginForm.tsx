@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation"; 
@@ -6,11 +6,13 @@ import { HiOutlineUser } from "react-icons/hi2";
 import { HiOutlineKey } from "react-icons/hi"; 
 import { HiMiniEyeSlash } from "react-icons/hi2"; 
 import { FcGoogle } from "react-icons/fc"; 
+import { users } from "@/services/api/dummyUser"; 
 
 export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ username: "", password: "" });
+  const [loginError, setLoginError] = useState("");
   const router = useRouter(); 
 
   const handleSubmit = (e) => {
@@ -30,8 +32,19 @@ export default function LoginForm() {
 
     if (hasError) {
       setErrors(newErrors);
+      return;
+    }
+
+    const user = users.find((user) => user.username === username);
+
+    if (user && password === "password123") {
+ 
+      console.log("Login successful");
+      router.push("/login/login-success"); 
     } else {
-      console.log("Form submitted successfully");
+
+      setLoginError("Invalid username or password");
+      router.push("/login/login-failed"); 
     }
   };
 
@@ -60,7 +73,6 @@ export default function LoginForm() {
           {errors.username && <p className="text-red-500 text-xs mt-1">{errors.username}</p>}
         </div>
 
-        {/* Password Field */}
         <div className="mb-6">
           <div className="flex items-center border-b-2 border-gray-300 py-7">
             <HiOutlineKey className="mr-2 text-gray-500" />
@@ -78,7 +90,7 @@ export default function LoginForm() {
           {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
         </div>
 
-        {/* Submit Button */}
+
         <button
           type="submit"
           className="w-full bg-[#5B5B5B] hover:bg-[#969696] text-white font-serif font-semibold py-7 rounded"
@@ -86,14 +98,14 @@ export default function LoginForm() {
           Sign In
         </button>
 
-        {/* Divider with Lines */}
+
         <div className="flex items-center my-6">
           <hr className="flex-grow border-gray-300" />
           <span className="px-4 text-gray-500 py-7">or login with</span>
           <hr className="flex-grow border-gray-300" />
         </div>
 
-        {/* Google Login */}
+
         <button
           type="button"
           className="w-full flex items-center justify-center border border-gray-300 py-7 rounded"
@@ -102,10 +114,10 @@ export default function LoginForm() {
           Login with Google
         </button>
 
-        {/* Sign Up Prompt */}
+
         <p className="text-center text-gray-600 mb-4 py-7">Don't have an account?</p>
 
-        {/* Sign Up Button */}
+
         <button
           type="button"
           onClick={navigateToRegister}

@@ -3,7 +3,7 @@ import React from "react";
 import RegisterImage from "@/interfaces/components/RegisterPage/RegisterImage";
 import RegisterForm from "@/interfaces/components/RegisterPage/RegisterForm";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   return (
     <main className="flex flex-col lg:flex-row w-full min-h-screen bg-white">
       <section className="w-full lg:w-1/2 flex justify-center items-center px-4">

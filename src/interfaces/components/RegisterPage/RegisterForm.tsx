@@ -7,6 +7,7 @@ import { HiOutlineKey } from "react-icons/hi";
 import { HiMiniEyeSlash } from "react-icons/hi2";
 import { FcGoogle } from "react-icons/fc";
 import { TfiEmail } from "react-icons/tfi";
+import { addUser } from "@/services/api/dummyUser";
 import Link from "next/link";
 
 export default function RegisterForm() {
@@ -15,9 +16,10 @@ export default function RegisterForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({ username: "", email: "", password: "", confirmPassword: "" });
+  const [registrationError, setRegistrationError] = useState("");
   const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let hasError = false;
     const newErrors = { username: "", email: "", password: "", confirmPassword: "" };
@@ -44,13 +46,16 @@ export default function RegisterForm() {
 
     if (hasError) {
       setErrors(newErrors);
-    } else {
-      console.log("Form submitted successfully");
+      return;
     }
-  };
 
-  const navigateToLogin = () => {
-    router.push("/login");
+    // simulasi POST user
+    const errorMessage = addUser(username, email, password);
+    if (errorMessage) {
+      router.push("/register/register-failed");
+    } else {
+      router.push("/register/register-success");
+    }
   };
 
   return (
@@ -156,7 +161,7 @@ export default function RegisterForm() {
           Already have an account?{" "}
           <button
             type="button"
-            onClick={navigateToLogin}
+            onClick={() => router.push("/login")}
             className="text-primary hover:underline"
           >
             <Link href="/login">Log In</Link>
