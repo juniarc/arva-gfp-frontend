@@ -36,8 +36,8 @@ export default function ProductList({ products }: ProductListProps) {
   const pageIndicators = Array.from({ length: endPageList - starPageList }, (_, i) => starPageList + i);
 
   return (
-    <div className="mt-10">
-      <div className="grid grid-cols-2 gap-5 w-full tablet:grid-cols-3">
+    <div className="mt-10 desktop:mt-0 desktop:w-full">
+      <div className="grid grid-cols-2 gap-5 w-full tablet:grid-cols-3 desktop:grid-cols-4">
         {Array.isArray(paginatedData) ? (
           paginatedData[currentPage].map((item: Product, index: number) => <ProductItem {...item} key={index} />)
         ) : (

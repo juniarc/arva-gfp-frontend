@@ -28,11 +28,8 @@ export default function MenuNav() {
   };
   return (
     <div>
-      <button
-        onClick={handleOpenDrawer}
-        className="w-15 h-15 tablet:h-30 tablet:w-30 border-solid border border-white rounded text-white flex items-center justify-center"
-      >
-        <LuMenu className="tablet:text-[2rem]" />
+      <button onClick={handleOpenDrawer} className="w-15 h-15 border-solid border border-white rounded text-white flex items-center justify-center">
+        <LuMenu />
       </button>
       <MenuDrawer overlayRef={overlayRef} menuDrawerRef={menuDrawerRef} handleCloseDrawer={handleCloseDrawer} isOpen={isOpen} />
     </div>
