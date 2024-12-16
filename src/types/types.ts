@@ -6,10 +6,22 @@ export interface ShippingInfo {
   shippingFee: number;
 }
 
-export interface Variants {
-  id: number | null;
-  name: string | null;
-  price: number | null;
+export interface Variant {
+  variant_id: number;
+  variant_name: string;
+  variant_price: number;
+  variant_stock: number;
+  variant_unit: string;
+}
+
+export interface Discount {
+  discount_id: number;
+  discount_name: string;
+  discount_type: string;
+  discount_value: number;
+  end_date: string;
+  product_id: number;
+  start_date: string;
 }
 
 export interface Shop {
@@ -35,22 +47,35 @@ export interface Shop {
 }
 
 export interface Product {
-  id: number;
-  name: string;
+  product_id: number;
+  product_name: string;
   description: string;
-  price: number;
-  imageUrl: string[];
+  product_type: string | null;
+  image: string[] | null;
   category: string;
-  stocks: number;
-  unit: string;
-  discount: number;
+  discount: Discount[] | null;
   rating: number;
-  isWishlist: boolean;
-  shippingInfo: ShippingInfo;
-  shop: { id: number; name: string; imageUrl: string; addressCity: string; shippingChannel: string[] };
+  shipping_cost: number;
+  shop: { shop_id: number; shop_address_city: string };
   sold: number;
-  variants: Variants[];
-  tags: string[];
+  variant: Variant[] | null;
+  status: string;
+  // tags: string[];
+}
+
+export interface UploadProductBody {
+  image_data: string[];
+  product_name: string;
+  product_description: string;
+  category: string;
+  variant_name: string;
+  price: number;
+  unit: string;
+  stock: number;
+  discount_name: string;
+  discount_value: number;
+  start_date: string;
+  end_date: string;
 }
 
 export interface User {
@@ -88,6 +113,17 @@ export interface Shop {
   createdAt: string;
   description: string;
   products: Product[];
+}
+
+export interface CreateShopBody {
+  shop_image: string;
+  shop_name: string;
+  description: string;
+  shop_address_province: string;
+  shop_address_city: string;
+  shop_address_district: string;
+  shop_address_subdistrict: string;
+  shop_address_street: string;
 }
 
 export interface CartItem {

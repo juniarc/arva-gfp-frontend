@@ -6,6 +6,8 @@ import { customeTheme } from "@/interfaces/theme/customTheme";
 import dynamic from "next/dynamic";
 import { shippingOptions } from "@/services/fixedData";
 import LineDivider from "../dividers/LineDivider";
+import Image from "next/image";
+import { FaCamera } from "react-icons/fa6";
 
 const DropdownWithSpinner = ({ label, options, isLoading, onSelect, name, touched, errors }: any) => {
   return (
@@ -31,20 +33,19 @@ const DropdownWithSpinner = ({ label, options, isLoading, onSelect, name, touche
 };
 
 interface ShopFormTypes {
-  name: string;
+  shop_image: string;
+  shop_name: string;
   description: string;
-  addressLabel: string;
-  addressProvince: string;
-  addressCity: string;
-  addressDistrict: string;
-  addressSubdistrict: string;
-  addressStreet: string;
-  shippingChannel: string[];
-  email: string;
-  phoneNumber: string;
-  openingHours: string;
-  closingHours: string;
-  zipCode: string;
+  shop_address_province: string;
+  shop_address_city: string;
+  shop_address_district: string;
+  shop_address_subdistrict: string;
+  shop_address_street: string;
+  // email: string;
+  // phoneNumber: string;
+  // openingHours: string;
+  // closingHours: string;
+  // zipCode: string;
 }
 interface ShopProfileFormProps {
   initialValues: ShopFormTypes;
@@ -55,20 +56,19 @@ const DynamicThemeProvider = dynamic(() => import("@material-tailwind/react").th
 
 export default function ShopProfile({ initialValues, handleSubmit, handlePrev }: ShopProfileFormProps) {
   const validationSchema = object({
-    name: string().required("Name is required"),
+    shop_image: string().required("Image is required"),
+    shop_name: string().required("Name is required"),
     description: string().required("Description is required"),
-    addressLabel: string().required("Label is required"),
-    addressProvince: string().required("Province is required"),
-    addressCity: string().required("City is required"),
-    addressDistrict: string().required("District is required"),
-    addressSubdistrict: string().required("Subdistrict is required"),
-    addressStreet: string().required("Street is required"),
-    zipCode: string().required("Zip Code is required"),
-    email: string().email().required("Email is required"),
-    phoneNumber: number().required("Phone Number is required"),
-    openingHours: string().required("Opening Hours is required"),
-    closingHours: string().required("Closing Hours is required"),
-    shippingChannel: string().required("Shipping is required"),
+    shop_address_province: string().required("Province is required"),
+    shop_address_city: string().required("City is required"),
+    shop_address_district: string().required("District is required"),
+    shop_address_subdistrict: string().required("Subdistrict is required"),
+    shop_address_street: string().required("Street is required"),
+    // zipCode: string().required("Zip Code is required"),
+    // email: string().email().required("Email is required"),
+    // phoneNumber: number().required("Phone Number is required"),
+    // openingHours: string().required("Opening Hours is required"),
+    // closingHours: string().required("Closing Hours is required"),
   });
 
   const maxLength = 30;
@@ -120,36 +120,115 @@ export default function ShopProfile({ initialValues, handleSubmit, handlePrev }:
   useEffect(() => {
     fetchProvinces();
   }, []);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, values: any, setFieldValue: (field: string, value: any) => void) => {
+    const MAX_FILE_SIZE = 500 * 1024; //500kb
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const file = files[0]; // Ambil hanya file pertama
+      if (file.size > MAX_FILE_SIZE) {
+        console.error(`File "${file.name}" exceeds the maximum size of 500 KB.`);
+        alert(`File "${file.name}" terlalu besar. Maksimum ukuran file adalah 500 KB.`);
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const base64String = reader.result as string;
+
+        // Set langsung shop_image dengan base64 string
+        setFieldValue("shop_image", base64String);
+      };
+
+      reader.onerror = (error) => {
+        console.error("Error reading file:", error);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
   return (
     <div className="mt-10 ">
       <h5 className="font-bold text-center w-full mb-10 ">Shop Information</h5>
       <div>
         <DynamicThemeProvider value={customeTheme}>
-          <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={(values, actions) => {
+              try {
+                validationSchema.validateSync(values, { abortEarly: false });
+                console.log("Submit successful:", values);
+                handleSubmit(values);
+              } catch (err) {
+                console.error("Validation errors:", err);
+              }
+            }}
+          >
             {({ errors, touched, values, handleChange, setFieldValue }) => (
               <Form className="flex flex-col justify-between min-h-[70svh]">
                 <div className="flex flex-col gap-15">
                   <div className="relative">
+                    <div className="flex items-center gap-10 mb-10">
+                      <div className="w-30 h-30 border border-gray bg-light-gray rounded-full relative flex justify-center items-center">
+                        {values.shop_image && (
+                          <Image
+                            src={`${values.shop_image}`}
+                            width={50}
+                            height={50}
+                            className="w-full h-full object-cover object-center rounded-full"
+                            alt="Product Image"
+                          />
+                        )}
+                        {!values.shop_image && <FaCamera className="text-dark-gray text-xl" />}
+                      </div>
+                      <div>
+                        <label htmlFor="shop_image" className="text-sm text-primary font-semibold">
+                          Upload Shop Image <span className="text-xs text-dark-gray font-normal">(Max. 500 KB)</span>
+                        </label>
+                        <input
+                          id="shop_image"
+                          type="file"
+                          name="shop_image"
+                          multiple
+                          accept="image/*"
+                          onChange={(event) => handleFileChange(event, values, setFieldValue)}
+                          className="hidden"
+                        />
+                      </div>
+                    </div>
                     <div className="relative">
                       <Input
-                        name="name"
+                        name="shop_name"
                         label="Shop Name"
-                        value={values.name}
+                        value={values.shop_name}
                         onChange={handleChange}
                         crossOrigin={undefined}
                         maxLength={maxLength}
                         className="tablet:text-base "
                       />
-                      <p className={`text-red absolute top-full ${touched.addressLabel && errors.addressLabel ? "visible" : ""}`}>
-                        <ErrorMessage name="name" />
+                      <p className={`text-red absolute top-full ${touched.shop_name && errors.shop_name ? "visible" : ""}`}>
+                        <ErrorMessage name="shop_name" />
                       </p>
                       <div className="w-full flex justify-end mt-2">
                         <span className="text-xs tablet:text-sm text-dark-gray">
-                          {values.addressLabel.length}/{maxLength}
+                          {values.shop_name.length}/{maxLength}
                         </span>
                       </div>
                     </div>
-                    <div className="relative">
+                    <div className="mt-10 mb-5">
+                      <Textarea name="description" label="Shop Description" value={values.description} onChange={handleChange} maxLength={3000} />
+                      <p className={`text-red absolute top-full ${touched.description && errors.description ? "visible" : ""}`}>
+                        <ErrorMessage name="description" />
+                      </p>
+                      <div className="w-full flex justify-end mt-2">
+                        <span className="text-xs text-dark-gray">
+                          {values.description.length}/{3000}
+                        </span>
+                      </div>
+                    </div>
+                    {/* <div className="relative">
                       <Textarea
                         name="description"
                         label="Shop Description"
@@ -167,8 +246,8 @@ export default function ShopProfile({ initialValues, handleSubmit, handlePrev }:
                         </span>
                       </div>
                     </div>
-                    <LineDivider className="my-5" />
-                    <div className="relative mt-5">
+                    <LineDivider className="my-5" /> */}
+                    {/* <div className="relative mt-5">
                       <Input
                         name="addressLabel"
                         label="Address Label"
@@ -186,7 +265,7 @@ export default function ShopProfile({ initialValues, handleSubmit, handlePrev }:
                           {values.addressLabel.length}/{maxLength}
                         </span>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="mt-5">
                       {/* <DropdownWithSpinner
                         touched={touched}
@@ -205,10 +284,10 @@ export default function ShopProfile({ initialValues, handleSubmit, handlePrev }:
                         }}
                       /> */}
                       <Select
-                        name="adressProvince"
+                        name="shop_address_province"
                         onChange={(value) => {
-                          setFieldValue("addressProvince", value);
-                          setFieldValue("addressCity", "");
+                          setFieldValue("shop_address_province", value);
+                          setFieldValue("shop_address_city", "");
                           setCities([]);
                           setDistricts([]);
                           setSubdistricts([]);
@@ -229,16 +308,16 @@ export default function ShopProfile({ initialValues, handleSubmit, handlePrev }:
                         )}
                       </Select>
 
-                      {values.addressProvince && (
+                      {values.shop_address_province && (
                         <DropdownWithSpinner
                           touched={touched}
                           errors={errors}
-                          name="addressCity"
+                          name="shop_address_city"
                           label="Select City"
                           options={cities}
                           isLoading={isLoadingCities}
                           onSelect={(cityId: number, cityName: string) => {
-                            setFieldValue("addressCity", cityName);
+                            setFieldValue("shop_address_city", cityName);
                             setDistricts([]);
                             setSubdistricts([]);
                             fetchDistricts(cityId);
@@ -246,37 +325,37 @@ export default function ShopProfile({ initialValues, handleSubmit, handlePrev }:
                         />
                       )}
 
-                      {values.addressCity && (
+                      {values.shop_address_city && (
                         <DropdownWithSpinner
                           touched={touched}
                           errors={errors}
-                          name="addressDistrict"
+                          name="shop_address_district"
                           label="Select District"
                           options={districts}
                           isLoading={isLoadingDistricts}
                           onSelect={(districtId: number, districtName: string) => {
-                            setFieldValue("addressDistrict", districtName);
+                            setFieldValue("shop_address_district", districtName);
                             setSubdistricts([]);
                             fetchSubdistricts(districtId);
                           }}
                         />
                       )}
 
-                      {values.addressDistrict && (
+                      {values.shop_address_district && (
                         <DropdownWithSpinner
                           touched={touched}
                           errors={errors}
-                          name="addressSubdistrict"
+                          name="shop_address_subdistrict"
                           label="Select Subdistrict"
                           options={subdistricts}
                           isLoading={isLoadingSubdistricts}
                           onSelect={(subdistrictId: number, subdistrictName: string) => {
-                            setFieldValue("addressSubdistrict", subdistrictName);
+                            setFieldValue("shop_address_subdistrict", subdistrictName);
                           }}
                         />
                       )}
                     </div>
-                    {values.addressSubdistrict && (
+                    {/* {values.shop_address_district && (
                       <div className="mt-10 relative">
                         <Input
                           name="zipCode"
@@ -296,27 +375,27 @@ export default function ShopProfile({ initialValues, handleSubmit, handlePrev }:
                           </span>
                         </div>
                       </div>
-                    )}
-                    {values.zipCode && (
+                    )} */}
+                    {values.shop_address_subdistrict && (
                       <div className="mt-10 mb-5">
                         <Textarea
-                          name="addressStreet"
+                          name="shop_address_street"
                           label="Address Street"
-                          value={values.addressStreet}
+                          value={values.shop_address_street}
                           onChange={handleChange}
                           maxLength={streetMaxLength}
                         />
-                        <p className={`text-red absolute top-full ${touched.addressStreet && errors.addressStreet ? "visible" : ""}`}>
-                          <ErrorMessage name="addressStreet" />
+                        <p className={`text-red absolute top-full ${touched.shop_address_street && errors.shop_address_street ? "visible" : ""}`}>
+                          <ErrorMessage name="shop_address_street" />
                         </p>
                         <div className="w-full flex justify-end mt-2">
                           <span className="text-xs text-dark-gray">
-                            {values.addressStreet.length}/{streetMaxLength}
+                            {values.shop_address_street.length}/{streetMaxLength}
                           </span>
                         </div>
                       </div>
                     )}
-                    {values.addressStreet && (
+                    {/* {values.addressStreet && (
                       <Select
                         name="shippingChannel"
                         onChange={(value) => setFieldValue("shippingChannel", value)}
@@ -329,9 +408,9 @@ export default function ShopProfile({ initialValues, handleSubmit, handlePrev }:
                           </Option>
                         ))}
                       </Select>
-                    )}
+                    )} */}
                     <LineDivider className="my-5" />
-                    {values.shippingChannel && (
+                    {/* {values.shop_address_street && (
                       <div className="relative ">
                         <Input
                           name="email"
@@ -346,8 +425,8 @@ export default function ShopProfile({ initialValues, handleSubmit, handlePrev }:
                           <ErrorMessage name="email" />
                         </p>
                       </div>
-                    )}
-                    {values.email && (
+                    )} */}
+                    {/* {values.email && (
                       <>
                         <div className="relative mt-10">
                           <Input
@@ -365,46 +444,14 @@ export default function ShopProfile({ initialValues, handleSubmit, handlePrev }:
                         </div>
                         <LineDivider className="my-5" />
                       </>
-                    )}
-                    {values.phoneNumber && (
-                      <div className="relative mt-10">
-                        <Input
-                          name="openingHours"
-                          label="Opening Hours"
-                          value={values.openingHours}
-                          onChange={handleChange}
-                          crossOrigin={undefined}
-                          maxLength={maxLength}
-                          className="tablet:text-base "
-                        />
-                        <p className={`text-red absolute top-full ${touched.addressLabel && errors.addressLabel ? "visible" : ""}`}>
-                          <ErrorMessage name="openingHours" />
-                        </p>
-                      </div>
-                    )}
-                    {values.openingHours && (
-                      <div className="relative mt-10">
-                        <Input
-                          name="closingHours"
-                          label="Closing Hours"
-                          value={values.closingHours}
-                          onChange={handleChange}
-                          crossOrigin={undefined}
-                          maxLength={maxLength}
-                          className="tablet:text-base "
-                        />
-                        <p className={`text-red absolute top-full ${touched.addressLabel && errors.addressLabel ? "visible" : ""}`}>
-                          <ErrorMessage name="closingHours" />
-                        </p>
-                      </div>
-                    )}
+                    )} */}
                   </div>
                 </div>
                 <div className="w-full mt-10 flex justify-between gap-5">
                   <button onClick={() => handlePrev(values)} className="w-full border-gray border rounded font-semibold py-3">
                     Prev
                   </button>
-                  <button type="submit" className="w-full bg-primary text-white rounded font-semibold py-3">
+                  <button onClick={() => console.log(values)} className="w-full bg-primary text-white rounded font-semibold py-3">
                     Next
                   </button>
                 </div>
