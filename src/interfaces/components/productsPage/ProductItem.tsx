@@ -37,14 +37,14 @@ export default function ProductItem({ product_id, product_name, image, category,
   const discountValue = useMemo(() => discount?.find((item) => item.discount_type === "percentage"), [discount]);
 
   return (
-    <div className="shadow-md w-full h-[300px] desktop:h-auto desktop:w-full bg-white rounded-lg flex flex-col relative mr-10">
+    <div className="shadow-lg w-full h-[300px] desktop:h-auto desktop:w-full bg-white rounded-lg flex flex-col relative mr-10">
       <div className="w-full h-1/2 overflow-hidden relative">
-        <div>
+        <div className="w-full h-full overflow-hidden">
           <img
             src={`${firstImageUrl}`}
             width={224}
             height={176}
-            className="w-full h-full object-cover object-center rounded-t-lg"
+            className="w-full h-full min-h-full min-w-full object-cover object-center rounded-t-lg"
             alt="Product Image"
           />
         </div>
