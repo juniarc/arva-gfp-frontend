@@ -63,7 +63,7 @@ export default function AddressModal({
   const [isDataCompleted, setIsDataCompleted] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
-  const [labelValue, setLabelValue] = useState<string>("");
+  const [labelValue, setLabelValue] = useState<string>(addressLabel || "");
   const [streetValue, setStreetValue] = useState<string>("");
   const [recipientValue, setRecipientValue] = useState<string>("");
   const [phoneValue, setPhoneValue] = useState<string>("");

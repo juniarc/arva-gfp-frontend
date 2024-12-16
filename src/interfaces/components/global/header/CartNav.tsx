@@ -38,12 +38,10 @@ export default function CartNav() {
     <div>
       <button
         onClick={handleOpenDrawer}
-        className="w-15 h-15 tablet:w-30 tablet:h-30 border-solid border border-white rounded text-white flex items-center justify-center relative"
+        className="w-15 h-15 border-solid border border-white rounded text-white flex items-center justify-center relative"
       >
-        <Image src={ShopIcon} alt="Shop icon" width={isTablet ? 33 : 24} height={isTablet ? 33 : 24} />
-        <span className="absolute top-1 right-1 min-w-6 min-h-6 tablet:min-h-13 tablet:min-w-13 bg-red rounded align-middle text-center text-[0.5rem] tablet:text-sm tablet:p-1">
-          5
-        </span>
+        <Image src={ShopIcon} alt="Shop icon" width={24} height={24} />
+        <span className="absolute top-1 right-1 min-w-6 min-h-6 bg-red rounded align-middle text-center text-[0.5rem]">5</span>
       </button>
       <CartDrawer overlayRef={overlayRef} cartDrawerRef={cartDrawerRef} handleCloseDrawer={handleCloseDrawer} isOpen={isOpen} />
     </div>

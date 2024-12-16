@@ -28,13 +28,13 @@ export default function ProductList({
   return (
     <div className="mt-5">
       <div className="flex items-center gap-5">
-        <div className="">
+        <div>
           <Checkbox
             color="blue"
             defaultChecked={checkedShops[shopId]}
             onChange={(e) => handleShopCheckboxChange(shopId, e.target.checked)}
             crossOrigin={undefined}
-            className="w-10 h-10"
+            className="w-10 h-10 tablet:w-20 tablet:h-20"
           />
         </div>
         <p className="font-semibold">Shop's Name</p>

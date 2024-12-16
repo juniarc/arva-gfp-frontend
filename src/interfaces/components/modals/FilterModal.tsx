@@ -7,7 +7,7 @@ import { CartItem, Product } from "@/types/types";
 import Image from "next/image";
 import LineDivider from "../dividers/LineDivider";
 import SuccessAlert from "../alerts/SuccessAlert";
-import { Variants } from "@/types/types";
+import { Variant } from "@/types/types";
 import { CiCoffeeBean } from "react-icons/ci";
 import SpinachIcon from "@/../public/icons/spinach-icon.svg";
 import FruitsIcon from "@/../public/icons/fruits-icon.svg";
@@ -38,14 +38,14 @@ export default function FilterModal({ isOpen, handleCloseModal, handleFilterBtn 
               <p>Category</p>
               <div className="flex flex-wrap items-center gap-5 mt-5">
                 {avaibleCategoriesWithIcon.map((category, index) => {
-                  if (category.name !== "seed") {
+                  if (category.name !== "seeds") {
                     return (
                       <button
                         key={index}
                         onClick={() => setSelectedFilterCategory(category.name)}
                         className={`flex items-center gap-8 rounded-lg  border px-5 py-2 transition-all ease-in ${selectedFilterCategory === category.name ? "border-primary bg-secondary text-primary" : "border-gray bg-white text-black"}`}
                       >
-                        <Image src={category.icon} className="w-10 h-10 tablet:w-15 tablet:h-15" alt="Spinach Icon" />
+                        <Image src={category.icon} className="w-10 h-10 tablet:w-15 tablet:h-15" alt={`${category.name} icon`} />
                         <p>{category.name}</p>
                       </button>
                     );
@@ -74,7 +74,7 @@ export default function FilterModal({ isOpen, handleCloseModal, handleFilterBtn 
             }}
             className="bg-primary text-white py-2 px-10 rounded tablet:text-[1.375rem] tablet:mt-5 font-bold w-full text-center"
           >
-            Add To Cart
+            Save
           </button>
         </DialogFooter>
       </Dialog>

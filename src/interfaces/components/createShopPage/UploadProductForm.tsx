@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Form, Formik, Field, ErrorMessage } from "formik";
-import { object, string, number, boolean, array } from "yup";
-import { Input, Option, Select, Spinner, Textarea } from "@material-tailwind/react";
+import { object, string, number, boolean, array, date } from "yup";
+import { Input, Option, Select, Spinner, Textarea, Popover, PopoverHandler, PopoverContent } from "@material-tailwind/react";
 import { customeTheme } from "@/interfaces/theme/customTheme";
 import dynamic from "next/dynamic";
 import { avaibleCategories, shippingOptions } from "@/services/fixedData";
@@ -10,25 +10,63 @@ import { Product, ShippingInfo } from "@/types/types";
 import Image from "next/image";
 import { LuX } from "react-icons/lu";
 import { formatPrice } from "@/utils/elementHelpers";
+import { format } from "date-fns";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
+import { DayPicker } from "react-day-picker";
+import "react-day-picker/style.css";
+
+const DatePicker = ({ name, selectedDate, onDateChange, label }) => {
+  return (
+    <div className="mt-10">
+      <Popover placement="bottom">
+        <PopoverHandler>
+          <Input
+            label={label}
+            value={selectedDate ? format(selectedDate, "PPP") : ""}
+            onChange={() => null} // Input tidak digunakan untuk mengubah nilai langsung
+            crossOrigin={undefined}
+          />
+        </PopoverHandler>
+        <PopoverContent>
+          <DayPicker
+            mode="single"
+            selected={selectedDate}
+            onSelect={(date) => onDateChange(date)} // Memperbarui nilai
+            showOutsideDays
+            className="border-0"
+          />
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+};
 
 interface UploadProductValuesTypes {
-  imageUrl: string[];
-  name: string;
-  description: string;
+  image_data: string[];
+  product_name: string;
+  product_description: string;
   category: string;
+  variant_name: string;
   price: number;
-  stocks: number;
   unit: string;
-  discount: number;
-  variants: string[];
-  shippingInfo: {
-    packageWeight: number;
-    packageHeight: number;
-    packageWidth: number;
-    packageLength: number;
-    shippingFee: number;
-  };
-  tags: string[];
+  stock: number;
+  discount_name: string;
+  discount_value: number;
+  start_date: string;
+  end_date: string;
+  // price: number;
+  // stocks: number;
+  // unit: string;
+  // discount: number;
+  // variants: string[];
+  // shippingInfo: {
+  //   packageWeight: number;
+  //   packageHeight: number;
+  //   packageWidth: number;
+  //   packageLength: number;
+  //   shippingFee: number;
+  // };
+  // tags: string[];
 }
 interface UploadProductFormProps {
   initialValues: UploadProductValuesTypes;
@@ -41,26 +79,42 @@ export default function UploadProductForm({ initialValues, handleSubmit, handleP
   const [imageUrls, setImagUrls] = useState<string[]>([]);
 
   const validationSchema = object().shape({
-    imageUrl: array().of(string().required("Image cannot be empty")).max(5, "You can only upload up to 5 images"),
-    name: string()
+    image_data: array().of(string().required("Image cannot be empty")).max(5, "You can only upload up to 5 images"),
+    product_name: string()
       .min(3, "Product name must be at least 3 characters")
       .max(100, "Product name cannot exceed 100 characters")
       .required("Product name is required"),
-    description: string().max(500, "Description cannot exceed 500 characters").required("Description is required"),
+    product_description: string().max(500, "Description cannot exceed 500 characters").required("Description is required"),
     category: string().required("Category is required"),
+    variant_name: string()
+      .min(3, "Variant name must be at least 3 characters")
+      .max(20, "Variant name cannot exceed 20 characters")
+      .required("Variant name is required"),
     price: number().min(0, "Price must be a positive value").required("Price is required"),
-    stocks: number().min(0, "Stocks must be a positive value").required("Stocks are required"),
+    stock: number().min(0, "Stocks must be a positive value").required("Stocks are required"),
     unit: string().required("Unit is required"),
-    discount: number().max(100, "Discount cannot exceed 100%"),
-    variants: array().of(string().required("Variant cannot be empty")).min(1, "At least one variant is required"),
-    shippingInfo: object().shape({
-      packageWeight: number().min(0, "Package weight must be a positive value").required("Package weight is required"),
-      packageHeight: number().min(0, "Package height must be a positive value").required("Package height is required"),
-      packageWidth: number().min(0, "Package width must be a positive value").required("Package width is required"),
-      packageLength: number().min(0, "Package length must be a positive value").required("Package length is required"),
-      shippingFee: number().min(0, "Shipping fee must be a positive value").required("Shipping fee is required"),
-    }),
-    tags: array().of(string().required("Tags cannot be empty")).min(1, "At least one tag is required"),
+    discount_name: string()
+      .min(3, "Discount name must be at least 3 characters")
+      .max(100, "Discount name cannot exceed 100 characters")
+      .required("Discount name is required"),
+    discount_value: number().min(0, "Discount Value must be a positive value").required("Discount Value is required"),
+    start_date: date().required("Start Date is required").typeError("Start Date is not valid"),
+    end_date: date()
+      .required("End Date is required")
+      .typeError("End Date is not valid")
+      .test("is-later", "End Date can not less than Start Date", function (value) {
+        const { start_date } = this.parent;
+        return !value || new Date(value) >= new Date(start_date); // validate start_date < end_date
+      }),
+
+    // shippingInfo: object().shape({
+    //   packageWeight: number().min(0, "Package weight must be a positive value").required("Package weight is required"),
+    //   packageHeight: number().min(0, "Package height must be a positive value").required("Package height is required"),
+    //   packageWidth: number().min(0, "Package width must be a positive value").required("Package width is required"),
+    //   packageLength: number().min(0, "Package length must be a positive value").required("Package length is required"),
+    //   shippingFee: number().min(0, "Shipping fee must be a positive value").required("Shipping fee is required"),
+    // }),
+    // tags: array().of(string().required("Tags cannot be empty")).min(1, "At least one tag is required"),
   });
 
   const calculateShippingFee = (shippingInfo: ShippingInfo) => {
@@ -78,10 +132,16 @@ export default function UploadProductForm({ initialValues, handleSubmit, handleP
   };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, values: any, setFieldValue: (field: string, value: any) => void) => {
+    const MAX_FILE_SIZE = 500 * 1024; //500kb
     const files = event.target.files;
     if (files) {
       const updatedUrls: string[] = [];
       Array.from(files).forEach((file) => {
+        if (file.size > MAX_FILE_SIZE) {
+          alert(`File "${file.name}" Too big. Maximum file size is 500 KB.`);
+          return;
+        }
+
         const reader = new FileReader();
 
         reader.onload = () => {
@@ -89,7 +149,7 @@ export default function UploadProductForm({ initialValues, handleSubmit, handleP
           updatedUrls.push(base64String);
 
           if (updatedUrls.length === files.length) {
-            setFieldValue("imageUrl", [...values.imageUrl, ...updatedUrls]);
+            setFieldValue("image_data", [...values.image_data, ...updatedUrls]);
           }
         };
 
@@ -102,8 +162,8 @@ export default function UploadProductForm({ initialValues, handleSubmit, handleP
     }
   };
   const handleRemoveImage = (index: number, values: any, setFieldValue: (field: string, value: any) => void) => {
-    const updatedUrls = values.imageUrl.filter((_, i) => i !== index);
-    setFieldValue("imageUrl", updatedUrls);
+    const updatedUrls = values.image_data.filter((_, i) => i !== index);
+    setFieldValue("image_data", updatedUrls);
   };
 
   const handleTagChange = (e: React.ChangeEvent<HTMLInputElement>, currentTags: string[], setFieldValue: (field: string, value: any) => void) => {
@@ -132,8 +192,8 @@ export default function UploadProductForm({ initialValues, handleSubmit, handleP
                         </p>
                       </div>
                       <div className="flex gap-5 flex-wrap">
-                        {values.imageUrl &&
-                          values.imageUrl.map((imageUrl: string, index: number) => (
+                        {values.image_data &&
+                          values.image_data.map((imageUrl: string, index: number) => (
                             <div key={index} className="w-25 h-25 border border-dark-gray rounded relative">
                               <Image
                                 src={imageUrl}
@@ -150,7 +210,7 @@ export default function UploadProductForm({ initialValues, handleSubmit, handleP
                               </span>
                             </div>
                           ))}
-                        {values.imageUrl.length <= 5 && (
+                        {values.image_data.length <= 5 && (
                           <div>
                             <label htmlFor="uploadImage">
                               <div className="w-25 h-25 overflow-hidden rounded border-dashed border-red border flex items-center justify-center p-2">
@@ -160,7 +220,7 @@ export default function UploadProductForm({ initialValues, handleSubmit, handleP
                             <input
                               id="uploadImage"
                               type="file"
-                              name="imageUrl"
+                              name="image_data"
                               multiple
                               accept="image/*"
                               onChange={(event) => handleFileChange(event, values, setFieldValue)}
@@ -169,45 +229,45 @@ export default function UploadProductForm({ initialValues, handleSubmit, handleP
                           </div>
                         )}
 
-                        <p className={`text-red absolute top-full ${errors.imageUrl ? "visible" : ""}`}>
-                          <ErrorMessage name="imageUrl" />
+                        <p className={`text-red absolute top-full ${errors.image_data ? "visible" : ""}`}>
+                          <ErrorMessage name="image_data" />
                         </p>
                       </div>
                     </div>
                     <div className="relative mt-10">
                       <Input
-                        name="name"
+                        name="product_name"
                         label="Product Name"
-                        value={values.name}
+                        value={values.product_name}
                         onChange={handleChange}
                         crossOrigin={undefined}
                         maxLength={200}
                         className="tablet:text-base "
                       />
-                      <p className={`text-red absolute top-full ${errors.name ? "visible" : ""}`}>
+                      <p className={`text-red absolute top-full ${errors.product_name ? "visible" : ""}`}>
                         <ErrorMessage name="name" />
                       </p>
                       <div className="w-full flex justify-end mt-2">
                         <span className="text-xs tablet:text-sm text-dark-gray">
-                          {values.name.length}/{200}
+                          {values.product_name.length}/{200}
                         </span>
                       </div>
                     </div>
                     <div className="relative mt-5">
                       <Textarea
-                        name="description"
+                        name="product_description"
                         label="Product Description"
-                        value={values.description}
+                        value={values.product_description}
                         onChange={handleChange}
                         maxLength={3000}
                         className="tablet:text-base "
                       />
-                      <p className={`text-red absolute top-full ${errors.description ? "visible" : ""}`}>
-                        <ErrorMessage name="name" />
+                      <p className={`text-red absolute top-full ${errors.product_description ? "visible" : ""}`}>
+                        <ErrorMessage name="product_description" />
                       </p>
                       <div className="w-full flex justify-end mt-2">
                         <span className="text-xs tablet:text-sm text-dark-gray">
-                          {values.description.length}/{3000}
+                          {values.product_description.length}/{3000}
                         </span>
                       </div>
                     </div>
@@ -221,14 +281,142 @@ export default function UploadProductForm({ initialValues, handleSubmit, handleP
                         className=" capitalize "
                       >
                         {avaibleCategories.map((category: any, index: number) => (
-                          <Option value={category} className="capitalize" key={index}>
-                            {category}
+                          <Option value={category.category_name} className="capitalize" key={index}>
+                            {category.category_name}
                           </Option>
                         ))}
                       </Select>
                     </div>
                     <LineDivider className="mt-10" />
-                    <div className="mt-10">
+                    <div className="mt-5">
+                      <p className="font-semibold">Product Variants</p>
+                      <div>
+                        <div className="relative mt-10">
+                          <Input
+                            name="variant_name"
+                            label="Variant Name"
+                            value={values.variant_name}
+                            onChange={handleChange}
+                            crossOrigin={undefined}
+                            maxLength={20}
+                            className="tablet:text-base "
+                          />
+                          <p className={`text-red absolute top-full ${errors.variant_name ? "visible" : ""}`}>
+                            <ErrorMessage name="variant_name" />
+                          </p>
+                          <div className="w-full flex justify-end mt-2">
+                            <span className="text-xs tablet:text-sm text-dark-gray">
+                              {values.variant_name.length}/{20}
+                            </span>
+                          </div>
+                        </div>
+                        <div>
+                          <p className="text-xs mb-2 text-dark-gray">Variant Price</p>
+                          <div className="flex">
+                            <div className="h-20 rounded-s-md flex items-center justify-center bg-gray px-5">
+                              <span className="font-semibold text-sm">Rp.</span>
+                            </div>
+                            <input
+                              name="price"
+                              inputMode="numeric"
+                              placeholder="0"
+                              value={values.price}
+                              onChange={(e) => {
+                                const formatedPrice = formatPrice(e.target.value);
+                                setFieldValue("price", formatedPrice);
+                              }}
+                              className="text-sm w-full h-20 border border-blue-gray-200 rounded-e-md px-5 text-md focus:outline-none"
+                            />
+                          </div>
+                          <p className={`text-red absolute top-full ${errors.price ? "visible" : ""}`}>
+                            <ErrorMessage name="price" />
+                          </p>
+                        </div>
+
+                        <div className="mt-10">
+                          <Input
+                            type="number"
+                            name="stock"
+                            label="Stocks"
+                            placeholder="0"
+                            value={values.stock}
+                            onChange={handleChange}
+                            crossOrigin={undefined}
+                            className="tablet:text-base "
+                          />
+                          <p className={`text-red absolute top-full ${errors.stock ? "visible" : ""}`}>
+                            <ErrorMessage name="stock" />
+                          </p>
+                        </div>
+                        <div className="mt-10">
+                          <Input
+                            name="unit"
+                            label="Unit"
+                            value={values.unit}
+                            onChange={handleChange}
+                            crossOrigin={undefined}
+                            className="tablet:text-base "
+                          />
+                          <p className={`text-red absolute top-full ${errors.unit ? "visible" : ""}`}>
+                            <ErrorMessage name="unit" />
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <LineDivider className="my-10" />
+                    <div>
+                      <p className="font-semibold">Product Discount</p>
+                      <div>
+                        <div className="relative mt-5">
+                          <Input
+                            name="discount_name"
+                            label="Discount Name"
+                            value={values.discount_name}
+                            onChange={handleChange}
+                            crossOrigin={undefined}
+                            maxLength={20}
+                            className="tablet:text-base "
+                          />
+                          <p className={`text-red discount_name top-full ${errors.discount_name ? "visible" : ""}`}>
+                            <ErrorMessage name="variant_name" />
+                          </p>
+                          <div className="w-full flex justify-end mt-2">
+                            <span className="text-xs tablet:text-sm text-dark-gray">
+                              {values.discount_name.length}/{20}
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="mt-5">
+                          <Input
+                            type="number"
+                            name="discount_value"
+                            label="Discount Value (%)"
+                            placeholder="0"
+                            value={values.discount_value}
+                            onChange={handleChange}
+                            crossOrigin={undefined}
+                            className="tablet:text-base "
+                          />
+                          <p className={`text-red absolute top-full ${errors.discount_value ? "visible" : ""}`}>
+                            <ErrorMessage name="discount_value" />
+                          </p>
+                        </div>
+                        <DatePicker
+                          name="start_date"
+                          label="Start Date"
+                          selectedDate={values.start_date}
+                          onDateChange={(date: any) => setFieldValue("start_date", date)}
+                        />
+                        <DatePicker
+                          name="end_date"
+                          label="End Date"
+                          selectedDate={values.end_date}
+                          onDateChange={(date: any) => setFieldValue("end_date", date)}
+                        />
+                      </div>
+                    </div>
+                    {/* <div className="mt-10">
                       <Input
                         name="unit"
                         label="Product Unit"
@@ -394,7 +582,7 @@ export default function UploadProductForm({ initialValues, handleSubmit, handleP
                           }}
                         />
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="w-full mt-10 flex justify-between gap-5">

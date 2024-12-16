@@ -35,25 +35,26 @@ export default function ProductItem({ id, userId, product, shop, selectedVariant
   return (
     <div className="w-full mb-10">
       <div className=" flex items-start gap-5 w-full">
-        <div className="w-30 h-30 min-w-30 min-h-30">
+        <div className="w-30 h-30 tablet:w-[122px] tablet:h-[122px] desktop:w-[126px] desktop:h-[126px] tablet:min-w-[122px] tablet:min-h-[122px] desktop:min-w-[126px] desktop:min-h-[126px] min-w-30 min-h-30">
           <Image
-            src={product.imageUrl}
-            width={60}
-            height={30}
+            src={Foto}
+            width={126}
+            height={126}
             className="w-full h-full overflow-hidden object-cover object-center rounded-lg"
             alt="Product image"
           />
         </div>
-        <div className="flex flex-col gap-3 w-full">
+        <div className="flex flex-col gap-3 tablet:gap-5 desktop:gap-5 w-full ">
           <p className=" truncate max-w-[240px]">{product.name}</p>
-          <p className="text-xs text-dark-gray">{selectedVariant.variantName}</p>
-          <p className="font-semibold">Rp. {price}</p>
+          <p className="text-xs tablet:text-sm desktop:text-base text-dark-gray">{selectedVariant.variantName}</p>
+          <p className="font-semibold tablet:text-[1.375rem] desktop:text-2xl">Rp. {selectedVariant.price}</p>
           <div className="flex items-center justify-end mt-5 w-full">
-            <div className="text-dark-gray flex items-center border-solid border-gray border w-fit rounded-lg py-1 px-5">
+            <div className="text-dark-gray flex items-center border-solid border-gray border w-fit rounded-lg py-1 px-5 tablet:py-3 tablet:px-10 desktop:px-10 desktop:py-3">
               <button
                 onClick={() => {
                   handleQuantityChange(id, currentQuantity - 1, product.stocks);
                 }}
+                className="tablet:text-[1.375rem]"
               >
                 <LuMinus />
               </button>
@@ -68,13 +69,14 @@ export default function ProductItem({ id, userId, product, shop, selectedVariant
                     handleQuantityChange(id, newQuantity, product.stocks);
                   }
                 }}
-                className="w-30 text-center text-black"
+                className="w-30 tablet:w-40 desktop:w-36 text-center text-black tablet:text-[1.375rem] desktop:text-[1.375rem]"
               />
               <button
                 onClick={() => {
                   handleQuantityChange(id, currentQuantity + 1, product.stocks);
                 }}
                 disabled={quantity >= product.stocks}
+                className="tablet:text-[1.375rem]"
               >
                 <LuPlus />
               </button>

@@ -32,7 +32,7 @@ export default function ShopPage({
   averageRatings,
 }: ShopPageProps) {
   return (
-    <main className="min-h-[90vh] p-10">
+    <main className="min-h-[90vh] p-10 tablet:p-15">
       <section>
         <div className="flex items-center gap-5 tablet:gap-10">
           <div className="h-[65px] tablet:h-[72px] aspect-square">
@@ -45,8 +45,8 @@ export default function ShopPage({
             </span>
           </div>
         </div>
-        <div className="w-full h-[86px] bg-primary rounded-lg mt-10 flex items-center justify-center">
-          <div className="flex items-center justify-center gap-10">
+        <div className="w-full h-[86px] tablet:h-55 bg-primary rounded-lg mt-10 flex items-center justify-center">
+          <div className="flex items-center justify-center gap-10 tablet:gap-30">
             <div className="flex flex-col items-center">
               <div className="flex items-center gap-3 ">
                 <FaStar className="text-lg text-yellow" />
@@ -68,12 +68,12 @@ export default function ShopPage({
           </div>
         </div>
         <div className="mt-10">
-          <h2 className="text-xl mb-5">Shop Description</h2>
+          <h2 className="text-xl tablet:text-[1.75rem] mb-5 tablet:mb-10">Shop Description</h2>
           <p className="text-dark-gray">{description}</p>
         </div>
-        <LineDivider className="my-5" />
+        <LineDivider className="my-5 tablet:my-10" />
         <div className="mt-5">
-          <h2 className="text-xl mb-5">Shop Information</h2>
+          <h2 className="text-xl tablet:text-[1.75rem] mb-5 tablet:mb-10">Shop Information</h2>
           <div className="w-full flex">
             <div className="w-2/5">
               <p className="font-semibold w-full mb-5">Location</p>
@@ -96,7 +96,7 @@ export default function ShopPage({
         <LineDivider className="my-5" />
       </section>
       <section className="mt-10">
-        <h2 className="text-xl mb-5">Products</h2>
+        <h2 className="text-xl tablet:text-[1.75rem] mb-5 tablet:mb-10">Products</h2>
         <ProductList products={products} />
       </section>
     </main>

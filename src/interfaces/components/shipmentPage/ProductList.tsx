@@ -27,7 +27,7 @@ export default function ProductList({
 }: ProductListProps) {
   return (
     <div>
-      <p className="font-semibold mb-3">{shopData.shopName}</p>
+      <p className="font-semibold mb-5">{shopData.shopName}</p>
       <div>
         {shopData.products.map((item: any) => (
           <ProductItem key={item.id} {...item} cart={cart} handleQuantityChange={handleQuantityChange} />
@@ -43,7 +43,7 @@ export default function ProductList({
       <div className="mt-5">
         <VoucherSection />
       </div>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between tablet:mt-10 desktop:mt-10">
         <span className="text-dark-gray text-xs tablet:text-base desktop:text-base flex gap-2 items-center underline">
           <GoShieldCheck /> Total damage protection 3 months
         </span>

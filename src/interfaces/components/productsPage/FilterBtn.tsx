@@ -12,8 +12,11 @@ export default function FilterBtn({ handleFilterBtn }: FilterBtnProps) {
   };
   return (
     <div>
-      <button onClick={() => setIsOpen(true)} className="flex items-center justify-center h-15 w-15 rounded bg-white border border-gray">
-        <LuFilter />
+      <button
+        onClick={() => setIsOpen(true)}
+        className="flex items-center justify-center h-15 w-15 tablet:h-30 tablet:w-30 rounded tablet:rounded-lg bg-white border border-gray"
+      >
+        <LuFilter className="tablet:text-3xl" />
       </button>
       <FilterModal isOpen={isOpen} handleCloseModal={handleCloseModal} handleFilterBtn={handleFilterBtn} />
     </div>

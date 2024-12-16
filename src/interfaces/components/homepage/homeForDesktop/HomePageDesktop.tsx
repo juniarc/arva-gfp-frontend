@@ -7,9 +7,11 @@ import HomeCategories from "../HomeCategories";
 import HomeCategoriesDesktop from "./HomeCategoriesDesktop";
 import AsideCategories from "./AsideCategories";
 export default async function HomePageDesktop() {
-  const popularProducts: Product[] = (await api.getAllProducts(8)) || [];
-  const fruitProducts: Product[] = (await api.getAllProductsByCategory("fruit", 6)) || [];
-  const vegetableProducts: Product[] = (await api.getAllProductsByCategory("vegetable", 6)) || [];
+  const products = (await api.getAllProducts()) || [];
+  const slicedProducts = products?.slice(0, 6);
+  // const popularProducts: Product[] = (await api.getAllProducts(8)) || [];
+  // const fruitProducts: Product[] = (await api.getAllProductsByCategory("fruit", 6)) || [];
+  // const vegetableProducts: Product[] = (await api.getAllProductsByCategory("vegetable", 6)) || [];
   return (
     <main className="w-full bg-white desktop:px-[120px]">
       <section className="w-full">
@@ -28,19 +30,19 @@ export default async function HomePageDesktop() {
 
         <div className="max-w-[78%]">
           <section className="w-full mt-0">
-            <ProductListByCategoryDesktop classname="grid-cols-4" products={popularProducts} category="popular" />
+            <ProductListByCategoryDesktop classname="grid-cols-4" products={slicedProducts} category="popular" />
           </section>
           <section className="w-full mt-10">
             <HomeAds />
           </section>
           <section className="w-full">
-            <ProductListByCategoryDesktop classname="grid-cols-4" products={fruitProducts} category="fruit" />
+            <ProductListByCategoryDesktop classname="grid-cols-4" products={slicedProducts} category="fruit" />
           </section>
           <section className="w-full mt-10">
             <HomeCategoriesDesktop />
           </section>
           <section className="w-full">
-            <ProductListByCategoryDesktop classname="grid-cols-4" products={vegetableProducts} category="vegetable" />
+            <ProductListByCategoryDesktop classname="grid-cols-4" products={slicedProducts} category="vegetable" />
           </section>
         </div>
       </div>

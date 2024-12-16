@@ -22,8 +22,8 @@ export default function ProductsInfo({
   isProtected,
 }: ProductsInfoProps) {
   return (
-    <div>
-      <h3 className="mb-5">Shopping Items</h3>
+    <div className="mt-10">
+      <h4 className="mb-5">Shopping Items</h4>
       <div>
         {Object.keys(separatedByShop).map((shopId, index) => (
           <div key={index}>

@@ -86,6 +86,7 @@ const cart: CartItem[] = [
 export default async function Page() {
   const cookiesList = await cookies();
   const userId = cookiesList.get("userId")?.value || null;
+  const viewport = cookiesList.get("viewport")?.value || undefined;
   const userCart = cart.filter((item) => item.userId === Number(userId));
   const separatedByShop = userCart.reduce(
     (acc, item) => {
@@ -101,5 +102,5 @@ export default async function Page() {
     },
     {} as Record<number, { shopName: string; products: CartItem[] }>,
   );
-  return <CartPageWrapper separatedByShop={separatedByShop} cart={userCart} />;
+  return <CartPageWrapper separatedByShop={separatedByShop} cart={userCart} viewport={viewport} />;
 }

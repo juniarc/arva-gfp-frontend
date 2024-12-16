@@ -3,17 +3,20 @@
 import { Product } from "@/types/types";
 import ProductsPage from "./ProductsPage";
 import { useState } from "react";
+import ProductsPageDesktop from "./desktop/ProductsPageDesktop";
 
 interface ProductsPageWrapperProps {
   products: Product[];
+  viewport: string | undefined;
 }
 
-export default function ProductsPageWrapper({ products }: ProductsPageWrapperProps) {
+export default function ProductsPageWrapper({ products, viewport }: ProductsPageWrapperProps) {
   const [displayProducts, setDisplayProducts] = useState<Product[]>(products);
   const [selectedFilter, setSelectedFilter] = useState<string>("");
   const handleFilterBtn = (filterer: string) => {
     setSelectedFilter(filterer);
   };
-  const filteredProducts = displayProducts.filter((product) => product.category === selectedFilter);
-  return <ProductsPage products={products} handleFilterBtn={handleFilterBtn} />;
+  const filteredProducts = selectedFilter === "" ? displayProducts : displayProducts.filter((product) => product.category === selectedFilter);
+  if (viewport === "mobile") return <ProductsPage products={filteredProducts} handleFilterBtn={handleFilterBtn} />;
+  return <ProductsPageDesktop products={filteredProducts} handleFilterBtn={handleFilterBtn} />;
 }
