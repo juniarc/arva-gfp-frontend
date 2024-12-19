@@ -7,8 +7,9 @@ import { HiOutlineKey } from "react-icons/hi";
 import { HiMiniEyeSlash } from "react-icons/hi2";
 import { FcGoogle } from "react-icons/fc";
 import { TfiEmail } from "react-icons/tfi";
-import { addUser } from "@/services/api/dummyUser";
 import Link from "next/link";
+import FailAlert from "../alerts/FailAlert";
+import SuccessAlert from "../alerts/SuccessAlert";
 
 export default function RegisterForm() {
   const [username, setUsername] = useState("");
@@ -17,13 +18,15 @@ export default function RegisterForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({ username: "", email: "", password: "", confirmPassword: "" });
   const [registrationError, setRegistrationError] = useState("");
+  const [registrationSuccess, setRegistrationSuccess] = useState(false); // New state for success alert
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let hasError = false;
     const newErrors = { username: "", email: "", password: "", confirmPassword: "" };
 
+    // Validate fields
     if (!username) {
       newErrors.username = "Username cannot be empty";
       hasError = true;
@@ -49,18 +52,44 @@ export default function RegisterForm() {
       return;
     }
 
-    // simulasi POST user
-    const errorMessage = addUser(username, email, password);
-    if (errorMessage) {
-      router.push("/register/register-failed");
-    } else {
+    // API Call
+    try {
+      const response = await fetch("https://capitalist-corliss-student-ed34d764.koyeb.app/user/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setRegistrationError(errorData.message || "Registration failed. Please try again.");
+        setRegistrationSuccess(false);
+        return;
+      }
+
+      setRegistrationSuccess(true); // Set success state
       router.push("/register/register-success");
+    } catch (error) {
+      console.error("Error during registration:", error);
+      setRegistrationError("An error occurred. Please try again later.");
+      setRegistrationSuccess(false);
     }
   };
 
   return (
     <div className="w-full max-w-sm p-4">
       <h2 className="text-2xl font-bold mb-6 text-center py-7">Create Your Account</h2>
+
+      {/* Show Success or Failure Alert */}
+      {registrationError && <FailAlert message={registrationError} />}
+      {registrationSuccess && <SuccessAlert message="Registration successful!" />}
+
       <form onSubmit={handleSubmit}>
         {/* Username Field */}
         <div className="mb-6">
@@ -82,7 +111,7 @@ export default function RegisterForm() {
         {/* Email Field */}
         <div className="mb-6">
           <div className="flex items-center border-b-2 border-gray-300 py-7">
-          <TfiEmail className="mr-2 text-gray-500" />
+            <TfiEmail className="mr-2 text-gray-500" />
             <input
               type="email"
               id="email"
