@@ -31,7 +31,7 @@ export const paginateArray = (array: any, itemsPerPage: any) => {
   }, []);
 };
 
-export const startPage = ({ currentPage, maxIndicators, totalPages }: any) => {
+export const startPage = (currentPage: any, maxIndicators: any, totalPages: any) => {
   return Math.max(0, Math.min(currentPage - Math.floor(maxIndicators / 2), totalPages - maxIndicators));
 };
 
