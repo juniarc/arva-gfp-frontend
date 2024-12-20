@@ -14,6 +14,7 @@ import {
 
 const api = (() => {
   const BASE_URL = "https://capitalist-corliss-revoustudents-ed34d764.koyeb.app";
+  // const BASE_URL = "http://127.0.0.1:5000";
 
   async function getAllProducts(limit?: number): Promise<Product[] | undefined> {
     try {
