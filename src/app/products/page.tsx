@@ -7,6 +7,5 @@ export default async function Page() {
 
   const cookieList = await cookies();
   const viewport = cookieList.get("viewport")?.value || undefined;
-  const slicedProducts = products?.slice(0, 6);
-  if (products) return <ProductsPageWrapper products={slicedProducts} viewport={viewport} />;
+  if (products) return <ProductsPageWrapper products={products} viewport={viewport} />;
 }

@@ -37,13 +37,13 @@ export default function CartPageDesktop({
             <button className=" text-red font-semibold">Delete</button>
           </div>
           <div className="mt-10">
-            {Object.keys(separatedByShop).map((shopId, index) => (
+            {Object.keys(separatedByShop).map((shop_id, index) => (
               <div key={index}>
                 <ProductList
                   checkedShops={checkedShops}
-                  shopId={Number(shopId)}
+                  shop_id={Number(shop_id)}
                   handleShopCheckboxChange={handleShopCheckboxChange}
-                  shopData={separatedByShop[shopId]}
+                  shopData={separatedByShop[shop_id]}
                   handleProductCheckboxChange={handleProductCheckboxChange}
                   checkedProducts={checkedProducts}
                   handleQuantityChange={handleQuantityChange}

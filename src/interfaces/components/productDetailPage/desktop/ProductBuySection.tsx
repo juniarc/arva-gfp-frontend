@@ -1,55 +1,77 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { LuMinus, LuPlus } from "react-icons/lu";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import ShopingBag from "@/../public/icons/shopping-bag-white.svg";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Discount, Variant } from "@/types/types";
+import { currencyFormater } from "@/utils/elementHelpers";
+import api from "@/services/api/api";
 interface ProductBuySectionProps {
-  id: number;
-  name: string;
-  price: number;
-  variants: string[];
-  stocks: number;
-  unit: string;
+  product_id: number;
+  product_name: string;
+  variant: Variant[] | null;
+  discount: Discount[] | null;
+  handleSelectVariant: (variant: Variant) => void;
+  selectedVariant: Variant | null;
+  quantity: number;
+  setQuantity: (quantity: number) => void;
+  totalPrice: string;
+  handleBuynowBtn: () => void;
+  handleATCBtn: () => void;
+  wishlistId: number;
+  isWishlist: boolean;
+  token: string | undefined;
 }
 
-export default function ProductBuySection({ id, name, price, variants, stocks, unit }: ProductBuySectionProps) {
-  const router = useRouter();
-  const [quantity, setQuantity] = useState<number>(1);
-  const [totalPrice, setTotalPrice] = useState<number>(price);
-  const [isWishlist, setIsWishlist] = useState<boolean>(false);
-  const [selectedVariant, setSelectedVariant] = useState<string>(variants[0]);
-
-  const handleSelectVariant = (variant: string) => {
-    setSelectedVariant(variant);
-  };
-
-  const handleWishlistBtn = () => {};
-  const handleBuyNowBtn = () => {
-    router.push(`/buy-now?id=${id}&quantity=${quantity}`);
-  };
-
-  const handleQuantityChange = (newQuantity: number) => {
-    if (newQuantity >= 1 && newQuantity <= stocks) {
-      setQuantity(newQuantity);
-      setTotalPrice(price * newQuantity);
+export default function ProductBuySection({
+  product_id,
+  product_name,
+  variant,
+  discount,
+  isWishlist,
+  handleSelectVariant,
+  selectedVariant,
+  quantity,
+  setQuantity,
+  totalPrice,
+  handleATCBtn,
+  handleBuynowBtn,
+  wishlistId,
+  token,
+}: ProductBuySectionProps) {
+  const [wishlist, setWishlist] = useState(isWishlist);
+  const handleWishlist = async () => {
+    if (wishlist) {
+      setWishlist(false);
+      try {
+        await api.deleteWishlist(wishlistId, token);
+      } catch (error) {
+        setWishlist(true);
+      }
+    } else {
+      setWishlist(true);
+      try {
+        await api.addToWishlist(product_id, token);
+      } catch (error) {
+        setWishlist(false);
+      }
     }
   };
-
   return (
     <div className="w-fit bg-secondary rounded-lg p-10">
-      {variants.length !== 0 && (
+      {variant?.length !== 0 && (
         <>
           <div className="flex items-center gap-10 mb-10">
             <p className="font-semibold">Variants</p>
             <div className="grid grid-cols-4 gap-5 w-full">
-              {variants.map((variant, index) => (
+              {variant?.map((item, index) => (
                 <button
-                  onClick={() => handleSelectVariant(variant)}
-                  className={`text-xs tablet:text-base py-2 px-10 rounded capitalize ${selectedVariant === variant ? "bg-[#76BF9B] text-white transition-all ease-in " : "bg-white"}`}
+                  onClick={() => handleSelectVariant(item)}
+                  className={`text-xs tablet:text-base py-2 px-10 rounded capitalize ${selectedVariant?.variant_name === item.variant_name ? "bg-[#76BF9B] text-white transition-all ease-in " : "bg-white"}`}
                   key={index}
                 >
-                  {variant}
+                  {item.variant_name}
                 </button>
               ))}
             </div>
@@ -61,8 +83,7 @@ export default function ProductBuySection({ id, name, price, variants, stocks, u
         <div className="bg-white flex items-center border-solid border-black border w-fit rounded-lg py-1 px-10">
           <button
             onClick={() => {
-              const newQuantity = quantity - 1;
-              if (newQuantity >= 1) handleQuantityChange(newQuantity);
+              if (quantity > 1) setQuantity(quantity - 1);
             }}
           >
             <LuMinus />
@@ -70,21 +91,16 @@ export default function ProductBuySection({ id, name, price, variants, stocks, u
           <input
             type="number"
             minLength={1}
-            maxLength={stocks}
+            maxLength={selectedVariant?.variant_stock ?? 0}
             value={quantity}
-            onChange={(e) => {
-              const newQuantity = Number(e.target.value);
-              if (newQuantity >= 1 && newQuantity <= stocks) {
-                handleQuantityChange(newQuantity);
-              }
-            }}
-            className="w-55 text-center text-black"
+            onChange={(e) => setQuantity(Number(e.target.value))}
+            className="w-55 text-center text-black bg-transparent"
             disabled
           />
           <button
             onClick={() => {
               const newQuantity = quantity + 1;
-              if (newQuantity <= stocks) handleQuantityChange(newQuantity);
+              if (quantity < (selectedVariant?.variant_stock ?? 0)) setQuantity(quantity + 1);
             }}
           >
             <LuPlus />
@@ -95,22 +111,25 @@ export default function ProductBuySection({ id, name, price, variants, stocks, u
 
       <div>
         <p className="font-bold">
-          Total <span>Rp. {totalPrice}</span>
+          Total <span>{totalPrice}</span>
         </p>
       </div>
       <div className="mt-10">
         <div className="w-full h-full flex items-center justify-between gap-5">
-          <button onClick={handleWishlistBtn} className="border border-primary bg-white border-solid p-5 rounded-lg">
-            {isWishlist ? <FaHeart className="text-xl text-red transition-colors" /> : <FaRegHeart className="text-primary text-xl" />}
+          <button onClick={handleWishlist} className="border border-primary bg-white border-solid p-5 rounded-lg">
+            {wishlist ? <FaHeart className="text-xl text-red transition-colors" /> : <FaRegHeart className="text-primary text-xl" />}
           </button>
           <div className="w-full flex items-center gap-5">
             <button
-              onClick={handleBuyNowBtn}
+              onClick={handleBuynowBtn}
               className="border bg-white w-1/2 border-primary border-solid p-5 rounded-lg text-sm font-bold text-primary"
             >
               Buy Now
             </button>
-            <button className="bg-primary p-5 w-1/2 rounded-lg text-sm font-bold text-white flex items-center gap-5 justify-center">
+            <button
+              onClick={handleATCBtn}
+              className="bg-primary p-5 w-1/2 rounded-lg text-sm font-bold text-white flex items-center gap-5 justify-center"
+            >
               <Image src={ShopingBag} alt="Cart Icon" /> Add To Chart
             </button>
           </div>

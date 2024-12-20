@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { MdOutlineShoppingBag } from "react-icons/md";
 import ShopIcon from "@/../public/icons/shopping-bag-white.svg";
 import Image from "next/image";
@@ -12,7 +12,7 @@ import useDeviceCategory from "@/hooks/useDeviceCategory";
 gsap.registerPlugin(useGSAP);
 
 export default function CartNav() {
-  const [isTablet, isDekstop] = useDeviceCategory();
+  const [cart, setCart] = useState([]);
   const cartDrawerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);

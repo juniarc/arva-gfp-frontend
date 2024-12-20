@@ -54,3 +54,5 @@ export const avaibleCategoriesWithIcon = [
     icon: FertilizersIcon,
   },
 ];
+
+export const avaibleProductType = ["organic", "non-organic"];

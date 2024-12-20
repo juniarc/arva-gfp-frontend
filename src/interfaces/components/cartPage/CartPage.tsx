@@ -5,9 +5,9 @@ import { CartItem } from "@/types/types";
 interface CartPageProps {
   checkedShops: { [key: number]: boolean };
   checkedProducts: { [key: number]: boolean };
-  handleShopCheckboxChange: (shopId: number, checked: boolean) => void;
-  handleProductCheckboxChange: (productId: number, checked: boolean) => void;
-  handleQuantityChange: (productId: number, newQuantity: number, maxStock: number) => void;
+  handleShopCheckboxChange: (shop_id: number, checked: boolean) => void;
+  handleProductCheckboxChange: (product_id: number, checked: boolean) => void;
+  handleQuantityChange: (product_id: number, newQuantity: number, maxStock: number) => void;
   separatedByShop: any;
   handleBtnCO: () => void;
   totalPrice: number;
@@ -26,6 +26,7 @@ export default function CartPage({
   handleQuantityChange,
   cart,
 }: CartPageProps) {
+  Object;
   return (
     <main className="p-10 tablet:p-15">
       <h1 className="text-primary text-[1.75rem] tablet:text-[2rem]">Your Cart</h1>
@@ -34,13 +35,13 @@ export default function CartPage({
         <button className="text-xs tablet:text-sm text-red font-semibold">Delete</button>
       </div>
       <div>
-        {Object.keys(separatedByShop).map((shopId, index) => (
+        {Object.keys(separatedByShop).map((shop_id, index) => (
           <div key={index}>
             <ProductList
               checkedShops={checkedShops}
-              shopId={Number(shopId)}
+              shop_id={Number(shop_id)}
               handleShopCheckboxChange={handleShopCheckboxChange}
-              shopData={separatedByShop[shopId]}
+              shopData={separatedByShop[shop_id]}
               handleProductCheckboxChange={handleProductCheckboxChange}
               checkedProducts={checkedProducts}
               handleQuantityChange={handleQuantityChange}

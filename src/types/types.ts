@@ -3,7 +3,7 @@ export interface ShippingInfo {
   packageHeight: number;
   packageWidth: number;
   packageLength: number;
-  shippingFee: number;
+  shippingCost: number;
 }
 
 export interface Variant {
@@ -25,97 +25,111 @@ export interface Discount {
 }
 
 export interface Shop {
-  id: number;
-  name: string;
-  phoneNumber: string;
-  email: string;
+  shop_id: number;
+  shop_name: string;
+  shop_phone_number: string;
+  shop_email: string;
   description: string;
-  imageUrl: string;
-  createdAt: string;
-  shippingOptions: string[];
-  openingHours: string;
-  closingHours: string;
-  productList: Product[];
-  addressLabel: string;
-  addressProvince: string;
-  addressCity: string;
-  addressDistrict: string;
-  addressSubdistrict: string;
-  addressStreet: string;
-  shippingChannel: string[];
-  zipCode: number;
+  shop_image: string;
+  created_at: string;
+  shop_address_province: string;
+  shop_address_city: string;
+  shop_address_district: string;
+  shop_address_subdistrict: string;
+  shop_address_street: string;
+  shop_zip_code: number;
+  status: string;
+  user_id: number;
+}
+
+export interface ShopDetail {
+  shop_id: number;
+  shop_name: string;
+  shop_image: string;
+  description: string;
+  shop_address_province: string;
+  shop_address_city: string;
+  shop_address_district: string;
+  shop_address_subdistrict: string;
+  shop_address_street: string;
+  shop_zip_code: string;
+  shop_email: string;
+  shop_phone_number: string;
+  created_at: string;
 }
 
 export interface Product {
   product_id: number;
   product_name: string;
   description: string;
-  product_type: string | null;
-  image: string[] | null;
+  product_type: string;
+  image: string[];
   category: string;
-  discount: Discount[] | null;
-  rating: number;
+  discount: Discount[];
+  ratings: string;
   shipping_cost: number;
-  shop: { shop_id: number; shop_address_city: string };
+  shop: { shop_id: number; shop_address_city: string; shop_name: string };
   sold: number;
-  variant: Variant[] | null;
+  variant: Variant[];
   status: string;
-  // tags: string[];
+  created_at: string;
+  tag: any;
 }
 
-export interface UploadProductBody {
-  image_data: string[];
+export interface ReqProductBody {
+  images: string[];
   product_name: string;
-  product_description: string;
+  description: string;
+  product_type: string;
+  category_id: number;
+  variants: {
+    variant_name: string;
+    price: number;
+    stock: number;
+    unit: string;
+  }[];
+  shipping_cost: number;
+}
+
+export interface ProductDetail {
+  product_id: number;
+  product_name: string;
+  description: string;
+  product_type: string;
+  shipping_cost: number;
+  created_at: string;
+  sold: number;
+  status: string;
   category: string;
-  variant_name: string;
-  price: number;
-  unit: string;
-  stock: number;
-  discount_name: string;
-  discount_value: number;
-  start_date: string;
-  end_date: string;
+  image: { image_data: string; image_id: number }[];
+  variant: Variant[];
+  tag: string[];
+  discount: Discount[];
+  shop: Shop;
+  ratings: string;
 }
 
 export interface User {
-  id: number;
-  name: string;
-  email: string;
+  user_id: number;
   username: string;
-  imageUrl: string | null;
-  phoneNumber: string | null;
-  addressLabel: string | null;
-  addressStreet: string | null;
-  addressSubdistrict: string | null;
-  addressDistrict: string | null;
-  addressCity: string | null;
-  addressProvince: string | null;
-  zipCode: number | null;
+  email: string;
+  password: string;
+  phone_number: string;
+  profile_image: string;
+  role: string;
+  address_city: string;
+  address_district: string;
+  address_province: string;
+  address_street: string;
+  address_subdistrict: string;
+  zip_code: string;
 }
 
-export interface Shop {
-  id: number;
-  userId: number;
-  name: string;
-  imageUrl: string;
-  phoneNumber: string;
-  addressLabel: string;
-  addressStreet: string;
-  addressSubdistrict: string;
-  addressDistrict: string;
-  addressCity: string;
-  addressProvince: string;
-  zipCode: number;
-  openingHours: string;
-  closingHours: string;
-  shippingOptions: string[];
-  createdAt: string;
-  description: string;
-  products: Product[];
+export interface UserInShipmentPage extends User {
+  address_label: string;
 }
 
-export interface CreateShopBody {
+export interface ReqShopBody {
   shop_image: string;
   shop_name: string;
   description: string;
@@ -124,31 +138,139 @@ export interface CreateShopBody {
   shop_address_district: string;
   shop_address_subdistrict: string;
   shop_address_street: string;
+  shop_zip_code: string;
+  shop_email: string;
+  shop_phone_number: string;
+}
+
+export interface CreateDiscountBody {
+  discount_name: string;
+  discount_value: number;
+  discount_type: string;
+  start_date: string;
+  end_date: string;
 }
 
 export interface CartItem {
-  id: number;
-  userId: number;
-  product: {
-    id: number;
-    name: string;
-    category: string;
-    imageUrl: string;
-    stocks: number;
-  };
-  shop: {
-    shopId: number;
-    shopName: string;
-    imageUrl: string;
-    addressCity: string;
-    shippingChannel: string[];
-  };
-  selectedVariant: {
-    variantId: number;
-    variantName: string;
-    price: number;
-  };
+  cart_id: number;
+  user_id: number;
+  product_id: number;
+  product_name: string;
+  category: string;
+  image: string;
+  shop: Shop;
+  selectedVariant: Variant;
   quantity: number;
-  createdAt: string;
-  updatedAt: string;
+  discount: Discount[];
+  priceAfterDiscount: number;
+  shipping_cost: number;
+}
+
+export interface CreateTagBody {
+  tag_name: string;
+}
+
+export interface Tag {
+  "tag.status": string;
+  tag_name: string;
+  tag_id: number;
+}
+
+export interface ReqCartbody {
+  product_id: number;
+  variant_id: number | undefined;
+  quantity: number;
+}
+
+export interface ResponseGetCartUser {
+  cart: ResponseGetCartUserItem[];
+}
+
+export interface ResponseGetCartUserItem {
+  cart_id: number;
+  created_at: string;
+  product_id: number;
+  quantity: number;
+  user_id: number;
+  variant_id: number;
+}
+
+export interface ReqUserBody {
+  address_city: string;
+  address_district: string;
+  address_province: string;
+  address_street: string;
+  address_subdistrict: string;
+  zip_code: string;
+}
+
+export interface ReqOrderItemBody {
+  product_id: number;
+  variant_id: number;
+  quantity: number;
+  shipping_cost: number;
+}
+
+export interface ShopingItem {
+  product_id: number;
+  category: string;
+  discount: Discount[];
+  image: string;
+  priceAfterDiscount: number;
+  product_name: string;
+  quantity: number;
+  selectedVariant: Variant;
+  shipping_cost: number;
+  shop: Shop;
+}
+
+export interface OrderHistory {
+  created_at: string;
+  order_id: number;
+  payment_amount: number;
+  status: "completed";
+  total_amount: number;
+  user_id: number;
+  voucher_id: number | null;
+}
+
+export interface CreateVoucherBody {
+  voucher_name: string;
+  voucher_type: string;
+  voucher_value: number;
+  start_date: string;
+  end_date: string;
+}
+
+export interface Voucher {
+  end_date: string;
+  shop_id: number;
+  start_date: string;
+  voucher_id: number;
+  voucher_name: string;
+  voucher_type: "percentage";
+  voucher_value: number;
+}
+
+export interface WishlistItem {
+  product_id: number;
+  product_name: string;
+  description: string;
+  product_type: string;
+  image: { image_data: string; image_id: number; product_id: number }[];
+  category_name: string;
+  discount: Discount[];
+  rating: string;
+  shipping_cost: number;
+  shop: { shop_id: number; shop_address_city: string; shop_name: string };
+  sold: number;
+  variant: {
+    price: number;
+    product_id: number;
+    stock: number;
+    unit: string;
+    variant_id: number;
+    variant_name: string;
+  }[];
+  status: "active";
 }

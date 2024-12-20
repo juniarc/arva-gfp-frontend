@@ -1,25 +1,65 @@
-import { poppins } from "@/interfaces/fonts/fonts";
-import { ShopDevelop } from "@/services/api/dummyShop";
-import { FaLocationDot, FaStar } from "react-icons/fa6";
-import Image from "next/image";
-import LineDivider from "../dividers/LineDivider";
 import ShopInfo from "./ShopInfo";
 import ProductList from "./ProductList";
+import { Product, ReqProductBody, ReqShopBody, ShopDetail, Voucher } from "@/types/types";
+import SuccessAlert from "../alerts/SuccessAlert";
+import FailAlert from "../alerts/FailAlert";
+import { ManageProductValuesProps } from "../modals/ManageProductModal";
+import VoucherSection from "./VoucherSection";
+import LineDivider from "../dividers/LineDivider";
 
 interface ShopPageProps {
-  shop: ShopDevelop;
+  shop: ShopDetail;
   totalRatings: number;
   averageRatings: number;
+  handleEditShop: (value: ReqShopBody) => void;
+  products: Product[];
+  editShopStatus: "idle" | "loading" | "success" | "error";
+  handleSubmit: (values: ManageProductValuesProps) => void;
+  manageProductStatus: "idle" | "loading" | "success" | "error";
+  token: string | undefined;
+  getUpdateProductList: () => void;
+  vouchers: Voucher[];
 }
-export default function MyShopPage({ shop, totalRatings, averageRatings }: ShopPageProps) {
+export default function MyShopPage({
+  shop,
+  totalRatings,
+  averageRatings,
+  handleEditShop,
+  products,
+  editShopStatus,
+  handleSubmit,
+  manageProductStatus,
+  token,
+  vouchers,
+  getUpdateProductList,
+}: ShopPageProps) {
   return (
     <main className="min-h-[90vh] p-10 tablet:p-15 desktop:px-[120px] desktop:pt-20">
       <section>
-        <ShopInfo {...shop} totalRatings={totalRatings} averageRatings={averageRatings} />
+        <ShopInfo
+          editShopStatus={editShopStatus}
+          {...shop}
+          totalProducts={products.length}
+          totalRatings={totalRatings}
+          averageRatings={averageRatings}
+          handleEditShop={handleEditShop}
+        />
       </section>
       <section className="mt-10">
-        <ProductList products={shop.products} />
+        <VoucherSection vouchers={vouchers} token={token} shop_id={shop.shop_id} />
       </section>
+      <LineDivider className="my-10" />
+      <section className="mt-10">
+        <ProductList
+          handleSubmit={handleSubmit}
+          products={products}
+          manageProductStatus={manageProductStatus}
+          token={token}
+          getUpdateProductList={getUpdateProductList}
+        />
+      </section>
+      <SuccessAlert isOpen={editShopStatus === "success" || manageProductStatus === "success"} text="Success Update Shop" />
+      <FailAlert isOpen={editShopStatus === "error" || manageProductStatus === "error"} text="Failed" />
     </main>
   );
 }

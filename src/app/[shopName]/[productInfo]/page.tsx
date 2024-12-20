@@ -4,6 +4,7 @@ import api from "@/services/api/api";
 import uriHelpers from "@/utils/uriHelpers";
 import ProductDetailPage from "@/interfaces/components/productDetailPage/ProductDetailPage";
 import ProductDetailPageDesktop from "@/interfaces/components/productDetailPage/desktop/ProductDetailPageDesktop";
+import { convertCategoryNameToId } from "@/utils/elementHelpers";
 
 const dummyReviews = [
   {
@@ -52,21 +53,58 @@ export async function generateMetadata({ params }: { params: Promise<{ productIn
 export default async function Page({ params }: { params: Promise<{ productInfo: string; shopName: string }> }) {
   const cookiesList = await cookies();
   const viewport = cookiesList.get("viewport")?.value || undefined;
+  const userId = cookiesList.get("userId")?.value || undefined;
+  const token = cookiesList.get("token")?.value || undefined;
+
+  const allWishList = await api.allWishlist();
+
   const urlName = (await params).productInfo;
   const idMatch = urlName.match(/-(\d+)$/);
-  const id = idMatch ? idMatch[1] : null;
-  const product = await api.getProductById(Number(id));
-  const popularProducts = (await api.getAllProducts(5)) || [];
-  const fruitProducts = (await api.getAllProductsByCategory("fruit", 5)) || [];
+  const productId = idMatch ? idMatch[1] : null;
+  const detailProduct = await api.getDetailProductById(Number(productId));
 
-  if (product) {
+  const shopId = detailProduct.shop.shop_id;
+  const anotherShopProducts = (await api.getProductByShopId(shopId)) || [];
+
+  const categoryId = convertCategoryNameToId("fruits");
+  const categoryProducts = (await api.getAllProductsByCategory(categoryId)) || [];
+
+  let wisthlist = false;
+  let wishlistId = 0;
+
+  if (detailProduct) {
+    allWishList.map((item: any) => {
+      if (item.product_id === detailProduct.product_id && item.user_id === Number(userId)) {
+        wisthlist = true;
+        wishlistId = item.wishlist_id;
+      }
+    });
+  }
+
+  if (detailProduct) {
     if (viewport === "mobile") {
       return (
-        <ProductDetailPage productDetail={product} popularProducts={popularProducts} fruitProducts={fruitProducts} dummyReviews={dummyReviews} />
+        <ProductDetailPage
+          productDetail={detailProduct}
+          dummyReviews={dummyReviews}
+          anotherShopProducts={anotherShopProducts}
+          categoryProducts={categoryProducts}
+          isWishlist={wisthlist}
+          token={token}
+          wishlistId={wishlistId}
+        />
       );
     }
     return (
-      <ProductDetailPageDesktop productDetail={product} popularProducts={popularProducts} fruitProducts={fruitProducts} dummyReviews={dummyReviews} />
+      <ProductDetailPageDesktop
+        productDetail={detailProduct}
+        dummyReviews={dummyReviews}
+        anotherShopProducts={anotherShopProducts}
+        categoryProducts={categoryProducts}
+        isWishlist={wisthlist}
+        token={token}
+        wishlistId={wishlistId}
+      />
     );
   }
 }

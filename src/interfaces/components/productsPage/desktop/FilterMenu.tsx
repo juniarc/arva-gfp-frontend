@@ -21,6 +21,7 @@ export default function FilterMenu({ handleFilterBtn }: FilterMenuProps) {
   };
 
   const [selectedFilterCategory, setSelectedFilterCategory] = useState<string>("");
+  console.log(selectedFilterCategory);
   const handleSelectFilterCategory = (filterer: string) => {
     setSelectedFilterCategory(filterer);
     handleFilterBtn(filterer);
@@ -28,7 +29,15 @@ export default function FilterMenu({ handleFilterBtn }: FilterMenuProps) {
 
   return (
     <div className="w-full">
-      <p className="font-semibold mb-10">Filter By:</p>
+      <div className="flex items-center justify-between w-full mb-10">
+        <p className="font-semibold">Filter By:</p>
+        <button
+          className={`${selectedFilterCategory === "" ? "hidden" : ""} text-xs text-primary font-semibold`}
+          onClick={() => handleSelectFilterCategory("")}
+        >
+          Reset
+        </button>
+      </div>
       <div className="w-full bg-white rounded-lg shadow ">
         <button onClick={handleCategoryNav} className="w-full flex items-center justify-between p-10">
           <p className="font-semibold">Category</p>

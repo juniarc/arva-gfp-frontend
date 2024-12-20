@@ -5,6 +5,7 @@ import { endPage, paginateArray, startPage } from "@/utils/elementHelpers";
 import { useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import ProductItem from "./ProductItem";
+import ItemNotFound from "../error/ItemNotFound";
 
 interface ProductListProps {
   products: Product[];
@@ -37,13 +38,17 @@ export default function ProductList({ products }: ProductListProps) {
 
   return (
     <div className="mt-10 desktop:mt-0 desktop:w-full">
-      <div className="grid grid-cols-2 gap-5 w-full tablet:grid-cols-3 desktop:grid-cols-4">
-        {Array.isArray(paginatedData) ? (
-          paginatedData[currentPage].map((item: Product, index: number) => <ProductItem {...item} key={index} />)
-        ) : (
-          <p>{paginatedData}</p>
-        )}
-      </div>
+      {Array.isArray(paginatedData) ? (
+        <div className="grid grid-cols-2 gap-5 w-full tablet:grid-cols-3 desktop:grid-cols-4">
+          {paginatedData[currentPage].map((item: Product, index: number) => (
+            <ProductItem {...item} key={index} />
+          ))}
+        </div>
+      ) : (
+        <div className="w-full flex items-center justify-center mb-20">
+          <ItemNotFound text="Oops, Product Not Found" />
+        </div>
+      )}
       <div className="w-full flex items-center justify-center gap-10 mt-10">
         <button onClick={handlePrev} disabled={currentPage === 0}>
           <BsChevronLeft className="tablet:text-xl" />

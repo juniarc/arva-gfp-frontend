@@ -1,12 +1,15 @@
 import AddressSection from "../buynowPage/AddressSection";
 import PaymentMehtod from "../buynowPage/PaymentMethod";
-import { CartItem, User } from "@/types/types";
+import { CartItem, User, UserInShipmentPage } from "@/types/types";
 import ProductsInfo from "./ProductsInfo";
 import ShoppingSummary from "./ShoppingSummary";
 import PaynowBtn from "../buynowPage/PaynowBtn";
+import SuccessAlert from "../alerts/SuccessAlert";
+import FailAlert from "../alerts/FailAlert";
+import SuccessModal from "../modals/SuccessModal";
 
 interface ShipmentPageProps {
-  user: User;
+  user: UserInShipmentPage;
   handleFetchUpdatedUser: (updatedAddress: any) => void;
   cart: CartItem[];
   separatedByShop: any;
@@ -21,6 +24,10 @@ interface ShipmentPageProps {
   totalItems: number;
   isCompleted: boolean;
   totalProtectedShop: number;
+  editAddressStatus: "idle" | "loading" | "success" | "error";
+  shippingPrice: number;
+  handlePayBtn: () => void;
+  orderStatus: "idle" | "loading" | "success" | "error";
 }
 export default function ShipmentPage({
   user,
@@ -38,12 +45,16 @@ export default function ShipmentPage({
   isProtected,
   isCompleted,
   totalProtectedShop,
+  editAddressStatus,
+  shippingPrice,
+  handlePayBtn,
+  orderStatus,
 }: ShipmentPageProps) {
   return (
     <main className="px-10 pt-5 tablet:p-15 mb-10">
       <h1 className="text-primary text-[1.75rem] tablet:text-[2rem]">Checkout</h1>
       <section>
-        <AddressSection {...user} handleUpdateAddress={handleFetchUpdatedUser} />
+        <AddressSection editAddressStatus={editAddressStatus} {...user} handleUpdateAddress={handleFetchUpdatedUser} />
       </section>
       <section className="mt-5">
         <ProductsInfo
@@ -62,13 +73,16 @@ export default function ShipmentPage({
       <section>
         <ShoppingSummary
           totalPrice={totalPrice}
-          shippingPrice={1000}
+          shippingPrice={shippingPrice}
           appliedVoucher={null}
           totalProtectedShop={totalProtectedShop}
           totalItems={totalItems}
         />
       </section>
-      <PaynowBtn isCompleted={isCompleted} />
+      <PaynowBtn isCompleted={isCompleted} handlePayBtn={handlePayBtn} orderStatus={orderStatus} />
+      <SuccessAlert isOpen={editAddressStatus === "success"} text="Success edit user" />
+      <FailAlert isOpen={editAddressStatus === "error"} text="Fail edit user" />
+      <SuccessModal isOpen={orderStatus === "success"} handleCloseModal={() => {}} message={"Order success"} />
     </main>
   );
 }
