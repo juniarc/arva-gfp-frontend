@@ -1,16 +1,28 @@
-import { Product } from "@/types/types";
+import { Product, WishlistItem } from "@/types/types";
 import ProductList from "./ProductList";
+import ItemNotFound from "../error/ItemNotFound";
 
 interface WishlistPageProps {
-  products: Product[];
+  products: WishlistItem[];
+  token: string | undefined;
+  isWishlist: boolean;
 }
 
-export default function WishlistPage({ products }: WishlistPageProps) {
+export default function WishlistPage({ products, token, isWishlist }: WishlistPageProps) {
   return (
     <main className="px-10 py-5 tablet:p-15 desktop:px-[120px] desktop:py-20">
       <h1 className="text-[1.75rem] tablet:text-[2rem] desktop:text-[2.5rem] text-primary mb-5 tablet:mb-10">Your Wishlist</h1>
       <section>
-        <ProductList products={products} />
+        {products.length > 0 ? (
+          <ProductList products={products} token={token} isWishlist={isWishlist} />
+        ) : (
+          <div className="flex flex-col items-center gap-10">
+            <ItemNotFound text="Your wishlist is empty. Let's add some products!" />
+            <a href="/" className="px-20 py-3 bg-primary text-white rounded-lg font-semibold">
+              Back to home
+            </a>
+          </div>
+        )}
       </section>
     </main>
   );

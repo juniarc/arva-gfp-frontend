@@ -5,37 +5,56 @@ import Link from "next/link";
 import { FaStar, FaLocationDot, FaHeart, FaRegHeart } from "react-icons/fa6";
 import ShopIcon from "@/../public/icons/shopping-bag-white.svg";
 import AddToCartModal from "../modals/AddToCartModal";
-import { Variants } from "@/types/types";
-import { useState } from "react";
+import { Discount, Product, Variant, WishlistItem } from "@/types/types";
+import { useMemo, useState } from "react";
 import uriHelpers from "@/utils/uriHelpers";
 
-export interface ProductItemProps {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  imageUrl: string[];
-  category: string;
-  stocks: number;
-  unit: string;
-  discount: number;
-  rating: number;
-  shop: { id: number; name: string; imageUrl: string; addressCity: string; shippingChannel: string[] };
-  sold: number;
-  variants: Variants[];
-  tags: string[];
+interface ProductItemProps extends WishlistItem {
+  isWishlist: boolean;
+  token: string | undefined;
 }
 
-export default function ProductItem({ id, name, price, imageUrl, category, discount, shop, rating, sold, variants, stocks, unit }: ProductItemProps) {
+export default function ProductItem({
+  product_id,
+  product_name,
+  image,
+  category_name,
+  discount,
+  shop,
+  rating,
+  sold,
+  variant,
+  product_type,
+  token,
+  isWishlist,
+}: ProductItemProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const formatedShopnameForUrl = uriHelpers.formatStringForUrl(shop.name);
-  const formatedProductnameForUrl = uriHelpers.formatStringForUrl(name);
+  const formatedShopnameForUrl = uriHelpers.formatStringForUrl(shop.shop_name);
+  const formatedProductnameForUrl = uriHelpers.formatStringForUrl(product_name);
+
+  const getFormatedPrice = useMemo(() => {
+    if (variant?.length !== 0) {
+      return Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(variant?.[0].price ?? 0);
+    }
+    return "Rp. 0";
+  }, [variant]);
+
+  const discountValue = useMemo(() => discount?.find((item) => item.discount_type === "percentage"), [discount]);
+  const formattedRatings = rating ? parseFloat(parseFloat(rating).toFixed(2)) : 0;
+
+  const mappedVariant = variant.map((item) => ({
+    variant_id: item.variant_id,
+    variant_name: item.variant_name,
+    variant_price: item.price,
+    variant_stock: item.stock,
+    variant_unit: item.unit,
+  }));
 
   return (
     <div className="shadow-md max-w-[188px] tablet:max-w-full w-full min-h-[330px] desktop:w-full desktop:max-w-[220px] bg-white rounded-lg flex flex-col relative mr-10">
       <div className="w-full h-[144px] tablet:h-1/2 desktop:h-1/2 overflow-hidden">
         <Image
-          src={`${imageUrl[0]}`}
+          src={image[0].image_data}
           width={188}
           height={176}
           quality={100}
@@ -44,25 +63,28 @@ export default function ProductItem({ id, name, price, imageUrl, category, disco
         />
       </div>
       <div className="w-full flex-grow p-5 tablet:p-7 desktop:p-7 flex flex-col justify-between desktop:gap-3">
-        <p className="text-dark-gray text-[0.5rem]  tablet:text-xs capitalize desktop:text-base mb-3">{category}</p>
-        <Link href={`/${formatedShopnameForUrl}/${formatedProductnameForUrl}-${id}`} className="text-sm desktop:text-base max-h-21 mb-3 line-clamp-2">
-          {name}
-        </Link>
+        <p className="text-dark-gray text-[0.5rem]  tablet:text-xs capitalize desktop:text-base mb-3">{category_name}</p>
+        <a
+          href={`/${formatedShopnameForUrl}-${shop.shop_id}/${formatedProductnameForUrl}-${product_id}`}
+          className="text-sm desktop:text-base max-h-21 mb-3 line-clamp-2 capitalize"
+        >
+          {product_name}
+        </a>
         <div className="flex items-center gap-5 mb-3">
-          <p className="font-semibold text-primary tablet:text-[1.375rem] desktop:text-xl">Rp. {price}</p>
-          <p className="text-red bg-light-red px-3 text-xs tablet:text-[0.9375rem] desktop:text-base">{discount} %</p>
+          <p className="font-semibold text-primary tablet:text-[1.375rem] desktop:text-xl">{getFormatedPrice}</p>
+          <p className="text-red bg-light-red px-3 text-xs tablet:text-[0.9375rem] desktop:text-base">{discountValue?.discount_value} %</p>
         </div>
         <div className="flex items-center text-xs gap-4 mb-3">
           <div className="flex items-center gap-2">
             <FaStar className="text-yellow text-xs text-[0.9375rem] desktop:text-base" />
-            <p className=" text-xs text-[0.9375rem] desktop:text-xs">{rating}</p>
+            <p className=" text-xs text-[0.9375rem] desktop:text-xs">{formattedRatings ?? 0}</p>
           </div>
           <div>|</div>
           <p className="text-xs text-[0.9375rem]">{sold} Sold</p>
         </div>
         <div className="flex items-center gap-2 text-xs text-[0.9375rem] text-dark-gray">
           <FaLocationDot className=" text-xs text-[0.9375rem]" />
-          <p className="capitalize text-xs text-[0.9375rem]">{shop.addressCity}</p>
+          <p className="capitalize text-xs text-[0.9375rem]">{shop.shop_address_city}</p>
         </div>
         <div className="flex items-center gap-2 tablet:gap-5 mt-5 tablet:mt-10 desktop:mt-10">
           <button className="border border-red border-solid rounded h-15 w-15 min-w-15 tablet:w-20 tablet:min-w-20 tablet:h-20 desktop:w-20 desktop:min-w-20 desktop:h-20 flex items-center justify-center hover:text-white hover:bg-red">
@@ -82,9 +104,11 @@ export default function ProductItem({ id, name, price, imageUrl, category, disco
           <AddToCartModal
             isOpen={isOpen}
             handleCloseModal={() => setIsOpen(false)}
-            {...{ id, name, price, category, stocks, unit, discount }}
-            imageUrl={imageUrl[0]}
-            variants={variants}
+            {...{ product_id, product_name, variant, discount }}
+            imageUrl={image[0].image_data}
+            category={category_name}
+            token={token}
+            variant={mappedVariant}
           />
         </div>
       </div>

@@ -14,8 +14,9 @@ export default async function Page({ params }: { params: Promise<{ shopName: str
     if (shop.error) {
       return <CreateShop />;
     }
-
-    return <MyShopPageWrapper shop={dummyShop} viewport={viewport} />;
+    const products = await api.getProductByShopId(shop.shop_id);
+    const vouchers = await api.getVoucher(shop.shop_id);
+    return <MyShopPageWrapper vouchers={vouchers} userId={userId} shop={shop} products={products} token={token} viewport={viewport} />;
   } catch (error) {
     console.log(error);
     return <div>error</div>;

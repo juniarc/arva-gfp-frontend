@@ -12,7 +12,7 @@ import Link from "next/link";
 import uriHelpers from "@/utils/uriHelpers";
 import { formatPrice } from "@/utils/elementHelpers";
 
-export default function ProductItem({ product_id, product_name, image, category, discount, shop, rating, sold, variant, product_type }: Product) {
+export default function ProductItem({ product_id, product_name, image, category, discount, shop, ratings, sold, variant, product_type }: Product) {
   // Set first Image
   const firstImageUrl = useMemo(() => {
     return image?.[0] ?? "https://fastly.picsum.photos/id/44/200/200.jpg?hmac=W5KcqhapHjBgEIHGQpQnX6o9jdOXQEVCKEdGIohjisY";
@@ -35,6 +35,7 @@ export default function ProductItem({ product_id, product_name, image, category,
 
   // Find percentage discount
   const discountValue = useMemo(() => discount?.find((item) => item.discount_type === "percentage"), [discount]);
+  const formattedRatings = ratings ? parseFloat(parseFloat(ratings).toFixed(2)) : 0;
 
   return (
     <div className="shadow-lg w-full h-[300px] desktop:h-auto desktop:w-full bg-white rounded-lg flex flex-col relative mr-10">
@@ -69,7 +70,7 @@ export default function ProductItem({ product_id, product_name, image, category,
         <div className="flex items-center gap-4 mb-3">
           <div className="flex items-center gap-2">
             <FaStar className="text-yellow text-xs tablet:text-[0.9375rem]" />
-            <p className="text-xs tablet:text-[0.9375rem]">4.3</p>
+            <p className="text-xs tablet:text-[0.9375rem]">{formattedRatings ?? 0}</p>
           </div>
           <div className="w-[0.5px] h-5 bg-black"></div>
           <p className="text-xs tablet:text-[0.9375rem]">{sold} Sold</p>

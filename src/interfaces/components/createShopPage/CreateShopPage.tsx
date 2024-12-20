@@ -5,8 +5,13 @@ import IdentityFrom from "./IdentityForm";
 import ShopProfile from "./ShopProfileForm";
 import { FaCheck } from "react-icons/fa6";
 import UploadProductForm from "./UploadProductForm";
-import { CreateShopBody, Product, UploadProductBody } from "@/types/types";
+import { ReqShopBody, Discount, Product, ReqProductBody, CreateDiscountBody } from "@/types/types";
 import api from "@/services/api/api";
+import { useRouter } from "next/navigation";
+import SpinnerModal from "../modals/SpinnerModa";
+import SuccessAlert from "../alerts/SuccessAlert";
+import FailAlert from "../alerts/FailAlert";
+import { format } from "date-fns";
 
 interface CreateShopPageProps {
   userId: number;
@@ -44,47 +49,41 @@ export default function CreateShopPage({ userId, token }: CreateShopPageProps) {
     shop_address_district: "",
     shop_address_subdistrict: "",
     shop_address_street: "",
-    // zipCode: "",
-    // email: "",
-    // phoneNumber: "",
+    shop_zip_code: "",
+    shop_email: "",
+    shop_phone_number: "",
     shop_name: "",
     description: "",
   });
   const [uploadProductValues, setUploadProductValues] = useState({
-    image_data: [],
+    images: [],
     product_name: "",
-    product_description: "",
-    category: "",
-    variant_name: "",
-    price: 0,
-    stock: 0,
-    unit: "",
-    discount_name: "",
-    discount_value: 0,
-    start_date: "",
-    end_date: "",
-    // discount: {
-    //   discount_name: "",
-    //   discount_type: "",
-    //   discount_value: 0,
-    //   start_date: "",
-    //   end_date: "",
-    //   product_id: 0,
-    // },
-    // variant: {
-    //   variant_name: "",
-    //   price: 0,
-    //   stock: 0,
-    //   product_id: 0,
-    // },
-    // shippingInfo: {
-    //   packageWeight: 0,
-    //   packageHeight: 0,
-    //   packageWidth: 0,
-    //   packageLength: 0,
-    //   shippingFee: 0,
-    // },
-    // tags: [],
+    description: "",
+    product_type: "",
+    category_id: 0,
+    variants: [
+      {
+        variant_name: "",
+        price: 0,
+        stock: 0,
+        unit: "",
+      },
+    ],
+    shippingInfo: {
+      packageWeight: 0,
+      packageWidth: 0,
+      packageLength: 0,
+      packageHeight: 0,
+      shippingCost: 0,
+    },
+    shipping_cost: 0,
+    discount: {
+      discount_name: "",
+      discount_value: 0,
+      start_date: "",
+      end_date: "",
+      discount_type: "percentage",
+    },
   });
   const handleNext = (values: any) => {
     switch (activeStep) {
@@ -101,7 +100,8 @@ export default function CreateShopPage({ userId, token }: CreateShopPageProps) {
         break;
       case 2:
         setUploadProductValues({ ...values });
-        submitCreateProduct(values);
+        submitShopAndProduct(values);
+        break;
     }
     !isLastStep && setActiveStep((cur) => (cur < MAX_STEP ? cur + 1 : cur));
   };
@@ -115,13 +115,14 @@ export default function CreateShopPage({ userId, token }: CreateShopPageProps) {
         break;
       case 2:
         setUploadProductValues(values);
+        // submitCreateProduct(values);
         break;
     }
     !isFirstStep && setActiveStep((cur) => (cur > 0 ? cur - 1 : cur));
   };
 
   // Fungsi untuk mengubah semua nilai Shop menjadi lowercase
-  const formatShopToLowerCase = (values: CreateShopBody): CreateShopBody => {
+  const formatShopToLowerCase = (values: ReqShopBody): ReqShopBody => {
     return {
       ...values,
       shop_image: values.shop_image,
@@ -132,53 +133,75 @@ export default function CreateShopPage({ userId, token }: CreateShopPageProps) {
       shop_address_district: values.shop_address_district.toLowerCase(),
       shop_address_subdistrict: values.shop_address_subdistrict.toLowerCase(),
       shop_address_street: values.shop_address_street.toLowerCase(),
+      shop_email: values.shop_email.toLowerCase(),
+      shop_phone_number: values.shop_phone_number.toString(),
+      shop_zip_code: values.shop_zip_code.toString(),
     };
   };
 
-  // Fungsi untuk POST data ke backend
-  const submitCreateShop = async (values: any) => {
-    const formattedValues = formatShopToLowerCase(values);
-    try {
-      const createShop = await api.createShop(userId, token, formattedValues);
-      const response = createShop.json();
-
-      console.log(response);
-    } catch (error) {
-      console.error("Error posting data:", error);
-      alert("Terjadi kesalahan saat mengirim data.");
-    }
-  };
-
-  const formatProductToLowerCase = (values: UploadProductBody): UploadProductBody => {
+  const formatProductToLowerCase = (values: ReqProductBody): ReqProductBody => {
     return {
-      ...values,
+      product_type: values.product_type.toLowerCase(),
       product_name: values.product_name.toLowerCase(),
-      image_data: values.image_data,
-      product_description: values.product_description.toLowerCase(),
-      category: values.category.toLowerCase(),
-      variant_name: values.variant_name.toLowerCase(),
-      price: values.price,
-      stock: values.stock,
-      unit: values.unit.toLowerCase(),
-      discount_name: values.discount_name.toLowerCase(),
-      discount_value: values.discount_value,
-      start_date: new Date(values.start_date).toISOString().split("Z")[0],
-      end_date: new Date(values.end_date).toISOString().split("Z")[0],
+      images: values.images,
+      description: values.description.toLowerCase(),
+      category_id: values.category_id,
+      variants: values.variants.map((variant) => ({
+        variant_name: variant.variant_name.toLowerCase(),
+        price: parseInt(String(variant.price).replace(/\./g, ""), 10),
+        stock: variant.stock,
+        unit: variant.unit.toLowerCase(),
+      })),
+      shipping_cost: values.shipping_cost,
     };
   };
 
-  const submitCreateProduct = async (values: any) => {
-    const formattedValues = formatProductToLowerCase(values);
-    console.log(formattedValues);
-    // try {
-    //   const createProduct = await api.createProduct(userId, token, formattedValues);
-    //   const response = createProduct.json();
+  const formatDiscountToLowerCase = (values: CreateDiscountBody): CreateDiscountBody => {
+    return {
+      discount_name: values.discount_name.toLowerCase(),
+      discount_type: "percentage",
+      discount_value: values.discount_value,
+      start_date: format(new Date(values.start_date), "yyyy-MM-dd"),
+      end_date: format(new Date(values.end_date), "yyyy-MM-dd"),
+    };
+  };
 
-    //   console.log(response);
-    // } catch (error) {
-    //   console.error("Error posting data:", error);
-    //   alert("Terjadi kesalahan saat mengirim data.");
-    // }
+  const router = useRouter();
+  const [reqStatus, setReqStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
+  const submitShopAndProduct = async (productValuesInput: any) => {
+    setReqStatus("loading");
+    const shopValues = formatShopToLowerCase(shopProfileValues);
+    const productValues = formatProductToLowerCase(productValuesInput);
+
+    console.log("shopValues", shopValues);
+    console.log("productValues", productValues);
+
+    try {
+      const createShop = await api.createShop(userId, token, shopValues);
+
+      const createProduct = await api.createProduct(userId, token, productValues);
+
+      if (createProduct.product_id && productValuesInput.discount) {
+        const formatedDiscountBody = formatDiscountToLowerCase(productValuesInput.discount);
+        await api.createDiscount(createProduct.product_id, token, formatedDiscountBody);
+      }
+      console.log(createShop, createProduct);
+
+      setReqStatus("success");
+      setTimeout(() => {
+        setReqStatus("idle");
+      }, 2000);
+
+      router.push("/my-shop");
+    } catch (error) {
+      console.log(error);
+
+      setReqStatus("error");
+      setTimeout(() => {
+        setReqStatus("idle");
+      }, 2000);
+    }
   };
 
   return (
@@ -205,6 +228,9 @@ export default function CreateShopPage({ userId, token }: CreateShopPageProps) {
         {activeStep === 1 && <ShopProfile handleSubmit={handleNext} initialValues={shopProfileValues} handlePrev={handlePrev} />}
         {activeStep === 2 && <UploadProductForm handleSubmit={handleNext} initialValues={uploadProductValues} handlePrev={handlePrev} />}
       </div>
+      <SpinnerModal isOpen={reqStatus === "loading"} handleCloseModal={() => setReqStatus("idle")} />
+      <SuccessAlert isOpen={reqStatus === "success"} text="Success Add Shop" />
+      <FailAlert isOpen={reqStatus === "error"} text="Failed Add Shop" />
     </div>
   );
 }

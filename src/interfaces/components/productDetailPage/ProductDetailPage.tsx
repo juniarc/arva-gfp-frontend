@@ -8,24 +8,35 @@ import api from "@/services/api/api";
 import uriHelpers from "@/utils/uriHelpers";
 import React from "react";
 import FloatingDrawer from "@/interfaces/components/productDetailPage/FloatingDrawer";
-import { Product } from "@/types/types";
+import { Product, ProductDetail } from "@/types/types";
 import { WishlistProvider } from "@/hooks/WishlistContext";
 
 interface ProductDetailPageProps {
-  productDetail: any;
-  popularProducts: Product[];
-  fruitProducts: Product[];
+  productDetail: ProductDetail;
+  anotherShopProducts: Product[];
+  categoryProducts: Product[];
   dummyReviews: any;
+  isWishlist: boolean;
+  token: string | undefined;
+  wishlistId: number;
 }
-export default function ProductDetailPage({ productDetail, popularProducts, fruitProducts, dummyReviews }: ProductDetailPageProps) {
+export default function ProductDetailPage({
+  productDetail,
+  dummyReviews,
+  anotherShopProducts,
+  categoryProducts,
+  isWishlist,
+  token,
+  wishlistId,
+}: ProductDetailPageProps) {
   if (productDetail) {
     return (
       <main className="w-full">
         <section className="w-full">
-          <ImagesSection imageUrl={productDetail.imageUrl} />
+          <ImagesSection image={productDetail.image} />
         </section>
         <section>
-          <ProductInfo {...productDetail} shopLocation={productDetail.shop.addressCity} />
+          <ProductInfo {...productDetail} isWishlist={isWishlist} />
         </section>
         <section>
           <ShopInfo {...productDetail.shop} />
@@ -34,28 +45,27 @@ export default function ProductDetailPage({ productDetail, popularProducts, frui
           <ReviewSection reviews={dummyReviews} />
         </section>
         <section className="w-full">
-          <ProductListByCategory products={fruitProducts} category={productDetail.shop.name} />
+          <ProductListByCategory products={anotherShopProducts} category={productDetail.shop.shop_name} />
         </section>
         <section className="w-full">
-          <ProductListByCategory products={popularProducts} category="Recommended" />
+          <ProductListByCategory products={categoryProducts} category="Fruit" />
         </section>
-        <WishlistProvider>
-          <FloatingDrawer
-            id={productDetail.id}
-            category={productDetail.category}
-            imageUrl={productDetail.imageUrl[0]}
-            name={productDetail.name}
-            price={productDetail.price}
-            discount={productDetail.discount}
-            unit={productDetail.unit}
-            stocks={productDetail.stocks}
-            variants={productDetail.variants}
-            rating={productDetail.rating}
-            tags={productDetail.tags}
-            sold={productDetail.sold}
-            shop={productDetail.shop}
-          />
-        </WishlistProvider>
+        <FloatingDrawer
+          product_id={productDetail.product_id}
+          category={productDetail.category}
+          image={productDetail.image[0].image_data}
+          product_name={productDetail.product_name}
+          discount={productDetail.discount}
+          variant={productDetail.variant}
+          ratings={productDetail.ratings}
+          tag={productDetail.tag}
+          sold={productDetail.sold}
+          shop={productDetail.shop}
+          shipping_cost={productDetail.shipping_cost}
+          isWishlist={isWishlist}
+          token={token}
+          wishlistId={wishlistId}
+        />
       </main>
     );
   }

@@ -1,38 +1,55 @@
-import { Product } from "@/types/types";
+import { Product, ReqProductBody } from "@/types/types";
 import ProductItem from "./ProductItem";
 import { useState } from "react";
 import ManageProductModal from "../modals/ManageProductModal";
+import ItemNotFound from "../error/ItemNotFound";
+import { ManageProductValuesProps } from "../modals/ManageProductModal";
 
 interface ProductListProps {
   products: Product[];
+  handleSubmit: (values: ManageProductValuesProps) => void;
+  manageProductStatus: "idle" | "loading" | "success" | "error";
+  token: string | undefined;
+  getUpdateProductList: () => void;
 }
 
-export default function ProductList({ products }: ProductListProps) {
+export default function ProductList({ products, handleSubmit, manageProductStatus, token, getUpdateProductList }: ProductListProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [productList, setProductList] = useState<Product[]>(products);
-  const [uploadProductValues, setUploadProductValues] = useState({
-    imageUrl: [],
-    name: "",
+
+  const initialValues = {
+    images: [],
+    product_name: "",
     description: "",
-    category: "",
-    price: 0,
-    stocks: 0,
-    unit: "",
-    discount: 0,
-    // variants: variants[].name ?? '',
+    product_type: "",
+    category_id: 0,
+    variants: [
+      {
+        variant_name: "",
+        price: 0,
+        stock: 0,
+        unit: "",
+      },
+    ],
     shippingInfo: {
       packageWeight: 0,
-      packageHeight: 0,
       packageWidth: 0,
       packageLength: 0,
-      shippingFee: 0,
+      packageHeight: 0,
+      shippingCost: 0,
     },
-    tags: [],
-  });
-
-  const handleSubmit = (values: any) => {
-    setProductList([...productList, values]);
+    shipping_cost: 0,
+    discount: {
+      discount_name: "",
+      discount_value: 0,
+      start_date: "",
+      end_date: "",
+      discount_type: "percentage",
+    },
   };
+
+  // const handleSubmit = (values: any) => {
+  //   setProductList([...productList, values]);
+  // };
   return (
     <div>
       <div className="w-full desktop:w-fit desktop:gap-20 flex items-center justify-between mb-10 tablet:mb-10">
@@ -45,19 +62,25 @@ export default function ProductList({ products }: ProductListProps) {
             + Add New Product
           </button>
           <ManageProductModal
-            initialValues={uploadProductValues}
+            manageProductStatus={manageProductStatus}
+            initialValues={initialValues}
             handleCloseModal={() => setIsOpen(false)}
             isOpen={isOpen}
             handleSubmit={handleSubmit}
-            handlePrev={() => setIsOpen(false)}
           />
         </div>
       </div>
-      <div className="flex flex-col gap-5">
-        {productList.map((item, index) => (
-          <ProductItem {...item} key={index} />
-        ))}
-      </div>
+      {products.length > 0 ? (
+        <div className="flex flex-col gap-5">
+          {products.map((item, index) => (
+            <ProductItem {...item} key={index} token={token} getUpdateProductList={getUpdateProductList} />
+          ))}
+        </div>
+      ) : (
+        <div className="w-full flex items-center justify-center mb-20">
+          <ItemNotFound text="Your Product is Empty, Let's Add New Product" />
+        </div>
+      )}
     </div>
   );
 }

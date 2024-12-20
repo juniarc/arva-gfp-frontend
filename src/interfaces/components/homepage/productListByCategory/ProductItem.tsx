@@ -9,17 +9,44 @@ import AddToCartModal from "../../modals/AddToCartModal";
 import Link from "next/link";
 import uriHelpers from "@/utils/uriHelpers";
 import CartIcon from "@/../public/icons/shopping-bag-white.svg";
+import ErrorProductImageFallback from "@/../public/images/24493070_6962884.jpg";
 
-export default function ProductItem({ product_id, product_name, image, category, discount, shop, rating, sold, variant, product_type }: Product) {
+interface ProductItemProps extends Product {
+  token?: string | undefined;
+}
+
+export default function ProductItem({
+  product_id,
+  product_name,
+  image,
+  category,
+  discount,
+  shop,
+  ratings,
+  sold,
+  variant,
+  product_type,
+  token,
+}: ProductItemProps) {
   const firstImageUrl = useMemo(() => {
-    return image?.[0] ?? "https://fastly.picsum.photos/id/44/200/200.jpg?hmac=W5KcqhapHjBgEIHGQpQnX6o9jdOXQEVCKEdGIohjisY";
+    const defaultUrl = "https://fastly.picsum.photos/id/44/200/200.jpg?hmac=W5KcqhapHjBgEIHGQpQnX6o9jdOXQEVCKEdGIohjisY";
+
+    const isValidUrl = (url: any) => {
+      try {
+        new URL(url); // Jika URL tidak valid, ini akan melempar error
+        return true;
+      } catch {
+        return false;
+      }
+    };
+    return typeof image?.[0] === "string" && isValidUrl(image[0]) ? image[0] : defaultUrl;
   }, [image]);
 
   // State for AddToCartModal
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   // Formated product and shop name for URL
-  const formatedShopnameForUrl = uriHelpers.formatStringForUrl("shop-1");
+  const formatedShopnameForUrl = uriHelpers.formatStringForUrl(shop.shop_name ?? "shop");
   const formatedProductnameForUrl = uriHelpers.formatStringForUrl(product_name);
 
   // Formated price from first variant
@@ -31,9 +58,14 @@ export default function ProductItem({ product_id, product_name, image, category,
   }, [variant]);
 
   const discountValue = useMemo(() => discount?.find((item) => item.discount_type === "percentage"), [discount]);
-
+  const formattedRatings = ratings ? parseFloat(parseFloat(ratings).toFixed(2)) : 0;
   return (
     <div className="shadow-md w-56 h-[330px] desktop:h-auto desktop:w-full bg-white rounded-lg flex flex-col relative mr-10">
+      {product_type === "organic" && (
+        <div className="absolute top-0 right-0 pb-1 px-10 bg-secondary rounded-tr-lg rounded-bl-lg">
+          <span className="capitalize text-xs text-primary font-semibold">{product_type}</span>
+        </div>
+      )}
       <div className="w-full h-[176px] overflow-hidden">
         <Image
           src={firstImageUrl}
@@ -46,17 +78,20 @@ export default function ProductItem({ product_id, product_name, image, category,
       </div>
       <div className="w-full flex-grow p-5 flex flex-col justify-between desktop:gap-3">
         <p className="text-dark-gray text-[0.5rem] tablet:text-xs capitalize desktop:text-xs">{category}</p>
-        <Link href={`/${formatedShopnameForUrl}/${formatedProductnameForUrl}-${product_id}`} className="text-base max-h-21 line-clamp-2 capitalize">
+        <a
+          href={`/${formatedShopnameForUrl}-${shop.shop_id}/${formatedProductnameForUrl}-${product_id}`}
+          className="text-base max-h-21 line-clamp-2 capitalize"
+        >
           {product_name}
-        </Link>
+        </a>
         <div className="flex items-center gap-5">
           <p className="font-semibold text-primary">{getFormatedPrice}</p>
-          <p className="text-red text-base bg-light-red px-3 desktop:text-xs">{discountValue?.discount_value} %</p>
+          {discountValue && <p className="text-red text-base bg-light-red px-3 desktop:text-xs">{discountValue?.discount_value} %</p>}
         </div>
         <div className="flex items-center text-xs gap-4">
           <div className="flex items-center gap-2">
             <FaStar className="text-yellow" />
-            <p className="desktop:text-xs">4.2</p>
+            <p className="desktop:text-xs">{formattedRatings}</p>
           </div>
           <div>|</div>
           <p className="desktop:text-xs">{sold} Sold</p>
@@ -82,6 +117,7 @@ export default function ProductItem({ product_id, product_name, image, category,
           handleCloseModal={() => setIsOpen(false)}
           {...{ product_id, product_name, category, variant, discount }}
           imageUrl={firstImageUrl}
+          token={token}
         />
       </div>
     </div>

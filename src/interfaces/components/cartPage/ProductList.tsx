@@ -7,17 +7,17 @@ import { CartItem } from "@/types/types";
 interface ProductListProps {
   checkedShops: { [key: number]: boolean };
   checkedProducts: { [key: number]: boolean };
-  shopId: number;
-  handleShopCheckboxChange: (shopId: number, checked: boolean) => void;
+  shop_id: number;
+  handleShopCheckboxChange: (shop_id: number, checked: boolean) => void;
   shopData: any;
-  handleProductCheckboxChange: (productId: number, checked: boolean) => void;
-  handleQuantityChange: (productId: number, newQuantity: number, maxStock: number) => void;
+  handleProductCheckboxChange: (product_id: number, checked: boolean) => void;
+  handleQuantityChange: (product_id: number, newQuantity: number, maxStock: number) => void;
   cart: CartItem[];
 }
 
 export default function ProductList({
   checkedShops,
-  shopId,
+  shop_id,
   handleShopCheckboxChange,
   shopData,
   checkedProducts,
@@ -31,17 +31,17 @@ export default function ProductList({
         <div>
           <Checkbox
             color="blue"
-            defaultChecked={checkedShops[shopId]}
-            onChange={(e) => handleShopCheckboxChange(shopId, e.target.checked)}
+            defaultChecked={checkedShops[shop_id]}
+            onChange={(e) => handleShopCheckboxChange(shop_id, e.target.checked)}
             crossOrigin={undefined}
             className="w-10 h-10 tablet:w-20 tablet:h-20"
           />
         </div>
-        <p className="font-semibold">Shop's Name</p>
+        <p className="font-semibold capitalize">{shopData.shop_name}</p>
       </div>
-      {shopData.products.map((item: any) => (
+      {shopData.products.map((item: any, index: number) => (
         <ProductItem
-          key={item.id}
+          key={index}
           {...item}
           handleProductCheckboxChange={handleProductCheckboxChange}
           checkedProducts={checkedProducts}

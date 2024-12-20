@@ -8,6 +8,7 @@ import { shippingOptions } from "@/services/fixedData";
 import LineDivider from "../dividers/LineDivider";
 import Image from "next/image";
 import { FaCamera } from "react-icons/fa6";
+import { ReqShopBody } from "@/types/types";
 
 const DropdownWithSpinner = ({ label, options, isLoading, onSelect, name, touched, errors }: any) => {
   return (
@@ -32,25 +33,10 @@ const DropdownWithSpinner = ({ label, options, isLoading, onSelect, name, touche
   );
 };
 
-interface ShopFormTypes {
-  shop_image: string;
-  shop_name: string;
-  description: string;
-  shop_address_province: string;
-  shop_address_city: string;
-  shop_address_district: string;
-  shop_address_subdistrict: string;
-  shop_address_street: string;
-  // email: string;
-  // phoneNumber: string;
-  // openingHours: string;
-  // closingHours: string;
-  // zipCode: string;
-}
 interface ShopProfileFormProps {
-  initialValues: ShopFormTypes;
-  handleSubmit: (values: ShopFormTypes) => void;
-  handlePrev: (values: ShopFormTypes) => void;
+  initialValues: ReqShopBody;
+  handleSubmit: (values: ReqShopBody) => void;
+  handlePrev: (values: ReqShopBody) => void;
 }
 const DynamicThemeProvider = dynamic(() => import("@material-tailwind/react").then((mod) => mod.ThemeProvider), { ssr: false });
 
@@ -64,11 +50,9 @@ export default function ShopProfile({ initialValues, handleSubmit, handlePrev }:
     shop_address_district: string().required("District is required"),
     shop_address_subdistrict: string().required("Subdistrict is required"),
     shop_address_street: string().required("Street is required"),
-    // zipCode: string().required("Zip Code is required"),
-    // email: string().email().required("Email is required"),
-    // phoneNumber: number().required("Phone Number is required"),
-    // openingHours: string().required("Opening Hours is required"),
-    // closingHours: string().required("Closing Hours is required"),
+    shop_zip_code: string().required("Zip Code is required"),
+    shop_email: string().email().required("Email is required"),
+    shop_phone_number: string().required("Phone Number is required"),
   });
 
   const maxLength = 30;
@@ -228,61 +212,8 @@ export default function ShopProfile({ initialValues, handleSubmit, handlePrev }:
                         </span>
                       </div>
                     </div>
-                    {/* <div className="relative">
-                      <Textarea
-                        name="description"
-                        label="Shop Description"
-                        value={values.addressLabel}
-                        onChange={handleChange}
-                        maxLength={3000}
-                        className="tablet:text-base "
-                      />
-                      <p className={`text-red absolute top-full ${touched.addressLabel && errors.addressLabel ? "visible" : ""}`}>
-                        <ErrorMessage name="description" />
-                      </p>
-                      <div className="w-full flex justify-end mt-2">
-                        <span className="text-xs tablet:text-sm text-dark-gray">
-                          {values.addressLabel.length}/{maxLength}
-                        </span>
-                      </div>
-                    </div>
-                    <LineDivider className="my-5" /> */}
-                    {/* <div className="relative mt-5">
-                      <Input
-                        name="addressLabel"
-                        label="Address Label"
-                        value={values.addressLabel}
-                        onChange={handleChange}
-                        crossOrigin={undefined}
-                        maxLength={maxLength}
-                        className="tablet:text-base "
-                      />
-                      <p className={`text-red absolute top-full ${touched.addressLabel && errors.addressLabel ? "visible" : ""}`}>
-                        <ErrorMessage name="addressLabel" />
-                      </p>
-                      <div className="w-full flex justify-end mt-2">
-                        <span className="text-xs tablet:text-sm text-dark-gray">
-                          {values.addressLabel.length}/{maxLength}
-                        </span>
-                      </div>
-                    </div> */}
+
                     <div className="mt-5">
-                      {/* <DropdownWithSpinner
-                        touched={touched}
-                        errors={errors}
-                        name="addressProvince"
-                        label="Select Province"
-                        options={provinces}
-                        isLoading={isLoadingProvinces}
-                        onSelect={(provinceId: number, provinceName: string) => {
-                          setFieldValue("addressProvince", provinceName);
-                          setFieldValue("addressCity", "");
-                          setCities([]);
-                          setDistricts([]);
-                          setSubdistricts([]);
-                          fetchCities(provinceId);
-                        }}
-                      /> */}
                       <Select
                         name="shop_address_province"
                         onChange={(value) => {
@@ -301,7 +232,7 @@ export default function ShopProfile({ initialValues, handleSubmit, handlePrev }:
                           </div>
                         ) : (
                           provinces.map((province: any) => (
-                            <Option value={province.id} onClick={() => fetchCities(province.id)} className="capitalize" key={province.id}>
+                            <Option value={province.name} onClick={() => fetchCities(province.id)} className="capitalize" key={province.id}>
                               {province.name.toLowerCase()}
                             </Option>
                           ))
@@ -355,27 +286,6 @@ export default function ShopProfile({ initialValues, handleSubmit, handlePrev }:
                         />
                       )}
                     </div>
-                    {/* {values.shop_address_district && (
-                      <div className="mt-10 relative">
-                        <Input
-                          name="zipCode"
-                          label="Zip Code"
-                          value={values.zipCode}
-                          onChange={handleChange}
-                          crossOrigin={undefined}
-                          maxLength={6}
-                          type="text"
-                        />
-                        <p className={`text-red absolute top-full ${touched.zipCode && errors.zipCode ? "visible" : ""}`}>
-                          <ErrorMessage name="zipCode" />
-                        </p>
-                        <div className="w-full flex justify-end mt-2">
-                          <span className="text-xs text-dark-gray">
-                            {values.zipCode.length}/{6}
-                          </span>
-                        </div>
-                      </div>
-                    )} */}
                     {values.shop_address_subdistrict && (
                       <div className="mt-10 mb-5">
                         <Textarea
@@ -395,65 +305,65 @@ export default function ShopProfile({ initialValues, handleSubmit, handlePrev }:
                         </div>
                       </div>
                     )}
-                    {/* {values.addressStreet && (
-                      <Select
-                        name="shippingChannel"
-                        onChange={(value) => setFieldValue("shippingChannel", value)}
-                        label="Select Shipping"
-                        className="h-20 capitalize"
-                      >
-                        {shippingOptions.map((option: any, index) => (
-                          <Option value={option} className="capitalize" key={index}>
-                            {option}
-                          </Option>
-                        ))}
-                      </Select>
-                    )} */}
-                    <LineDivider className="my-5" />
-                    {/* {values.shop_address_street && (
-                      <div className="relative ">
+                    {values.shop_address_street && (
+                      <div className="relative">
                         <Input
-                          name="email"
-                          label="Email"
-                          value={values.email}
+                          type="number"
+                          name="shop_zip_code"
+                          label="Zip Code"
+                          value={values.shop_zip_code}
                           onChange={handleChange}
                           crossOrigin={undefined}
-                          maxLength={maxLength}
+                          maxLength={6}
                           className="tablet:text-base "
                         />
-                        <p className={`text-red absolute top-full ${touched.addressLabel && errors.addressLabel ? "visible" : ""}`}>
-                          <ErrorMessage name="email" />
+                        <p className={`text-red absolute top-full ${touched.shop_zip_code && errors.shop_zip_code ? "visible" : ""}`}>
+                          <ErrorMessage name="shop_zip_code" />
                         </p>
                       </div>
-                    )} */}
-                    {/* {values.email && (
+                    )}
+                    <LineDivider className="my-10" />
+                    {values.shop_zip_code && (
                       <>
-                        <div className="relative mt-10">
+                        <div className="relative">
                           <Input
-                            name="phoneNumber"
-                            label="Phone Number"
-                            value={values.phoneNumber}
+                            name="shop_email"
+                            label="Shop Email"
+                            value={values.shop_email}
                             onChange={handleChange}
                             crossOrigin={undefined}
                             maxLength={maxLength}
                             className="tablet:text-base "
+                            type="email"
                           />
-                          <p className={`text-red absolute top-full ${touched.addressLabel && errors.addressLabel ? "visible" : ""}`}>
-                            <ErrorMessage name="phoneNumber" />
+                          <p className={`text-red absolute top-full ${touched.shop_zip_code && errors.shop_zip_code ? "visible" : ""}`}>
+                            <ErrorMessage name="shop_email" />
                           </p>
                         </div>
-                        <LineDivider className="my-5" />
+                        <div className="relative mt-10">
+                          <Input
+                            name="shop_phone_number"
+                            label="Shop Phone Number"
+                            value={values.shop_phone_number}
+                            onChange={handleChange}
+                            crossOrigin={undefined}
+                            maxLength={maxLength}
+                            className="tablet:text-base "
+                            type="number"
+                          />
+                          <p className={`text-red absolute top-full ${touched.shop_phone_number && errors.shop_phone_number ? "visible" : ""}`}>
+                            <ErrorMessage name="shop_phone_number" />
+                          </p>
+                        </div>
                       </>
-                    )} */}
+                    )}
                   </div>
                 </div>
                 <div className="w-full mt-10 flex justify-between gap-5">
                   <button onClick={() => handlePrev(values)} className="w-full border-gray border rounded font-semibold py-3">
                     Prev
                   </button>
-                  <button onClick={() => console.log(values)} className="w-full bg-primary text-white rounded font-semibold py-3">
-                    Next
-                  </button>
+                  <button className="w-full bg-primary text-white rounded font-semibold py-3">Next</button>
                 </div>
               </Form>
             )}

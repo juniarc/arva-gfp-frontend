@@ -4,33 +4,34 @@ import { FaLocationDot, FaStar } from "react-icons/fa6";
 import Image from "next/image";
 import ProductList from "../ProductList";
 import LineDivider from "../../dividers/LineDivider";
+import { Product, ShopDetail } from "@/types/types";
+import { format } from "date-fns";
 
-interface ShopPageProps extends ShopDevelop {
+interface ShopPageProps extends ShopDetail {
   totalRatings: number;
   averageRatings: number;
+  products: Product[];
 }
 export default function ShopPageDesktop({
-  name,
-  addressCity,
-  imageUrl,
+  shop_name,
+  shop_image,
   description,
+  shop_address_province,
+  shop_address_city,
+  shop_address_district,
+  shop_address_subdistrict,
+  shop_address_street,
+  shop_zip_code,
+  shop_email,
+  shop_id,
+  shop_phone_number,
+  created_at,
   products,
-  id,
-  userId,
-  addressProvince,
-  addressDistrict,
-  addressLabel,
-  addressStreet,
-  addressSubdistrict,
-  phoneNumber,
-  email,
-  openingHours,
-  closingHours,
-  zipCode,
-  createdAt,
   totalRatings,
   averageRatings,
 }: ShopPageProps) {
+  const formatedDate = format(new Date(created_at), "dd MMMM yyyy");
+
   return (
     <main className="min-h-[90vh] px-[120px] py-20">
       <section>
@@ -40,12 +41,12 @@ export default function ShopPageDesktop({
           "
           >
             <div className="h-[65px] tablet:h-[72px] aspect-square">
-              <Image src={imageUrl} width={60} height={60} alt="Shop Image" className="w-full h-full object-cover object-center rounded-full" />
+              <Image src={shop_image} width={60} height={60} alt="Shop Image" className="w-full h-full object-cover object-center rounded-full" />
             </div>
             <div className="h-full flex flex-col gap-2">
-              <h3 className={`${poppins.className} font-bold`}>{name}</h3>
-              <span className="flex items-center gap-2 text-dark-gray">
-                <FaLocationDot /> {addressCity}
+              <h3 className={`${poppins.className} font-bold capitalize`}>{shop_name}</h3>
+              <span className="flex items-center gap-2 text-dark-gray capitalize">
+                <FaLocationDot /> {shop_address_city}
               </span>
             </div>
           </div>
@@ -58,15 +59,6 @@ export default function ShopPageDesktop({
                 </p>
               </div>
               <p>Ratings & Reviews</p>
-            </div>
-            <div className="w-px h-15 bg-black"></div>
-            <div className=" flex flex-col text-center justify-center">
-              <div>
-                <p className="font-semibold text-2xl">
-                  {openingHours} - {closingHours}
-                </p>
-              </div>
-              <p>Operasional Hours</p>
             </div>
           </div>
         </div>
@@ -88,12 +80,12 @@ export default function ShopPageDesktop({
             </div>
             <div>
               <p className="mb-5">
-                : {addressCity}, {addressProvince}
+                : {shop_address_city}, {shop_address_province}
               </p>
-              <p className="mb-5">: {email}</p>
-              <p className="mb-5">: {phoneNumber}</p>
-              <p className="mb-5">: {products.length}</p>
-              <p className="mb-5">: {createdAt}</p>
+              <p className="mb-5">: {shop_email}</p>
+              <p className="mb-5">: {shop_phone_number}</p>
+              <p className="mb-5">: {products.length} Products</p>
+              <p className="mb-5">: {formatedDate}</p>
             </div>
           </div>
         </div>
