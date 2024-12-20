@@ -60,7 +60,7 @@ export default function UploadProductForm({ initialValues, handleSubmit, handleP
       .min(3, "Product name must be at least 3 characters")
       .max(100, "Product name cannot exceed 100 characters")
       .required("Product name is required"),
-    description: string().max(500, "Description cannot exceed 500 characters").required("Description is required"),
+    description: string().max(3000, "Description cannot exceed 500 characters").required("Description is required"),
     product_type: string().required("Product type is required"),
     shipping_cost: number(),
     category_id: number().required("Category is required"),

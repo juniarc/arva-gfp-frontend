@@ -4,15 +4,18 @@ import { LuMinus, LuPlus } from "react-icons/lu";
 import { CartItem } from "@/types/types";
 import { useMemo } from "react";
 import { currencyFormater } from "@/utils/elementHelpers";
+import { useCart } from "@/hooks/cart/CartContext";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 interface ProductItemProps extends CartItem {
   checkedProducts: { [key: number]: boolean };
-  cart: CartItem[];
   handleProductCheckboxChange: (productId: number, checked: boolean) => void;
   handleQuantityChange: (productId: number, newQuantity: number, maxStock: number) => void;
+  handleDeleteCart: (cartId: number) => void;
 }
 
 export default function ProductItem({
+  cart_id,
   product_id,
   user_id,
   product_name,
@@ -21,14 +24,11 @@ export default function ProductItem({
   selectedVariant,
   quantity,
   checkedProducts,
-  cart,
   discount,
   handleProductCheckboxChange,
   handleQuantityChange,
+  handleDeleteCart,
 }: ProductItemProps) {
-  const cartItem = cart.find((item) => item.product_id === product_id);
-  const currentQuantity = cartItem ? cartItem.quantity : quantity;
-
   const discountValue = useMemo(() => discount?.find((item) => item.discount_type === "percentage"), [discount]);
   const priceAfterDiscount = useMemo(() => {
     if (!discountValue) return selectedVariant?.variant_price ?? 0;
@@ -37,14 +37,14 @@ export default function ProductItem({
     return (selectedVariant?.variant_price ?? 0) - discountPrice;
   }, [selectedVariant, discountValue]);
 
-  const formatedPriceDiscount = currencyFormater.format(priceAfterDiscount);
+  const formatedPriceDiscount = currencyFormater.format(priceAfterDiscount * quantity);
 
   return (
     <div className="mt-5 flex items-start gap-5 w-full min-w-full">
       <div className="p-0">
         <Checkbox
           color="blue"
-          checked={checkedProducts[product_id]}
+          checked={checkedProducts[product_id] || false}
           onChange={(e) => handleProductCheckboxChange(product_id, e.target.checked)}
           crossOrigin={undefined}
           className="w-10 h-10 tablet:w-20 tablet:h-20"
@@ -67,19 +67,30 @@ export default function ProductItem({
             <p className="font-semibold tablet:text-[1.375rem] desktop:text-2xl">{formatedPriceDiscount}</p>
             <div className="flex items-center justify-end mt-5 desktop:mt-10 w-full">
               <div className="text-dark-gray flex items-center border-solid border-gray border w-fit rounded-lg py-1 px-5 tablet:py-3 tablet:px-10 desktop:px-10 desktop:py-3">
-                <button
-                  onClick={() => {
-                    handleQuantityChange(product_id, currentQuantity - 1, selectedVariant.variant_stock);
-                  }}
-                  className="tablet:text-[1.375rem]"
-                >
-                  <LuMinus />
-                </button>
+                {quantity > 1 ? (
+                  <button
+                    onClick={() => {
+                      handleQuantityChange(product_id, quantity - 1, selectedVariant.variant_stock);
+                    }}
+                    className="tablet:text-[1.375rem]"
+                  >
+                    <LuMinus />
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      handleDeleteCart(cart_id);
+                    }}
+                    className="tablet:text-[1.375rem]"
+                  >
+                    <FaRegTrashCan className="text-red" />
+                  </button>
+                )}
                 <input
                   type="number"
                   minLength={1}
                   maxLength={selectedVariant.variant_stock}
-                  value={currentQuantity}
+                  value={quantity}
                   onChange={(e) => {
                     const newQuantity = Number(e.target.value);
                     if (!isNaN(newQuantity)) {
@@ -91,7 +102,7 @@ export default function ProductItem({
                 />
                 <button
                   onClick={() => {
-                    handleQuantityChange(product_id, currentQuantity + 1, selectedVariant.variant_stock);
+                    handleQuantityChange(product_id, quantity + 1, selectedVariant.variant_stock);
                   }}
                   disabled={quantity >= selectedVariant.variant_stock}
                   className="tablet:text-[1.375rem]"

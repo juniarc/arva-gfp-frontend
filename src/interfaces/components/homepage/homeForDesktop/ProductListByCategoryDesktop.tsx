@@ -11,8 +11,9 @@ interface ProductListByCategoryProps {
   category: string;
   classname: string;
   token?: string | undefined;
+  userId: number;
 }
-export default function ProductListByCategoryDesktop({ products, category, classname, token }: ProductListByCategoryProps) {
+export default function ProductListByCategoryDesktop({ products, category, classname, token, userId }: ProductListByCategoryProps) {
   return (
     <div>
       <div className="flex items-center justify-between mb-8">
@@ -24,7 +25,7 @@ export default function ProductListByCategoryDesktop({ products, category, class
       <div>
         <div className={`${classname} grid gap-5`}>
           {products.map((product, index) => (
-            <ProductItem {...product} key={index} token={token} />
+            <ProductItem {...product} key={index} token={token} userId={userId} />
           ))}
         </div>
       </div>

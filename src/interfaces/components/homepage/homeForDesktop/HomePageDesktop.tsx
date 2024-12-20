@@ -7,8 +7,9 @@ import AsideCategories from "./AsideCategories";
 
 interface HomePageProps {
   token?: string | undefined;
+  userId: number;
 }
-export default async function HomePageDesktop({ token }: HomePageProps) {
+export default async function HomePageDesktop({ token, userId }: HomePageProps) {
   const products = (await api.getAllProducts()) || [];
   const slicedProducts = products?.slice(0, 6);
 
@@ -30,19 +31,19 @@ export default async function HomePageDesktop({ token }: HomePageProps) {
 
         <div className="max-w-[78%]">
           <section className="w-full mt-0">
-            <ProductListByCategoryDesktop classname="grid-cols-4" products={slicedProducts} category="popular" token={token} />
+            <ProductListByCategoryDesktop userId={userId} classname="grid-cols-4" products={slicedProducts} category="popular" token={token} />
           </section>
           <section className="w-full mt-10">
             <HomeAds />
           </section>
           <section className="w-full">
-            <ProductListByCategoryDesktop classname="grid-cols-4" products={slicedProducts} category="fruit" token={token} />
+            <ProductListByCategoryDesktop userId={userId} classname="grid-cols-4" products={slicedProducts} category="fruit" token={token} />
           </section>
           <section className="w-full mt-10">
             <HomeCategoriesDesktop />
           </section>
           <section className="w-full mt-10">
-            <ProductListByCategoryDesktop classname="grid-cols-4" products={slicedProducts} category="vegetable" />
+            <ProductListByCategoryDesktop userId={userId} classname="grid-cols-4" products={slicedProducts} category="vegetable" />
           </section>
         </div>
       </div>

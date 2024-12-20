@@ -7,24 +7,19 @@ import { checkIsTextClamped, currencyFormater } from "@/utils/elementHelpers";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import ProductBuySection from "./ProductBuySection";
-import { Discount, Shop, Variant } from "@/types/types";
+import { Discount, ProductDetail, Shop, Variant } from "@/types/types";
 import { useRouter } from "next/navigation";
+import { useCart } from "@/hooks/cart/CartContext";
+import SuccessAlert from "../../alerts/SuccessAlert";
+import FailAlert from "../../alerts/FailAlert";
 
 gsap.registerPlugin(useGSAP);
 
-interface ProductInfoProps {
-  product_id: number;
-  product_name: string;
-  category: string;
-  description: string;
-  shop: Shop;
-  variant: Variant[];
-  discount: Discount[];
-  sold: number;
-  ratings: string;
+interface ProductInfoProps extends ProductDetail {
   wishlistId: number;
   isWishlist: boolean;
   token: string | undefined;
+  userId: number;
 }
 
 export default function ProductInfoDesktop({
@@ -40,6 +35,9 @@ export default function ProductInfoDesktop({
   isWishlist,
   wishlistId,
   token,
+  userId,
+  image,
+  shipping_cost,
 }: ProductInfoProps) {
   const descRef = useRef<HTMLParagraphElement | null>(null);
   const [isTexClamped, setIsTexClamped] = useState<boolean>(false);
@@ -53,12 +51,12 @@ export default function ProductInfoDesktop({
     setDescMoreOpen((prev) => !prev);
   };
 
-  const getFormatedPrice = useMemo(() => {
-    if (variant?.length !== 0) {
-      return Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(variant?.[0].variant_price ?? 0);
-    }
-    return "Rp. 0";
-  }, [variant]);
+  // const getFormatedPrice = useMemo(() => {
+  //   if (variant?.length !== 0) {
+  //     return Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", maximumFractionDigits: 0 }).format(variant?.[0].variant_price ?? 0);
+  //   }
+  //   return "Rp. 0";
+  // }, [variant]);
 
   const router = useRouter();
   const [selectedVariant, setSelectedVariant] = useState<Variant | null>(variant?.[0] ?? null);
@@ -88,21 +86,49 @@ export default function ProductInfoDesktop({
 
   const handleSelectVariant = (variant: Variant) => setSelectedVariant(variant);
 
-  const handleAddToCart = () => {
-    console.log(
-      `/buy-now?id=${product_id}&variantId=${selectedVariant?.variant_id}&variantName=${selectedVariant?.variant_name}&price=${selectedVariant?.variant_price}&quantity=${quantity}`,
-    );
-    // setShowAlert(true);
+  const { state, addItemToCart } = useCart();
 
-    // setTimeout(() => {
-    //   setShowAlert(false);
-    // }, 2000);
+  const [addToCartStatus, setAddToCartStatus] = useState<"loading" | "success" | "error" | "idle">("idle");
+
+  const shopingItem = useMemo(() => {
+    return {
+      product_id: product_id,
+      category: category,
+      discount: discount,
+      image: image[0].image_data,
+      priceAfterDiscount: priceAfterDiscount,
+      product_name: product_name,
+      quantity: quantity,
+      selectedVariant: selectedVariant,
+      shipping_cost: shipping_cost,
+      shop: shop,
+    };
+  }, [quantity, priceAfterDiscount, selectedVariant]);
+
+  const handleAddToCart = () => {
+    setAddToCartStatus("loading");
+    if (token && userId) {
+      try {
+        addItemToCart(product_id, quantity, selectedVariant?.variant_id ?? 0, token, userId);
+
+        setAddToCartStatus("success");
+        setTimeout(() => {
+          setAddToCartStatus("idle");
+        }, 2000);
+      } catch (error) {
+        setAddToCartStatus("error");
+        setTimeout(() => {
+          setAddToCartStatus("idle");
+        }, 2000);
+      }
+    } else {
+      router.push("/login");
+    }
   };
 
   const handleBuyNowBtn = () => {
-    router.push(
-      `/buy-now?id=${product_id}&variantId=${selectedVariant?.variant_id}&variantName=${selectedVariant?.variant_name}&price=${selectedVariant?.variant_price}&quantity=${quantity}`,
-    );
+    sessionStorage.setItem("shopingItem", JSON.stringify(shopingItem));
+    window.location.href = "/buy-now";
   };
 
   return (
@@ -112,13 +138,13 @@ export default function ProductInfoDesktop({
         <p className="text-base font-semibold desktop:text-lg">{product_name}</p>
         <div className="flex items-center gap-5 tablet:gap-10 desktop:mt-5">
           <div className="flex items-center gap-5">
-            <p className="font-bold text-primary text-2xl">{formatedPrice}</p>
+            <p className={`${discountValue ? "line-through text-dark-gray" : "text-primary font-semibold"} text-2xl`}>{formatedPrice}</p>
             <p className="text-dark-gray text-xs tablet:text-sm capitalize">/{selectedVariant?.variant_unit}</p>
           </div>
           {discountValue && <p className="text-red text-base bg-light-red px-3">{discountValue?.discount_value} %</p>}
           {discountValue && (
             <div className="flex items-center">
-              <p className="text-primary font-semibold tablet:text-[1.375rem] desktop:text-xl">{formatedPriceDiscount}</p>
+              <p className="text-primary font-semibold tablet:text-[1.375rem] desktop:text-2xl">{formatedPriceDiscount}</p>
               <p className="text-xss text-dark-gray tablet:text-[1.375rem] desktop:text-base">/ {selectedVariant?.variant_unit}</p>
             </div>
           )}
@@ -134,6 +160,7 @@ export default function ProductInfoDesktop({
         <p className="my-10">Stocks: {selectedVariant?.variant_stock}</p>
       </div>
       <ProductBuySection
+        addToCartStatus={addToCartStatus}
         product_id={product_id}
         product_name={product_name}
         isWishlist={isWishlist}
@@ -153,7 +180,6 @@ export default function ProductInfoDesktop({
         <h3 className="mb-6">Description</h3>
         <p ref={descRef} className={` ${descMoreOpen ? "" : "line-clamp-3"}`}>
           {description}
-          {description}
         </p>
         {isTexClamped && (
           <button onClick={handleDescMoreButton} className="w-full bg-secondary text-xs flex items-center justify-center py-5 rounded mt-5">
@@ -164,6 +190,11 @@ export default function ProductInfoDesktop({
           </button>
         )}
       </div>
+      <SuccessAlert isOpen={addToCartStatus === "success"} text={`Added ${quantity} ${selectedVariant?.variant_unit} of ${product_name} to cart`} />
+      <FailAlert
+        isOpen={addToCartStatus === "error"}
+        text={`Failed to add ${quantity} ${selectedVariant?.variant_unit} of ${product_name} to cart`}
+      />
     </div>
   );
 }

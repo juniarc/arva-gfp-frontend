@@ -209,6 +209,7 @@ export interface ReqOrderItemBody {
   variant_id: number;
   quantity: number;
   shipping_cost: number;
+  voucher_id?: number | null;
 }
 
 export interface ShopingItem {
@@ -248,7 +249,7 @@ export interface Voucher {
   start_date: string;
   voucher_id: number;
   voucher_name: string;
-  voucher_type: "percentage";
+  voucher_type: string;
   voucher_value: number;
 }
 
@@ -273,4 +274,17 @@ export interface WishlistItem {
     variant_name: string;
   }[];
   status: "active";
+}
+
+export interface LoginBody {
+  email: string;
+  password: string;
+}
+
+export interface RegisterBody {
+  username: string;
+  email: string;
+  phone_number: string;
+  role: string;
+  password: string;
 }

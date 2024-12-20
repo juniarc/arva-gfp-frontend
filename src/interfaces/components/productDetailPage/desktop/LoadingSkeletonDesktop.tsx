@@ -46,7 +46,7 @@ export default function LoadingSkeletonDesktop() {
                     <button>
                       <LuMinus />
                     </button>
-                    <input type="number" value={1} className="w-55 text-center text-black" />
+                    <div className="w-55 text-center text-black"></div>
                     <button>
                       <LuPlus />
                     </button>

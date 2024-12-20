@@ -4,14 +4,14 @@ import { CartItem } from "@/types/types";
 interface CartPageProps {
   checkedShops: { [key: number]: boolean };
   checkedProducts: { [key: number]: boolean };
-  handleShopCheckboxChange: (shopId: number, checked: boolean) => void;
-  handleProductCheckboxChange: (productId: number, checked: boolean) => void;
-  handleQuantityChange: (productId: number, newQuantity: number, maxStock: number) => void;
-  separatedByShop: any;
+  handleShopCheckboxChange: (shop_id: number, checked: boolean) => void;
+  handleProductCheckboxChange: (product_id: number, checked: boolean) => void;
+  handleQuantityChange: (product_id: number, newQuantity: number, maxStock: number) => void;
+  separatedByShop: { [shop_id: number]: { products: CartItem[]; shop_name: string } };
   handleBtnCO: () => void;
   totalPrice: number;
   totalItems: number;
-  cart: CartItem[];
+  handleDeleteCart: (cartId: number) => void;
 }
 
 export default function CartPageDesktop({
@@ -24,7 +24,7 @@ export default function CartPageDesktop({
   handleShopCheckboxChange,
   handleBtnCO,
   handleQuantityChange,
-  cart,
+  handleDeleteCart,
 }: CartPageProps) {
   return (
     <main className="px-[120px] py-20">
@@ -36,17 +36,17 @@ export default function CartPageDesktop({
             <button className=" text-red font-semibold">Delete</button>
           </div>
           <div className="mt-10">
-            {Object.keys(separatedByShop).map((shop_id, index) => (
+            {Object.entries(separatedByShop).map(([shop_id, shop], index) => (
               <div key={index}>
                 <ProductList
                   checkedShops={checkedShops}
                   shop_id={Number(shop_id)}
                   handleShopCheckboxChange={handleShopCheckboxChange}
-                  shopData={separatedByShop[shop_id]}
+                  shop={shop}
                   handleProductCheckboxChange={handleProductCheckboxChange}
                   checkedProducts={checkedProducts}
                   handleQuantityChange={handleQuantityChange}
-                  cart={cart}
+                  handleDeleteCart={handleDeleteCart}
                 />
                 <LineDivider className="mt-10 mb-5 tablet:my-10" />
               </div>

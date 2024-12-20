@@ -9,17 +9,13 @@ export function middleware(request: NextRequest) {
   const isProtectedRoutes = protectedRoutes.includes(url.pathname);
   const isPublicRoutes = protectedRoutes.includes(url.pathname);
 
-  const isLoggedIn = true;
+  const token = request.cookies.get("token")?.value || undefined;
+  const userId = request.cookies.get("userId")?.value || undefined;
 
+  const isLoggedIn = token && userId;
   if (!isLoggedIn && isProtectedRoutes) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
-  const userToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczNDYyMDIyNywianRpIjoiZDU5NDcyZTctZjdkYi00NjExLTg4MmYtMWQzZWRiOTczMTI2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIyIiwibmJmIjoxNzM0NjIwMjI3LCJjc3JmIjoiMjBmNjJiYTUtOGFlYy00YjM4LThkN2MtMWFlNWYzZTA3Y2FhIiwiZXhwIjoxNzM0NzA2NjI3LCJ1c2VybmFtZSI6InRlc3Q2OSIsImVtYWlsIjoidGVzdDY5QG1haWwuY29tIiwicm9sZSI6InVzZXIifQ.Pno2m1oIbbcmGKggnCw0sNb-bq1LVclE1EtALuhsehQ";
-  response.cookies.set("token", userToken, { httpOnly: true, secure: process.env.NODE_ENV === "production" });
-
-  const userId = 22;
-  response.cookies.set("userId", userId.toString(), { httpOnly: true, secure: process.env.NODE_ENV === "production" });
 
   // Viewport cookies
   const { device } = userAgent(request);

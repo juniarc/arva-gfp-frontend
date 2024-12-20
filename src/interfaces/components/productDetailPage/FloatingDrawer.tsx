@@ -23,6 +23,7 @@ interface FloatingRawerProps {
   isWishlist: boolean;
   token: string | undefined;
   wishlistId: number;
+  userId: number;
 }
 
 export default function FloatingDrawer({
@@ -40,6 +41,7 @@ export default function FloatingDrawer({
   isWishlist,
   wishlistId,
   token,
+  userId,
 }: FloatingRawerProps) {
   const [isAddToCartModalOpen, setIsAddToCartModalOpen] = useState<boolean>(false);
   const [isBuyNowModalOpen, setIsBuyNowtModalOpen] = useState<boolean>(false);
@@ -93,6 +95,7 @@ export default function FloatingDrawer({
         handleCloseModal={handleCloseATCModal}
         {...{ product_id, product_name, category, variant, discount }}
         imageUrl={image}
+        userId={userId}
       />
       <BuyNowModal
         isOpen={isBuyNowModalOpen}

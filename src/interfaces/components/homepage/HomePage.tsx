@@ -9,9 +9,10 @@ import { convertCategoryNameToId } from "@/utils/elementHelpers";
 
 interface HomePageProps {
   token?: string | undefined;
+  userId: number;
 }
 
-export default async function HomePage({ token }: HomePageProps) {
+export default async function HomePage({ token, userId }: HomePageProps) {
   const fruitId = convertCategoryNameToId("fruits");
   const vegetableId = convertCategoryNameToId("vegetables");
   const products = (await api.getAllProducts()) || [];
@@ -29,16 +30,16 @@ export default async function HomePage({ token }: HomePageProps) {
         <HomeCategories />
       </section>
       <section className="w-full mt-6">
-        <ProductListByCategory products={slicedProducts} category="popular" token={token} />
+        <ProductListByCategory userId={userId} products={slicedProducts} category="popular" token={token} />
       </section>
       <section className="w-full">
         <HomeAds />
       </section>
       <section className="w-full">
-        <ProductListByCategory products={fruitProducts} category="fruit" token={token} />
+        <ProductListByCategory userId={userId} products={fruitProducts} category="fruit" token={token} />
       </section>
       <section className="w-full">
-        <ProductListByCategory products={vegetableProducts} category="vegetable" token={token} />
+        <ProductListByCategory userId={userId} products={vegetableProducts} category="vegetable" token={token} />
       </section>
     </main>
   );

@@ -7,10 +7,11 @@ import { convertCategoryIdToName, convertCategoryNameToId } from "@/utils/elemen
 import api from "@/services/api/api";
 import SuccessAlert from "../alerts/SuccessAlert";
 import FailAlert from "../alerts/FailAlert";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { LuX } from "react-icons/lu";
 import TagModal from "../modals/TagModal";
 import ConfirmationModal from "../modals/ConfirmationModal";
+import uriHelpers from "@/utils/uriHelpers";
 
 interface ProductItemProps {
   product_id: number;
@@ -33,7 +34,7 @@ interface ProductItemProps {
   tag: string[];
   discount: Discount[];
   ratings: string;
-  shop: { shop_id: number; shop_address_city: string };
+  shop: { shop_id: number; shop_address_city: string; shop_name: string };
   token: string | undefined;
   getUpdateProductList: () => void;
 }
@@ -173,6 +174,7 @@ export default function ProductItem({
   const [isTagModalOpen, setTagModalOpen] = useState(false);
   const [productTags, setProductTags] = useState<Tag[]>([]);
   const [selectedTagId, setSelectedTagId] = useState<number>(0);
+  const [reqTagStatus, setReqTagStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   useEffect(() => {
     const getProductTags = async () => {
@@ -200,6 +202,9 @@ export default function ProductItem({
     }
   };
 
+  const formatedShopnameForUrl = uriHelpers.formatStringForUrl(shop.shop_name ?? "shop");
+  const formatedProductnameForUrl = uriHelpers.formatStringForUrl(product_name);
+
   return (
     <div className="bg-white shadow desktop:shadow-lg rounded-lg w-full min-h-[322px] p-5 flex gap-10 desktop:p-10">
       <div>
@@ -215,7 +220,12 @@ export default function ProductItem({
       </div>
       <div className="desktop:flex desktop:justify-between">
         <div>
-          <p className="capitalize font-semibold text-xs tablet:text-base desktop:text-xl">{productItemValues.product_name}</p>
+          <a
+            href={`/${formatedShopnameForUrl}-${shop.shop_id}/${formatedProductnameForUrl}-${product_id}`}
+            className="capitalize font-semibold text-xs tablet:text-base desktop:text-xl"
+          >
+            {productItemValues.product_name}
+          </a>
           <table className="desktop:w-full table-fixed text-xs tablet:text-[0.9375rem] desktop:text-base w-full mt-5 border-separate border-spacing-y-5">
             <tbody>
               <tr>
@@ -269,7 +279,7 @@ export default function ProductItem({
                   :
                   <span className="flex items-center gap-2">
                     <FaStar className="text-yellow" /> <span className="pt-1">{ratings ?? 0}</span>
-                    <span className="text-dark-gray font-normal">(10)</span>
+                    {/* <span className="text-dark-gray font-normal">()</span> */}
                   </span>
                 </td>
               </tr>
@@ -304,6 +314,7 @@ export default function ProductItem({
                       setNewTag={setNewTag}
                       product_id={product_id}
                       token={token}
+                      handleReqTagStatus={(value) => setReqTagStatus(value)}
                     />
                     <ConfirmationModal
                       handleCloseModal={() => setConfirmationModalOpen(false)}
@@ -349,6 +360,8 @@ export default function ProductItem({
       </div>
       <SuccessAlert isOpen={manageProductStatus === "success"} text="Success Update Product" />
       <FailAlert isOpen={manageProductStatus === "error"} text="Failed" />
+      <SuccessAlert isOpen={reqTagStatus === "success"} text="Success Add Tag Product" />
+      <FailAlert isOpen={reqTagStatus === "error"} text="Failed add tag product" />
     </div>
   );
 }

@@ -61,7 +61,7 @@ export default function VoucherSection({ vouchers, token, shop_id }: VoucherSect
   };
   return (
     <div>
-      <h2 className="text-xl tablet:text-[1.75rem] desktop:text-4xl">Active Voucher</h2>
+      <h2 className="text-xl tablet:text-[1.75rem] desktop:text-4xl">Active Shop Voucher</h2>
       <div className="mt-10">
         <div className="flex flex-col gap-5">
           {activeVouchers.map((voucher, index) => (

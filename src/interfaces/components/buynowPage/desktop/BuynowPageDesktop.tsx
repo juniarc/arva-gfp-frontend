@@ -1,4 +1,4 @@
-import { Product, ShopingItem, User, UserInShipmentPage } from "@/types/types";
+import { Product, ShopingItem, User, UserInShipmentPage, Voucher } from "@/types/types";
 import AddressSection from "../AddressSection";
 import ProductsInfo from "../ProductsInfo";
 import ShippingSection from "../ShippingSection";
@@ -29,6 +29,9 @@ interface BuynowPageProps {
   orderStatus: "idle" | "loading" | "success" | "error";
   totalPriceItem: number;
   totalShippingCost: number;
+  selectedVocuher: { voucher_id: number; voucher_name: string; voucher_value: number };
+  handleSelectedVoucher: (voucher: { voucher_id: number; voucher_name: string; voucher_value: number }) => void;
+  voucherShop: Voucher[];
 }
 
 export default function BuynowPageDesktop({
@@ -48,6 +51,9 @@ export default function BuynowPageDesktop({
   orderStatus,
   totalPriceItem,
   totalShippingCost,
+  selectedVocuher,
+  handleSelectedVoucher,
+  voucherShop,
 }: BuynowPageProps) {
   return (
     <main className="px-[120px] flex justify-between gap-20 py-20 ">
@@ -71,7 +77,7 @@ export default function BuynowPageDesktop({
           <LineDivider className="my-5 tablet:my-10 desktop:my-10" />
         </section>
         <section>
-          <VoucherSection />
+          <VoucherSection voucherShop={voucherShop} selectedVocuher={selectedVocuher} handleSelectedVoucher={handleSelectedVoucher} />
           <LineDivider className="my-5 tablet:my-10 desktop:my-10" />
         </section>
         <section>
@@ -80,7 +86,12 @@ export default function BuynowPageDesktop({
       </div>
       <div className="w-full max-w-[32%] h-fit bg-white p-10 shadow-lg rounded-lg">
         <section>
-          <SummarySection totalPriceItem={totalPriceItem} totalShippingCost={totalShippingCost} appliedVoucher={null} isProtected={isProtected} />
+          <SummarySection
+            totalPriceItem={totalPriceItem}
+            totalShippingCost={totalShippingCost}
+            appliedVoucher={selectedVocuher}
+            isProtected={isProtected}
+          />
         </section>
         <PaynowBtn isCompleted={isCompleted} handlePayBtn={handlePayBtn} orderStatus={orderStatus} />
         <SuccessAlert isOpen={editAddressStatus === "success"} text="Success edit user" />

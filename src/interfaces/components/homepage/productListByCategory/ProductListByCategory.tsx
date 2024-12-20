@@ -11,21 +11,22 @@ interface ProductListByCategoryProps {
   products: Product[];
   category: string;
   token?: string | undefined;
+  userId: number;
 }
-export default function ProductListByCategory({ products, category, token }: ProductListByCategoryProps) {
+export default function ProductListByCategory({ products, category, token, userId }: ProductListByCategoryProps) {
   return (
     <div>
       <div className="flex items-center justify-between mx-10 mb-8">
         <h3 className="capitalize">{category} Products</h3>
-        <Link href="*" className="text-primary">
+        <a href={`${category === "popular" ? "/products" : `/products/${category}s`}`} className="text-primary">
           See all
-        </Link>
+        </a>
       </div>
       <div className="mx-10">
         <Swiper slidesPerView={"auto"}>
           {products.map((product, index) => (
             <SwiperSlide key={index} className="w-auto pb-10">
-              <ProductItem {...product} token={token} />
+              <ProductItem {...product} token={token} userId={userId} />
             </SwiperSlide>
           ))}
         </Swiper>

@@ -1,4 +1,4 @@
-import { CartItem } from "@/types/types";
+import { CartItem, Voucher } from "@/types/types";
 import ProductList from "./ProductList";
 import LineDivider from "../dividers/LineDivider";
 import { shippingOptions } from "@/services/fixedData";
@@ -11,6 +11,8 @@ interface ProductsInfoProps {
   cart: CartItem[];
   selectedShipping: Record<number, string>;
   handleSelectedShipping: (shopId: number, shippingOption: string) => void;
+  selectedVocuher: { voucher_id: number; voucher_name: string; voucher_value: number; shop_id?: number }[];
+  handleSelectedVoucher: (voucher: { voucher_id: number; voucher_name: string; voucher_value: number; shop_id?: number }[]) => void;
 }
 
 export default function ProductsInfo({
@@ -21,6 +23,8 @@ export default function ProductsInfo({
   handleSelectedShipping,
   handleCheckbox,
   isProtected,
+  handleSelectedVoucher,
+  selectedVocuher,
 }: ProductsInfoProps) {
   return (
     <div className="mt-10">
@@ -38,6 +42,8 @@ export default function ProductsInfo({
               shopId={Number(shopId)}
               handleCheckbox={handleCheckbox}
               isProtected={isProtected}
+              handleSelectedVoucher={handleSelectedVoucher}
+              selectedVocuher={selectedVocuher}
             />
             <LineDivider className="mt-10 mb-5" />
           </div>

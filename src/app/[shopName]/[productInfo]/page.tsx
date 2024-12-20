@@ -92,6 +92,7 @@ export default async function Page({ params }: { params: Promise<{ productInfo: 
           isWishlist={wisthlist}
           token={token}
           wishlistId={wishlistId}
+          userId={Number(userId)}
         />
       );
     }
@@ -104,6 +105,7 @@ export default async function Page({ params }: { params: Promise<{ productInfo: 
         isWishlist={wisthlist}
         token={token}
         wishlistId={wishlistId}
+        userId={Number(userId)}
       />
     );
   }

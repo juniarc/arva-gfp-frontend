@@ -9,6 +9,7 @@ export default async function Page({ params }: { params: Promise<{ categoryName:
 
   const cookieList = await cookies();
   const viewport = cookieList.get("viewport")?.value || undefined;
+  const userId = cookieList.get("userId")?.value || undefined;
   //   const slicedProducts = products?.slice(0, 6);
-  if (products) return <ProductsPageWrapper products={products} viewport={viewport} categoryName={categoryName} />;
+  if (products) return <ProductsPageWrapper products={products} viewport={viewport} categoryName={categoryName} userId={Number(userId)} />;
 }

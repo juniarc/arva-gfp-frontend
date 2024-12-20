@@ -16,6 +16,7 @@ interface ProductDetailPageProps {
   isWishlist: boolean;
   token: string | undefined;
   wishlistId: number;
+  userId: number;
 }
 export default function ProductDetailPage({
   productDetail,
@@ -25,6 +26,7 @@ export default function ProductDetailPage({
   isWishlist,
   token,
   wishlistId,
+  userId,
 }: ProductDetailPageProps) {
   if (productDetail) {
     return (
@@ -42,12 +44,13 @@ export default function ProductDetailPage({
           <ReviewSection reviews={dummyReviews} />
         </section>
         <section className="w-full">
-          <ProductListByCategory products={anotherShopProducts} category={productDetail.shop.shop_name} />
+          <ProductListByCategory userId={userId} products={anotherShopProducts} category={productDetail.shop.shop_name} />
         </section>
         <section className="w-full">
-          <ProductListByCategory products={categoryProducts} category="Fruit" />
+          <ProductListByCategory userId={userId} products={categoryProducts} category="Fruit" />
         </section>
         <FloatingDrawer
+          userId={userId}
           product_id={productDetail.product_id}
           category={productDetail.category}
           image={productDetail.image[0].image_data}

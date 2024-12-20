@@ -5,6 +5,7 @@ import ShopingBag from "@/../public/icons/shopping-bag-white.svg";
 import Image from "next/image";
 import { Discount, Variant } from "@/types/types";
 import api from "@/services/api/api";
+import { Spinner } from "@material-tailwind/react";
 interface ProductBuySectionProps {
   product_id: number;
   product_name: string;
@@ -20,6 +21,7 @@ interface ProductBuySectionProps {
   wishlistId: number;
   isWishlist: boolean;
   token: string | undefined;
+  addToCartStatus: "idle" | "loading" | "success" | "error";
 }
 
 export default function ProductBuySection({
@@ -37,6 +39,7 @@ export default function ProductBuySection({
   handleBuynowBtn,
   wishlistId,
   token,
+  addToCartStatus,
 }: ProductBuySectionProps) {
   const [wishlist, setWishlist] = useState(isWishlist);
   const handleWishlist = async () => {
@@ -97,7 +100,6 @@ export default function ProductBuySection({
           />
           <button
             onClick={() => {
-              const newQuantity = quantity + 1;
               if (quantity < (selectedVariant?.variant_stock ?? 0)) setQuantity(quantity + 1);
             }}
           >
@@ -128,7 +130,13 @@ export default function ProductBuySection({
               onClick={handleATCBtn}
               className="bg-primary p-5 w-1/2 rounded-lg text-sm font-bold text-white flex items-center gap-5 justify-center"
             >
-              <Image src={ShopingBag} alt="Cart Icon" /> Add To Chart
+              {addToCartStatus === "loading" ? (
+                <Spinner />
+              ) : (
+                <>
+                  <Image src={ShopingBag} alt="Cart Icon" /> <span>Add To Chart</span>
+                </>
+              )}
             </button>
           </div>
         </div>

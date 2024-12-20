@@ -12,26 +12,26 @@ export default function HomeCategoriesDesktop() {
     <div>
       <h3>Browse By Categories</h3>
       <div className="w-auto flex gap-7 items-center justify-start mt-10">
-        <Link href="*" className="flex flex-col items-center justify-center gap-3 bg-secondary rounded p-5 w-32 h-32">
+        <a href="*" className="flex flex-col items-center justify-center gap-3 bg-secondary rounded p-5 w-32 h-32">
           <CiCoffeeBean className="text-[2.5rem]" />
           <span>Seeds</span>
-        </Link>
-        <Link href="*" className="flex flex-col  items-center justify-center gap-3 bg-secondary rounded p-5 w-32 h-32">
+        </a>
+        <a href="*" className="flex flex-col  items-center justify-center gap-3 bg-secondary rounded p-5 w-32 h-32">
           <Image src={SpinachIcon} className="w-20 h-20" alt="Spinach Icon" />
           <span>Vegetables</span>
-        </Link>
-        <Link href="*" className="flex flex-col  items-center justify-center gap-3 bg-secondary rounded p-5 w-32 h-32 ">
+        </a>
+        <a href="*" className="flex flex-col  items-center justify-center gap-3 bg-secondary rounded p-5 w-32 h-32 ">
           <Image src={FruitsIcon} className="w-20 h-20" alt="Spinach Icon" />
           <span>Fruits</span>
-        </Link>
-        <Link href="*" className="flex flex-col  items-center justify-center gap-3 bg-secondary rounded p-5 w-32 h-32">
+        </a>
+        <a href="*" className="flex flex-col  items-center justify-center gap-3 bg-secondary rounded p-5 w-32 h-32">
           <Image src={FertilizersIcon} className="w-20 h-20" alt="Spinach Icon" />
           <span>Fertilizers</span>
-        </Link>
-        <Link href="*" className="flex flex-col items-center justify-center gap-3 bg-secondary rounded p-5 w-32 h-32">
+        </a>
+        <a href="*" className="flex flex-col items-center justify-center gap-3 bg-secondary rounded p-5 w-32 h-32">
           <Image src={EquipmentsIcon} className="w-20 h-20" alt="Spinach Icon" />
           <span>Equipments</span>
-        </Link>
+        </a>
       </div>
     </div>
   );

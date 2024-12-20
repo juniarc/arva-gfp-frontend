@@ -11,6 +11,7 @@ import { Variant, Discount } from "@/types/types";
 import { currencyFormater } from "@/utils/elementHelpers";
 import { useRouter } from "next/navigation";
 import api from "@/services/api/api";
+import { useCart } from "@/hooks/cart/CartContext";
 
 interface AddToCartModalProps {
   isOpen: boolean;
@@ -20,8 +21,9 @@ interface AddToCartModalProps {
   imageUrl: string;
   category: string;
   discount: Discount[] | null;
-  variant: Variant[] | null;
+  variant: Variant[];
   token?: string | undefined;
+  userId: number;
 }
 export default function AddToCartModal({
   isOpen,
@@ -33,10 +35,11 @@ export default function AddToCartModal({
   variant,
   discount,
   token,
+  userId,
 }: AddToCartModalProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [selectedVariant, setSelectedVariant] = useState<Variant | null>(variant?.[0] ?? null);
+  const [selectedVariant, setSelectedVariant] = useState<Variant>(variant[0]);
   const [quantity, setQuantity] = useState<number>(1);
 
   // Find percentage discount
@@ -63,18 +66,13 @@ export default function AddToCartModal({
 
   const handleSelectVariant = (variant: Variant) => setSelectedVariant(variant);
 
-  const addToCartReqBody = {
-    product_id: product_id,
-    quantity: quantity,
-    variant_id: selectedVariant?.variant_id,
-  };
+  const { state, addItemToCart } = useCart();
 
   const handleAddToCart = async () => {
     setIsLoading(true);
-    if (token) {
-      console.log(addToCartReqBody);
+    if (token && userId) {
       try {
-        await api.addProductToCart(token, addToCartReqBody);
+        addItemToCart(product_id, quantity, selectedVariant?.variant_id ?? 0, token, userId);
       } catch (error) {
         alert("Failed");
       } finally {
@@ -113,7 +111,7 @@ export default function AddToCartModal({
               </div>
               {discountValue && (
                 <div className="flex items-center">
-                  <p className="text-primary font-semibold tablet:text-[1.375rem] desktop:text-xl">{formatedPriceDiscount}</p>{" "}
+                  <p className="text-primary font-semibold tablet:text-[1.375rem] desktop:text-xl">{formatedPriceDiscount}</p>
                   <p className="text-xss text-dark-gray tablet:text-[1.375rem] desktop:text-base">/ {selectedVariant?.variant_unit}</p>
                 </div>
               )}

@@ -1,6 +1,6 @@
 import AddressSection from "../buynowPage/AddressSection";
 import PaymentMehtod from "../buynowPage/PaymentMethod";
-import { CartItem, UserInShipmentPage } from "@/types/types";
+import { CartItem, UserInShipmentPage, Voucher } from "@/types/types";
 import ProductsInfo from "./ProductsInfo";
 import ShoppingSummary from "./ShoppingSummary";
 import PaynowBtn from "../buynowPage/PaynowBtn";
@@ -28,6 +28,8 @@ interface ShipmentPageProps {
   shippingPrice: number;
   handlePayBtn: () => void;
   orderStatus: "idle" | "loading" | "success" | "error";
+  selectedVocuher: { voucher_id: number; voucher_name: string; voucher_value: number; shop_id?: number }[];
+  handleSelectedVoucher: (voucher: { voucher_id: number; voucher_name: string; voucher_value: number; shop_id?: number }[]) => void;
 }
 export default function ShipmentPage({
   user,
@@ -49,6 +51,8 @@ export default function ShipmentPage({
   shippingPrice,
   handlePayBtn,
   orderStatus,
+  handleSelectedVoucher,
+  selectedVocuher,
 }: ShipmentPageProps) {
   return (
     <main className="px-10 pt-5 tablet:p-15 mb-10">
@@ -65,6 +69,8 @@ export default function ShipmentPage({
           handleSelectedShipping={handleSelectedShipping}
           isProtected={isProtected}
           handleCheckbox={handleCheckbox}
+          handleSelectedVoucher={handleSelectedVoucher}
+          selectedVocuher={selectedVocuher}
         />
       </section>
       <section>
@@ -74,9 +80,9 @@ export default function ShipmentPage({
         <ShoppingSummary
           totalPrice={totalPrice}
           shippingPrice={shippingPrice}
-          appliedVoucher={null}
           totalProtectedShop={totalProtectedShop}
           totalItems={totalItems}
+          selectedVocuher={selectedVocuher}
         />
       </section>
       <PaynowBtn isCompleted={isCompleted} handlePayBtn={handlePayBtn} orderStatus={orderStatus} />
