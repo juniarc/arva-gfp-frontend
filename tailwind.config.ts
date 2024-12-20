@@ -18,6 +18,7 @@ export default withMT({
         gray: "#D9D9D9",
         "light-gray": "#F3F3F3",
         "gray-300": "#D9D9D9",
+        "dark-green": "#274A21",
       },
       screens: {
         tablet: { min: "640px", max: "1024px" },

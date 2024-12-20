@@ -1,6 +1,7 @@
 import { CartItem } from "@/types/types";
 import ProductList from "./ProductList";
 import LineDivider from "../dividers/LineDivider";
+import { shippingOptions } from "@/services/fixedData";
 
 interface ProductsInfoProps {
   handleCheckbox: (shopId: number, isChecked: boolean) => void;
@@ -31,11 +32,12 @@ export default function ProductsInfo({
               shopData={separatedByShop[shopId]}
               handleQuantityChange={handleQuantityChange}
               cart={cart}
+              shippingOptions={shippingOptions}
               selectedShipping={selectedShipping[Number(shopId)]}
               handleSelectedShipping={handleSelectedShipping}
               shopId={Number(shopId)}
               handleCheckbox={handleCheckbox}
-              isProtected={isProtected[Number(shopId)]}
+              isProtected={isProtected}
             />
             <LineDivider className="mt-10 mb-5" />
           </div>

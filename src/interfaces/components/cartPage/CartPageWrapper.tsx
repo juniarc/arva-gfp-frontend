@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CartItem } from "@/types/types";
 import CartPage from "./CartPage";
 import { useRouter } from "next/navigation";
@@ -19,24 +19,24 @@ export default function CartPageWrapper({ separatedByShop, cart, viewport }: Car
     const initialCheckedShops: { [key: number]: boolean } = {};
 
     userCart.forEach((item) => {
-      initialCheckedProducts[item.id] = false;
+      initialCheckedProducts[item.product_id] = false;
 
-      initialCheckedShops[item.shop.shopId] = false;
+      initialCheckedShops[item.shop.shop_id] = false;
     });
 
     return { initialCheckedProducts, initialCheckedShops };
   };
   const { initialCheckedProducts, initialCheckedShops } = initializeCheckedState();
-  const [checkedProducts, setCheckedProducts] = useState<{ [productId: number]: boolean }>(initialCheckedProducts);
+  const [checkedProducts, setCheckedProducts] = useState<{ [product_id: number]: boolean }>(initialCheckedProducts);
   const [checkedShops, setCheckedShops] = useState<{ [shopId: number]: boolean }>(initialCheckedShops);
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [selectedItems, setSelectedItems] = useState<CartItem[]>([]);
-  const handleShopCheckboxChange = (shopId: number, checked: boolean) => {
+  const handleShopCheckboxChange = (shop_id: number, checked: boolean) => {
     setCheckedShops((prev) => {
-      const updatedShops = { ...prev, [shopId]: checked };
-      const updatedProducts = separatedByShop[shopId].products.reduce(
+      const updatedShops = { ...prev, [shop_id]: checked };
+      const updatedProducts = separatedByShop[shop_id].products.reduce(
         (acc, item) => {
-          acc[item.id] = checked;
+          acc[item.product_id] = checked;
           return acc;
         },
         {} as { [key: number]: boolean },
@@ -51,18 +51,37 @@ export default function CartPageWrapper({ separatedByShop, cart, viewport }: Car
     });
   };
 
-  const handleProductCheckboxChange = (productId: number, checked: boolean) => {
+  const handleProductCheckboxChange = (product_id: number, checked: boolean) => {
     setCheckedProducts((prev) => ({
       ...prev,
-      [productId]: checked,
+      [product_id]: checked,
     }));
   };
 
   const calculatedTotalPrice = () => {
-    const selectedItems = userCart.filter((item) => checkedProducts[item.id]);
-    const totalPrice = selectedItems.reduce((total, item) => total + item.selectedVariant.price * item.quantity, 0);
+    const selectedItemsWithDiscount = userCart
+      .filter((item) => checkedProducts[item.product_id])
+      .map((item) => {
+        let priceAfterDiscount = item.selectedVariant.variant_price;
+
+        if (item.discount && item.discount.length > 0) {
+          item.discount.forEach((discount) => {
+            if (discount.discount_type === "percentage") {
+              priceAfterDiscount -= (priceAfterDiscount * discount.discount_value) / 100;
+            }
+          });
+        }
+
+        return {
+          ...item,
+          priceAfterDiscount: priceAfterDiscount,
+        };
+      });
+
+    const totalPrice = selectedItemsWithDiscount.reduce((total, item) => total + item.priceAfterDiscount * item.quantity, 0);
+
     setTotalPrice(totalPrice);
-    setSelectedItems(selectedItems);
+    setSelectedItems(selectedItemsWithDiscount);
   };
 
   useEffect(() => {
@@ -70,22 +89,24 @@ export default function CartPageWrapper({ separatedByShop, cart, viewport }: Car
   }, [checkedProducts, userCart]);
 
   const handleButtonCO = () => {
-    sessionStorage.setItem("selectedItems", JSON.stringify(selectedItems));
-    router.push("/cart/shipment");
-    console.log(selectedItems);
+    if (selectedItems.length > 0) {
+      sessionStorage.setItem("selectedItems", JSON.stringify(selectedItems));
+      window.location.href = "/cart/shipment";
+    } else {
+      alert("Please select a product to checkout");
+    }
   };
 
-  const handleQuantityChange = (productId: number, newQuantity: number, maxStock: number) => {
+  const handleQuantityChange = (product_id: number, newQuantity: number, maxStock: number) => {
     if (newQuantity >= 1 && newQuantity <= maxStock) {
       const updatedCart = userCart
         .map((item) => {
-          if (item.id === productId) {
+          if (item.product_id === product_id) {
             return { ...item, quantity: newQuantity };
           }
           return item;
         })
         .filter((item) => item.quantity > 0);
-      console.log(updatedCart);
       setUserCart(updatedCart);
     }
   };

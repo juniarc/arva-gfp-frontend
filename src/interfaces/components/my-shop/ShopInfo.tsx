@@ -6,80 +6,84 @@ import LineDivider from "../dividers/LineDivider";
 import { shippingOptions } from "@/services/fixedData";
 import ShopInfoModal from "../modals/ShopInfoModal";
 import { useEffect, useState } from "react";
+import { Product, ReqShopBody, ShopDetail } from "@/types/types";
+import { format } from "date-fns";
 
-interface ShopInfoProps extends ShopDevelop {
+interface ShopInfoProps extends ShopDetail {
   totalRatings: number;
   averageRatings: number;
+  totalProducts: number;
+  handleEditShop: (value: ReqShopBody) => void;
+  editShopStatus: "idle" | "loading" | "success" | "error";
 }
-
-export default function ShopInfo({
-  name,
-  addressCity,
-  imageUrl,
+export default function ShopPage({
+  shop_name,
+  shop_image,
   description,
-  products,
-  id,
-  userId,
-  addressProvince,
-  addressDistrict,
-  addressLabel,
-  addressStreet,
-  addressSubdistrict,
-  phoneNumber,
-  email,
-  openingHours,
-  closingHours,
-  zipCode,
-  createdAt,
+  shop_address_province,
+  shop_address_city,
+  shop_address_district,
+  shop_address_subdistrict,
+  shop_address_street,
+  shop_zip_code,
+  shop_email,
+  shop_id,
+  shop_phone_number,
+  created_at,
+  totalProducts,
   totalRatings,
   averageRatings,
+  editShopStatus,
+  handleEditShop,
 }: ShopInfoProps) {
+  const initialValues = {
+    shop_id,
+    shop_name,
+    description,
+    shop_address_province,
+    shop_address_city,
+    shop_address_district,
+    shop_address_subdistrict,
+    shop_address_street,
+    shop_zip_code,
+    shop_email,
+    shop_phone_number,
+    shop_image,
+  };
+  const formatedDate = format(new Date(created_at), "dd MMMM yyyy");
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const [shopProfileValues, setShopProfileValues] = useState({
-    addressLabel: addressLabel,
-    addressProvince: addressProvince,
-    addressCity: addressCity,
-    addressDistrict: addressDistrict,
-    addressSubdistrict: addressSubdistrict,
-    addressStreet: addressStreet,
-    zipCode: `${zipCode}`,
-    shippingChannel: shippingOptions,
-    email: email,
-    phoneNumber: phoneNumber,
-    openingHours: openingHours,
-    closingHours: closingHours,
-    name: name,
-    description: description,
-  });
-
   const handleSubmt = (values: any) => {
-    setShopProfileValues({ ...values });
-    setIsOpen(false);
+    handleEditShop({ ...values });
   };
 
-  useEffect(() => {}, [shopProfileValues]);
   return (
     <div>
       <div className="mb-15 w-full">
         <button onClick={() => setIsOpen(true)} className="px-15 py-5 font-bold text-white text-xs bg-primary rounded">
           Edit Shop Info
         </button>
-        <ShopInfoModal initialValues={shopProfileValues} isOpen={isOpen} handleCloseModal={() => setIsOpen(false)} handleSubmit={handleSubmt} />
+        <ShopInfoModal
+          editShopStatus={editShopStatus}
+          initialValues={initialValues}
+          isOpen={isOpen}
+          handleCloseModal={() => setIsOpen(false)}
+          handleSubmit={handleSubmt}
+        />
       </div>
       <div className="flex items-center gap-5 tablet:gap-10">
         <div className="h-[65px] tablet:h-[72px] aspect-square">
-          <Image src={imageUrl} width={60} height={60} alt="Shop Image" className="w-full h-full object-cover object-center rounded-full" />
+          <Image src={shop_image} width={60} height={60} alt="Shop Image" className="w-full h-full object-cover object-center rounded-full" />
         </div>
         <div className="h-full flex flex-col gap-2">
-          <h3 className={`${poppins.className} font-bold`}>{name}</h3>
+          <h3 className={`${poppins.className} font-bold capitalize`}>{shop_name}</h3>
           <span className="flex items-center text-xs tablet:text-base gap-2 text-dark-gray capitalize">
-            <FaLocationDot /> {shopProfileValues.addressCity}
+            <FaLocationDot /> {shop_address_city}
           </span>
         </div>
       </div>
-      <div className="w-full  mt-10 flex items-center justify-center">
-        <div className="flex px-30 py-15 items-center justify-center gap-10 tablet:gap-30 bg-primary rounded-lg">
+      <div className="w-full mt-10 flex items-center justify-center">
+        <div className="flex w-full px-30 py-8 items-center justify-center gap-10 tablet:gap-30 bg-primary rounded-lg">
           <div className="flex flex-col items-center">
             <div className="flex items-center gap-3 ">
               <FaStar className="text-lg text-yellow" />
@@ -108,27 +112,16 @@ export default function ShopInfo({
           </div>
           <div>
             <p className="mb-5 capitalize">
-              : {shopProfileValues.addressCity.toLowerCase()}, {shopProfileValues.addressProvince.toLowerCase()}
+              : {shop_address_city.toLowerCase()}, {shop_address_province.toLowerCase()}
             </p>
-            <p className="mb-5 lowercase">: {shopProfileValues.email}</p>
-            <p className="mb-5">: {shopProfileValues.phoneNumber}</p>
-            <p className="mb-5">: {products.length}</p>
-            <p className="mb-5">: {createdAt}</p>
+            <p className="mb-5 lowercase">: {shop_email}</p>
+            <p className="mb-5">: {shop_phone_number}</p>
+            <p className="mb-5">: {totalProducts} Products</p>
+            <p className="mb-5">: {formatedDate}</p>
           </div>
         </div>
       </div>
       <LineDivider className="my-10 tablet:my-10" />
-      {/* <div>
-        <h2 className="text-xl tablet:text-[1.75rem] mb-10 tablet:mb-10">Shipping Channel</h2>
-        <ul className="list-disc pl-8">
-          {shippingOptions.map((option, index) => (
-            <li key={index} className="mb-5 text-sm">
-              {option}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <LineDivider className="my-10 tablet:my-10" /> */}
     </div>
   );
 }

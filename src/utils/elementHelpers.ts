@@ -1,3 +1,7 @@
+import api from "@/services/api/api";
+import { avaibleCategories } from "@/services/fixedData";
+import { CartItem, Discount, ProductDetail, ResponseGetCartUser, ResponseGetCartUserItem } from "@/types/types";
+
 export const checkIsTextClamped = (element: HTMLElement): boolean => {
   return element.scrollHeight > element.clientHeight;
 };
@@ -36,11 +40,90 @@ export const endPage = (startPage, maxIndicators, totalPages) => {
 };
 
 export const calculateAverageRatingShop = (products) => {
-  const validRatings = products.map((product) => product.rating).filter((rating) => typeof rating === "number" && !isNaN(rating));
+  const validRatings = products.map((product) => (product.ratings === "number" && !isNaN(product.ratings) ? product.ratings : 0));
 
   const totalRating = validRatings.reduce((sum, rating) => sum + rating, 0);
 
   const averageRating = validRatings.length > 0 ? totalRating / validRatings.length : 0;
 
   return { totalRating, averageRating };
+};
+
+export const convertCategoryNameToId = (categoryName: string) => {
+  const category = avaibleCategories.find((category) => category.category_name === categoryName);
+  return category ? category.category_id : 0;
+};
+
+export const convertCategoryIdToName = (categoryId: number) => {
+  const category = avaibleCategories.find((category) => category.category_id === categoryId);
+  return category ? category.category_name : "";
+};
+
+export const convertCartResponseToCartItems = async (cartResponse: ResponseGetCartUser) => {
+  try {
+    const getProductDetails = cartResponse.cart.map(async (item) => {
+      const response = await api.getDetailProductById(item.product_id);
+      return response;
+    });
+
+    const productDetails = await Promise.all(getProductDetails);
+
+    const cartItems: CartItem[] = cartResponse.cart.map((cartItem) => {
+      const productDetail = productDetails.find((product) => product.product_id === cartItem.product_id);
+      if (!productDetail) {
+        throw new Error(`Product detail not found for product_id: ${cartItem.product_id}`);
+      }
+      const selectedVariant = productDetail.variant.find((item: any) => item.variant_id === cartItem.variant_id);
+      if (!selectedVariant) {
+        throw new Error(`Variant not found for variant_id: ${cartItem.variant_id}`);
+      }
+
+      return {
+        cart_id: cartItem.cart_id,
+        user_id: cartItem.user_id,
+        product_id: productDetail.product_id,
+        product_name: productDetail.product_name,
+        category: productDetail.category,
+        image: productDetail.image[0]?.image_data || "",
+        shop: productDetail.shop,
+        selectedVariant,
+        quantity: cartItem.quantity,
+        discount: productDetail.discount,
+        priceAfterDiscount: selectedVariant.variant_price,
+        shipping_cost: productDetail.shipping_cost,
+      };
+    });
+
+    return cartItems;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const separateCartByShop = async (cartResponse: ResponseGetCartUser, userId: number) => {
+  try {
+    const processedCart = await convertCartResponseToCartItems(cartResponse);
+
+    const userCart = processedCart.filter((item) => item.user_id === userId);
+
+    const separatedByShop = userCart.reduce(
+      (acc, item) => {
+        const { shop_id } = item.shop;
+        if (!acc[shop_id]) {
+          acc[shop_id] = {
+            shop_name: item.shop.shop_name,
+            products: [],
+          };
+        }
+        acc[shop_id].products.push(item);
+        return acc;
+      },
+      {} as Record<number, { shop_name: string; products: CartItem[] }>,
+    );
+
+    return separatedByShop;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 };

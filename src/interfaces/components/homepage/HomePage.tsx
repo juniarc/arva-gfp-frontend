@@ -6,13 +6,21 @@ import ProductListByCategory from "@/interfaces/components/homepage/productListB
 import HomeAds from "@/interfaces/components/homepage/homeAds/HomeAds";
 import api from "@/services/api/api";
 import { Product } from "@/types/types";
+import { convertCategoryNameToId } from "@/utils/elementHelpers";
 
-export default async function HomePage() {
+interface HomePageProps {
+  token?: string | undefined;
+}
+
+export default async function HomePage({ token }: HomePageProps) {
+  const fruitId = convertCategoryNameToId("fruits");
+  const vegetableId = convertCategoryNameToId("vegetables");
   const products = (await api.getAllProducts()) || [];
   const slicedProducts = products?.slice(0, 6);
   // const popularProducts: Product[] = (await api.getAllProducts(6)) || [];
-  // const fruitProducts: Product[] = (await api.getAllProductsByCategory("fruit", 6)) || [];
-  // const vegetableProducts: Product[] = (await api.getAllProductsByCategory("vegetable", 6)) || [];
+  const fruitProducts = (await api.getAllProductsByCategory(fruitId)) || [];
+  const vegetableProducts = (await api.getAllProductsByCategory(vegetableId)) || [];
+
   return (
     <main className="w-full bg-white desktop:px-[120px]">
       <section className="w-full">
@@ -22,16 +30,16 @@ export default async function HomePage() {
         <HomeCategories />
       </section>
       <section className="w-full mt-6">
-        <ProductListByCategory products={slicedProducts} category="popular" />
+        <ProductListByCategory products={slicedProducts} category="popular" token={token} />
       </section>
       <section className="w-full">
         <HomeAds />
       </section>
       <section className="w-full">
-        <ProductListByCategory products={slicedProducts} category="fruit" />
+        <ProductListByCategory products={fruitProducts} category="fruit" token={token} />
       </section>
       <section className="w-full">
-        <ProductListByCategory products={slicedProducts} category="vegetable" />
+        <ProductListByCategory products={vegetableProducts} category="vegetable" token={token} />
       </section>
     </main>
   );

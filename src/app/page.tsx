@@ -5,6 +5,7 @@ import { cookies } from "next/headers";
 export default async function Page() {
   const cookiesList = await cookies();
   const viewport = cookiesList.get("viewport")?.value || undefined;
-  if (viewport === "mobile") return <HomePage />;
-  return <HomePageDesktop />;
+  const token = cookiesList.get("token")?.value || undefined;
+  if (viewport === "mobile") return <HomePage token={token} />;
+  return <HomePageDesktop token={token} />;
 }

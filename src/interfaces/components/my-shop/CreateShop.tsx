@@ -5,13 +5,16 @@ import Link from "next/link";
 
 export default function CreateShop() {
   return (
-    <main>
-      <div className="flex flex-col items-center gap-10 px-10 pt-20">
-        <h1 className={`${poppins.className} text-base font-bold`}>Let's Open Your Shop</h1>
+    <main className=" desktop:flex desktop:flex-col items-center">
+      <div className="flex flex-col items-center gap-10 desktop:gap-20 px-10 pt-20 desktop:w-[480px]">
+        <h1 className={`${poppins.className} text-base font-bold desktop:text-4xl`}>Let's Open Your Shop</h1>
         <p className="text-center">
           Let’s open your shop and share your fresh, high-quality agriculture products with customers who value healthy and sustainable living!
         </p>
-        <Link href="/my-shop/create-shop" className="bg-primary w-full font-semibold text-white text-center py-5 px-20 rounded-lg text-sm">
+        <Link
+          href="/my-shop/create-shop"
+          className="bg-primary w-full font-semibold text-white text-center py-5 px-20 rounded-lg text-sm desktop:text-base"
+        >
           Create Shop
         </Link>
         <div className="w-full max-w-full">

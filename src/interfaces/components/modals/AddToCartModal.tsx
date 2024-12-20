@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
-import { Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react";
+import { Dialog, DialogHeader, DialogBody, DialogFooter, Spinner } from "@material-tailwind/react";
 import { LuX, LuMinus, LuPlus } from "react-icons/lu";
 import { CartItem, Product } from "@/types/types";
 import Image from "next/image";
@@ -9,6 +9,8 @@ import LineDivider from "../dividers/LineDivider";
 import SuccessAlert from "../alerts/SuccessAlert";
 import { Variant, Discount } from "@/types/types";
 import { currencyFormater } from "@/utils/elementHelpers";
+import { useRouter } from "next/navigation";
+import api from "@/services/api/api";
 
 interface AddToCartModalProps {
   isOpen: boolean;
@@ -19,6 +21,7 @@ interface AddToCartModalProps {
   category: string;
   discount: Discount[] | null;
   variant: Variant[] | null;
+  token?: string | undefined;
 }
 export default function AddToCartModal({
   isOpen,
@@ -29,7 +32,10 @@ export default function AddToCartModal({
   category,
   variant,
   discount,
+  token,
 }: AddToCartModalProps) {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedVariant, setSelectedVariant] = useState<Variant | null>(variant?.[0] ?? null);
   const [quantity, setQuantity] = useState<number>(1);
 
@@ -57,15 +63,28 @@ export default function AddToCartModal({
 
   const handleSelectVariant = (variant: Variant) => setSelectedVariant(variant);
 
-  const handleAddToCart = () => {
-    console.log(
-      `/buy-now?id=${product_id}&variantId=${selectedVariant?.variant_id}&variantName=${selectedVariant?.variant_name}&price=${selectedVariant?.variant_price}&quantity=${quantity}`,
-    );
-    // setShowAlert(true);
+  const addToCartReqBody = {
+    product_id: product_id,
+    quantity: quantity,
+    variant_id: selectedVariant?.variant_id,
+  };
 
-    // setTimeout(() => {
-    //   setShowAlert(false);
-    // }, 2000);
+  const handleAddToCart = async () => {
+    setIsLoading(true);
+    if (token) {
+      console.log(addToCartReqBody);
+      try {
+        await api.addProductToCart(token, addToCartReqBody);
+      } catch (error) {
+        alert("Failed");
+      } finally {
+        setIsLoading(false);
+        handleCloseModal();
+      }
+    } else {
+      router.push("/login");
+      handleCloseModal();
+    }
   };
   if (isOpen) {
     return (
@@ -137,7 +156,7 @@ export default function AddToCartModal({
                 maxLength={selectedVariant?.variant_stock ?? 0}
                 value={quantity}
                 onChange={(e) => setQuantity(Number(e.target.value))}
-                className="w-55 text-center text-black"
+                className="w-55 text-center text-black bg-transparent"
                 disabled
               />
               <button
@@ -160,9 +179,9 @@ export default function AddToCartModal({
         <DialogFooter className="p-0">
           <button
             onClick={handleAddToCart}
-            className="bg-primary text-white py-2 px-10 rounded tablet:text-[1.375rem] tablet:mt-5 font-bold w-full text-center"
+            className="bg-primary text-white py-2 px-10 rounded tablet:text-[1.375rem] tablet:mt-5 font-bold w-full desktop:h-24 text-center flex items-center justify-center"
           >
-            Add To Cart
+            {isLoading ? <Spinner /> : "Add To Cart"}
           </button>
           {/* <SuccessAlert isOpen={showAlert} className="" text="Success add to your cart" /> */}
         </DialogFooter>

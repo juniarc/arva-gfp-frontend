@@ -10,8 +10,9 @@ import { Swiper, SwiperSlide } from "swiper/react";
 interface ProductListByCategoryProps {
   products: Product[];
   category: string;
+  token?: string | undefined;
 }
-export default function ProductListByCategory({ products, category }: ProductListByCategoryProps) {
+export default function ProductListByCategory({ products, category, token }: ProductListByCategoryProps) {
   return (
     <div>
       <div className="flex items-center justify-between mx-10 mb-8">
@@ -24,7 +25,7 @@ export default function ProductListByCategory({ products, category }: ProductLis
         <Swiper slidesPerView={"auto"}>
           {products.map((product, index) => (
             <SwiperSlide key={index} className="w-auto pb-10">
-              <ProductItem {...product} />
+              <ProductItem {...product} token={token} />
             </SwiperSlide>
           ))}
         </Swiper>

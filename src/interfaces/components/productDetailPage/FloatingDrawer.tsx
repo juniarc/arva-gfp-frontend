@@ -5,57 +5,73 @@ import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { MdOutlineShoppingBag } from "react-icons/md";
 import AddToCartModal from "../modals/AddToCartModal";
 import BuyNowModal from "../modals/BuyNowModal";
-import { Variants } from "@/types/types";
+import { Discount, Shop, Variant } from "@/types/types";
 import { useWishlist, WishlistProvider } from "@/hooks/WishlistContext";
+import api from "@/services/api/api";
 
 interface FloatingRawerProps {
-  id: number;
-  name: string;
-  price: number;
-  imageUrl: string;
+  product_id: number;
+  product_name: string;
+  image: string;
   category: string;
-  variants: Variants[];
-  stocks: number;
-  unit: string;
-  discount: number;
-  rating: number;
-  tags: string[];
-  shop: { id: number; name: string; addressCity: string };
+  variant: Variant[];
+  discount: Discount[];
+  ratings: string;
+  tag: string[];
+  shop: Shop;
   sold: number;
+  shipping_cost: number;
+  isWishlist: boolean;
+  token: string | undefined;
+  wishlistId: number;
 }
 
 export default function FloatingDrawer({
-  id,
-  name,
-  price,
-  imageUrl,
+  product_id,
+  product_name,
+  image,
   category,
-  variants,
-  stocks,
-  unit,
+  variant,
   discount,
-  rating,
-  tags,
+  ratings,
+  tag,
   shop,
   sold,
+  shipping_cost,
+  isWishlist,
+  wishlistId,
+  token,
 }: FloatingRawerProps) {
   const [isAddToCartModalOpen, setIsAddToCartModalOpen] = useState<boolean>(false);
   const [isBuyNowModalOpen, setIsBuyNowtModalOpen] = useState<boolean>(false);
-  const { wishlist, toggleWishlist } = useWishlist();
   const handleCloseATCModal = () => setIsAddToCartModalOpen(false);
   const hanldeCloseBuyNowModal = () => setIsBuyNowtModalOpen(false);
-  const isWishlsted = (id: number): boolean => {
-    return wishlist.some((item) => item.id === id);
+
+  const [wishlist, setWishlist] = useState(isWishlist);
+  const handleWishlist = async () => {
+    if (wishlist) {
+      setWishlist(false);
+      try {
+        await api.deleteWishlist(wishlistId, token);
+      } catch (error) {
+        setWishlist(true);
+      }
+    } else {
+      setWishlist(true);
+      try {
+        await api.addToWishlist(product_id, token);
+      } catch (error) {
+        setWishlist(false);
+      }
+    }
   };
+
   return (
     <>
       <div className="floating-drawer w-screen bg-white fixed bottom-0 left-0 right-0 z-20">
         <div className="w-full h-full flex items-center justify-between p-5 gap-5">
-          <button
-            onClick={() => toggleWishlist({ id, name, price, imageUrl, category, variants, stocks, unit, discount, rating, tags, shop, sold })}
-            className="border border-primary border-solid p-5 rounded-lg"
-          >
-            {isWishlsted(id) ? <FaHeart className="text-xl text-red transition-colors" /> : <FaRegHeart className="text-primary text-xl" />}
+          <button onClick={handleWishlist} className="border border-primary border-solid p-5 rounded-lg">
+            {wishlist ? <FaHeart className="text-xl text-red transition-colors" /> : <FaRegHeart className="text-primary text-xl" />}
           </button>
           <div className="w-full flex items-center gap-5">
             <button
@@ -73,15 +89,19 @@ export default function FloatingDrawer({
           </div>
         </div>
       </div>
-      {/* <AddToCartModal
+      <AddToCartModal
         isOpen={isAddToCartModalOpen}
         handleCloseModal={handleCloseATCModal}
-        {...{ id, name, price, imageUrl, category, variants, stocks, unit, discount }}
-      /> */}
+        {...{ product_id, product_name, category, variant, discount }}
+        imageUrl={image}
+      />
       <BuyNowModal
         isOpen={isBuyNowModalOpen}
         handleCloseModal={hanldeCloseBuyNowModal}
-        {...{ id, name, price, imageUrl, category, variants, stocks, unit, discount }}
+        {...{ product_id, product_name, category, variant, discount }}
+        imageUrl={image}
+        shop={shop}
+        shipping_cost={shipping_cost}
       />
     </>
   );

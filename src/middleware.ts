@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse, userAgent } from "next/server";
 import { boolean } from "yup";
 
-const protectedRoutes = ["/my-shop", "/my-shop/create-shop", "/my-shop/:shopId", "/buy-now"];
+const protectedRoutes = ["/my-shop", "/my-shop/create-shop", "/my-shop/:shopId", "/buy-now", "/cart", "/cart/shipment"];
 const publicRoutes = ["/login", "/signup", "/", "/:shopName/:productInfo", "/buy-now", "/:shopInfo"];
 
 export function middleware(request: NextRequest) {
@@ -16,10 +16,10 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/login", request.url));
   }
   const userToken =
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczNDMxOTg0NywianRpIjoiYzdlNTM2OGYtOTNkOC00OWM1LWFmMWMtZjAxNTU3NGQ2NTM0IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjciLCJuYmYiOjE3MzQzMTk4NDcsImNzcmYiOiI2ZWQ2MmNlNC03Yzg2LTRkNDEtOTkyYS1jMjAzODM3NWQyOTUiLCJleHAiOjE3MzQ0MDYyNDcsInVzZXJuYW1lIjoidGVzdDEyMyIsImVtYWlsIjoidGVzdDEyM0BlbWFpbC5jb20iLCJyb2xlIjoidXNlciJ9.qgnRbTvDUt91G_9mrxgtEM9I1tW1phRmyNSLAtZUd8c";
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTczNDYyMDIyNywianRpIjoiZDU5NDcyZTctZjdkYi00NjExLTg4MmYtMWQzZWRiOTczMTI2IiwidHlwZSI6ImFjY2VzcyIsInN1YiI6IjIyIiwibmJmIjoxNzM0NjIwMjI3LCJjc3JmIjoiMjBmNjJiYTUtOGFlYy00YjM4LThkN2MtMWFlNWYzZTA3Y2FhIiwiZXhwIjoxNzM0NzA2NjI3LCJ1c2VybmFtZSI6InRlc3Q2OSIsImVtYWlsIjoidGVzdDY5QG1haWwuY29tIiwicm9sZSI6InVzZXIifQ.Pno2m1oIbbcmGKggnCw0sNb-bq1LVclE1EtALuhsehQ";
   response.cookies.set("token", userToken, { httpOnly: true, secure: process.env.NODE_ENV === "production" });
 
-  const userId = 7;
+  const userId = 22;
   response.cookies.set("userId", userId.toString(), { httpOnly: true, secure: process.env.NODE_ENV === "production" });
 
   // Viewport cookies

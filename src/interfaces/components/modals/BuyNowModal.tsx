@@ -1,62 +1,86 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react";
 import { LuX, LuMinus, LuPlus } from "react-icons/lu";
-import { CartItem, Product, Variants } from "@/types/types";
+import { CartItem, Discount, Product, Shop, Variant } from "@/types/types";
 import Image from "next/image";
 import LineDivider from "../dividers/LineDivider";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { currencyFormater } from "@/utils/elementHelpers";
 interface BuyNowModalProps {
   isOpen: boolean;
   handleCloseModal: () => void;
-  id: number;
-  name: string;
-  price: number;
+  product_id: number;
+  product_name: string;
   imageUrl: string;
   category: string;
-  variants: Variants[];
-  stocks: number;
-  unit: string;
-  discount: number;
+  discount: Discount[] | null;
+  variant: Variant[] | null;
+  shipping_cost: number;
+  shop: Shop;
 }
 export default function BuyNowModal({
   isOpen,
   handleCloseModal,
-  id,
-  name,
-  price,
+  product_id,
+  product_name,
   imageUrl,
   category,
-  variants,
-  stocks,
-  unit,
+  variant,
   discount,
+  shop,
+  shipping_cost,
 }: BuyNowModalProps) {
   const router = useRouter();
-  const [selectedVariant, setSelectedVariant] = useState<Variants | null>({
-    id: null,
-    name: "",
-    price: null,
-  });
+  const [selectedVariant, setSelectedVariant] = useState<Variant | null>(variant?.[0] ?? null);
   const [quantity, setQuantity] = useState<number>(1);
-  const [totalPrice, setTotalPrice] = useState<number>(price);
 
-  useEffect(() => {
-    if (selectedVariant?.price) {
-      setTotalPrice(selectedVariant.price * quantity);
-    } else {
-      setTotalPrice(price * quantity);
-    }
-  }, [quantity, price]);
-  const handleSelectVariant = (variant: Variants) => setSelectedVariant(variant);
+  // Find percentage discount
+  const discountValue = useMemo(() => discount?.find((item) => item.discount_type === "percentage"), [discount]);
+
+  // calculate price after discount
+  const priceAfterDiscount = useMemo(() => {
+    if (!discountValue) return selectedVariant?.variant_price ?? 0;
+
+    const discountPrice = ((selectedVariant?.variant_price ?? 0) * discountValue.discount_value) / 100;
+    return (selectedVariant?.variant_price ?? 0) - discountPrice;
+  }, [selectedVariant, discountValue]);
+
+  // Calculate total price
+  const totalPrice = useMemo(() => {
+    const basePrice = discountValue ? priceAfterDiscount : (selectedVariant?.variant_price ?? 0);
+    return basePrice * quantity;
+  }, [priceAfterDiscount, selectedVariant, discountValue, quantity]);
+
+  // Formated prices
+  const formatedPrice = currencyFormater.format(selectedVariant?.variant_price ?? 0);
+  const formatedPriceDiscount = currencyFormater.format(priceAfterDiscount);
+  const formatedTotalPrice = currencyFormater.format(totalPrice);
+
+  const handleSelectVariant = (variant: Variant) => setSelectedVariant(variant);
+
+  const shopingItem = useMemo(() => {
+    return {
+      product_id: product_id,
+      category: category,
+      discount: discount,
+      image: imageUrl,
+      priceAfterDiscount: priceAfterDiscount,
+      product_name: product_name,
+      quantity: quantity,
+      selectedVariant: selectedVariant,
+      shipping_cost: shipping_cost,
+      shop: shop,
+    };
+  }, [quantity, priceAfterDiscount, selectedVariant]);
 
   const handleBuyBtn = () => {
-    router.push(
-      `/buy-now?id=${id}&variantId=${selectedVariant?.id}&variantName=${selectedVariant?.name}&price=${selectedVariant?.price}&quantity=${quantity}`,
-    );
+    sessionStorage.setItem("shopingItem", JSON.stringify(shopingItem));
+    window.location.href = "/buy-now";
   };
+
   if (isOpen) {
     return (
       <Dialog open={isOpen} handler={handleCloseModal} className="outline-none relative p-5 tablet:p-15">
@@ -70,30 +94,40 @@ export default function BuyNowModal({
             </div>
             <div className="font-normal w-4/5 flex flex-col gap-4">
               <p className="text-dark-gray text-[0.5rem] capitalize tablet:text-sm">{category}</p>
-              <p className="text-base ">{name}</p>
+              <p className="text-base ">{product_name}</p>
               <div className="flex items-center gap-5">
                 <div className="flex items-center">
-                  <p className="font-semibold text-primary tablet:text-[1.375rem]">Rp. {price}</p>
-                  <p className="text-xss text-dark-gray tablet:text-[1.375rem]">/ {unit}</p>
+                  <p
+                    className={`${discountValue ? "line-through text-dark-gray" : "text-primary font-semibold"} tablet:text-[1.375rem] desktop:text-xl`}
+                  >
+                    {formatedPrice}
+                  </p>
+                  <p className="text-xss text-dark-gray tablet:text-[1.375rem] desktop:text-base">/ {selectedVariant?.variant_unit}</p>
                 </div>
-                <p className="text-red text-base bg-light-red px-3">{discount} %</p>
+                {discountValue && <p className="text-red text- bg-light-red px-3 ">{discountValue.discount_value} %</p>}
               </div>
-              <p className="text-xs tablet:text-sm">Stocks : {stocks}</p>
+              {discountValue && (
+                <div className="flex items-center">
+                  <p className="text-primary font-semibold tablet:text-[1.375rem] desktop:text-xl">{formatedPriceDiscount}</p>{" "}
+                  <p className="text-xss text-dark-gray tablet:text-[1.375rem] desktop:text-base">/ {selectedVariant?.variant_unit}</p>
+                </div>
+              )}
+              <p className="text-xs tablet:text-base">Stocks : {selectedVariant?.variant_stock}</p>
             </div>
           </div>
           <LineDivider className="my-6 tablet:my-10" />
-          {variants.length !== 0 && (
+          {variant?.length !== 0 && (
             <>
               <div>
                 <p className="font-semibold mb-5 tablet:text-[1.375rem]">Variants</p>
                 <div className="grid grid-cols-4 gap-5 w-full">
-                  {variants.map((variant, index) => (
+                  {variant?.map((item, index) => (
                     <button
-                      onClick={() => handleSelectVariant(variant)}
-                      className={`bg-gray text-xs tablet:text-base py-2 px-10 rounded capitalize  ${selectedVariant?.name === variant.name ? "bg-secondary font-semibold" : ""}`}
+                      onClick={() => handleSelectVariant(item)}
+                      className={`bg-gray w-fit text-nowrap text-xs tablet:text-base py-2 px-10 rounded capitalize ${selectedVariant?.variant_name === item.variant_name ? "bg-secondary font-semibold" : ""}`}
                       key={index}
                     >
-                      {variant.name}
+                      {item.variant_name}
                     </button>
                   ))}
                 </div>
@@ -114,15 +148,15 @@ export default function BuyNowModal({
               <input
                 type="number"
                 minLength={1}
-                maxLength={stocks}
+                maxLength={selectedVariant?.variant_stock ?? 0}
                 value={quantity}
                 onChange={(e) => setQuantity(Number(e.target.value))}
-                className="w-55 text-center text-black"
+                className="w-55 text-center text-black bg-transparent"
                 disabled
               />
               <button
                 onClick={() => {
-                  if (quantity < stocks) setQuantity(quantity + 1);
+                  if (quantity < (selectedVariant?.variant_stock ?? 0)) setQuantity(quantity + 1);
                 }}
               >
                 <LuPlus />
@@ -133,7 +167,7 @@ export default function BuyNowModal({
 
           <div>
             <p className="font-bold text-base tablet:text-[1.375rem] w-full text-end">
-              Total <span>Rp. {totalPrice}</span>
+              Total <span>{formatedTotalPrice}</span>
             </p>
           </div>
         </DialogBody>

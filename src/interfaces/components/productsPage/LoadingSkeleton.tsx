@@ -9,7 +9,7 @@ export default function LoadingSkeleton() {
         </div>
       </div>
       <section className="mt-10">
-        <div className="grid grid-cols-2 gap-5 tablet:grid-cols-3">
+        <div className="grid grid-cols-2 gap-5 tablet:grid-cols-3 desktop:grid-cols-5">
           <div className="shadow-md w-full h-[300px] desktop:h-auto desktop:w-full rounded-lg">
             <div className="w-full h-1/2 bg-gray animate-pulse"></div>
             <div className="w-full flex-grow p-5 tablet:p-7 flex flex-col desktop:gap-3">

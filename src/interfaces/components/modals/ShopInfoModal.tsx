@@ -10,6 +10,9 @@ import { customeTheme } from "@/interfaces/theme/customTheme";
 import { shippingOptions } from "@/services/fixedData";
 import LineDivider from "../dividers/LineDivider";
 import { LuX } from "react-icons/lu";
+import { ReqShopBody } from "@/types/types";
+import Image from "next/image";
+import { FaCamera } from "react-icons/fa6";
 
 const DropdownWithSpinner = ({ label, options, isLoading, onSelect, name, touched, errors }: any) => {
   return (
@@ -33,48 +36,30 @@ const DropdownWithSpinner = ({ label, options, isLoading, onSelect, name, touche
     </div>
   );
 };
-interface ShopFormTypes {
-  addressLabel: string;
-  addressProvince: string;
-  addressCity: string;
-  addressDistrict: string;
-  addressSubdistrict: string;
-  addressStreet: string;
-  shippingChannel: string[];
-  email: string;
-  phoneNumber: string;
-  openingHours: string;
-  closingHours: string;
-  zipCode: string;
-  name: string;
-  description: string;
-}
 
 interface ShopInfoModalProps {
   isOpen: boolean;
   handleCloseModal: () => void;
-  initialValues: ShopFormTypes;
-  handleSubmit: (values: ShopFormTypes) => void;
+  initialValues: ReqShopBody;
+  handleSubmit: (values: ReqShopBody) => void;
+  editShopStatus: "idle" | "loading" | "success" | "error";
 }
 
 const DynamicThemeProvider = dynamic(() => import("@material-tailwind/react").then((mod) => mod.ThemeProvider), { ssr: false });
 
-export default function ShopInfoModal({ isOpen, handleCloseModal, initialValues, handleSubmit }: ShopInfoModalProps) {
+export default function ShopInfoModal({ isOpen, handleCloseModal, initialValues, handleSubmit, editShopStatus }: ShopInfoModalProps) {
   const validationSchema = object({
-    name: string().required("Name is required"),
+    shop_image: string().required("Image is required"),
+    shop_name: string().required("Name is required"),
     description: string().required("Description is required"),
-    addressLabel: string().required("Label is required"),
-    addressProvince: string().required("Province is required"),
-    addressCity: string().required("City is required"),
-    addressDistrict: string().required("District is required"),
-    addressSubdistrict: string().required("Subdistrict is required"),
-    addressStreet: string().required("Street is required"),
-    zipCode: string().required("Zip Code is required"),
-    email: string().email().required("Email is required"),
-    phoneNumber: number().required("Phone Number is required"),
-    openingHours: string().required("Opening Hours is required"),
-    closingHours: string().required("Closing Hours is required"),
-    shippingChannel: string().required("Shipping is required"),
+    shop_address_province: string().required("Province is required"),
+    shop_address_city: string().required("City is required"),
+    shop_address_district: string().required("District is required"),
+    shop_address_subdistrict: string().required("Subdistrict is required"),
+    shop_address_street: string().required("Street is required"),
+    shop_zip_code: string().required("Zip Code is required"),
+    shop_email: string().email().required("Email is required"),
+    shop_phone_number: string().required("Phone Number is required"),
   });
 
   const maxLength = 30;
@@ -90,6 +75,11 @@ export default function ShopInfoModal({ isOpen, handleCloseModal, initialValues,
   const [isLoadingCities, setIsLoadingCities] = useState(false);
   const [isLoadingDistricts, setIsLoadingDistricts] = useState(false);
   const [isLoadingSubdistricts, setIsLoadingSubdistricts] = useState(false);
+
+  const [selectedProvince, setSelectedProvince] = useState<string | undefined>(initialValues.shop_address_province || "");
+  const [selectedCity, setSelectedCity] = useState<string | undefined>(initialValues.shop_address_city);
+  const [selectedDistrict, setSelectedDistrict] = useState<string | undefined>(initialValues.shop_address_district);
+  const [selectedSubdistrict, setSelectedSubdistrict] = useState<string | undefined>(initialValues.shop_address_subdistrict);
 
   const fetchProvinces = async () => {
     setIsLoadingProvinces(true);
@@ -126,6 +116,40 @@ export default function ShopInfoModal({ isOpen, handleCloseModal, initialValues,
   useEffect(() => {
     fetchProvinces();
   }, []);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, values: any, setFieldValue: (field: string, value: any) => void) => {
+    const MAX_FILE_SIZE = 500 * 1024; //500kb
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const file = files[0]; // Ambil hanya file pertama
+      if (file.size > MAX_FILE_SIZE) {
+        console.error(`File "${file.name}" exceeds the maximum size of 500 KB.`);
+        alert(`File "${file.name}" terlalu besar. Maksimum ukuran file adalah 500 KB.`);
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const base64String = reader.result as string;
+
+        // Set langsung shop_image dengan base64 string
+        setFieldValue("shop_image", base64String);
+      };
+
+      reader.onerror = (error) => {
+        console.error("Error reading file:", error);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
+
+  useEffect(() => {
+    if (editShopStatus === "success" || editShopStatus === "error") {
+      handleCloseModal();
+    }
+  }, [editShopStatus]);
   return (
     <Dialog open={isOpen} handler={handleCloseModal} className="outline-none relative p-5 tablet:p-15">
       <button onClick={handleCloseModal} className="absolute top-5 right-5 z-10">
@@ -133,98 +157,90 @@ export default function ShopInfoModal({ isOpen, handleCloseModal, initialValues,
       </button>
       <DialogBody className="text-black font-normal max-h-[70vh] overflow-y-auto">
         <div className="mt-10 ">
-          <h5 className="font-bold text-center w-full mb-10 ">Shop Information</h5>
+          <h5 className="font-bold text-center w-full mb-10 ">Edit Shop Information</h5>
           <div>
             <DynamicThemeProvider value={customeTheme}>
-              <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => handleSubmit(values)}>
+              <Formik
+                initialValues={initialValues}
+                validationSchema={validationSchema}
+                onSubmit={(values) => {
+                  handleSubmit(values);
+                  handleCloseModal();
+                }}
+              >
                 {({ errors, touched, values, handleChange, setFieldValue }) => (
                   <Form className="flex flex-col justify-between min-h-[70svh]">
                     <div className="flex flex-col gap-15">
                       <div className="relative">
+                        <div className="flex items-center gap-10 mb-10">
+                          <div className="w-30 h-30 border border-gray bg-light-gray rounded-full relative flex justify-center items-center">
+                            {values.shop_image && (
+                              <Image
+                                src={`${values.shop_image}`}
+                                width={50}
+                                height={50}
+                                className="w-full h-full object-cover object-center rounded-full"
+                                alt="Product Image"
+                              />
+                            )}
+                            {!values.shop_image && <FaCamera className="text-dark-gray text-xl" />}
+                          </div>
+                          <div>
+                            <label htmlFor="shop_image" className="text-sm text-primary font-semibold">
+                              Upload Shop Image <span className="text-xs text-dark-gray font-normal">(Max. 500 KB)</span>
+                            </label>
+                            <input
+                              id="shop_image"
+                              type="file"
+                              name="shop_image"
+                              multiple
+                              accept="image/*"
+                              onChange={(event) => handleFileChange(event, values, setFieldValue)}
+                              className="hidden"
+                            />
+                          </div>
+                        </div>
                         <div className="relative">
                           <Input
-                            name="name"
+                            name="shop_name"
                             label="Shop Name"
-                            value={values.name}
+                            value={values.shop_name}
                             onChange={handleChange}
                             crossOrigin={undefined}
                             maxLength={maxLength}
                             className="tablet:text-base "
                           />
-                          <p className={`text-red absolute top-full ${touched.addressLabel && errors.addressLabel ? "visible" : ""}`}>
-                            <ErrorMessage name="name" />
+                          <p className={`text-red absolute top-full ${touched.shop_name && errors.shop_name ? "visible" : ""}`}>
+                            <ErrorMessage name="shop_name" />
                           </p>
                           <div className="w-full flex justify-end mt-2">
                             <span className="text-xs tablet:text-sm text-dark-gray">
-                              {values.addressLabel.length}/{maxLength}
+                              {values.shop_name.length}/{maxLength}
                             </span>
                           </div>
                         </div>
-                        <div className="relative">
-                          <Textarea
-                            name="description"
-                            label="Shop Description"
-                            value={values.addressLabel}
-                            onChange={handleChange}
-                            maxLength={3000}
-                            className="tablet:text-base "
-                          />
-                          <p className={`text-red absolute top-full ${touched.addressLabel && errors.addressLabel ? "visible" : ""}`}>
+                        <div className="mt-10 mb-5">
+                          <Textarea name="description" label="Shop Description" value={values.description} onChange={handleChange} maxLength={3000} />
+                          <p className={`text-red absolute top-full ${touched.description && errors.description ? "visible" : ""}`}>
                             <ErrorMessage name="description" />
                           </p>
                           <div className="w-full flex justify-end mt-2">
-                            <span className="text-xs tablet:text-sm text-dark-gray">
-                              {values.addressLabel.length}/{maxLength}
+                            <span className="text-xs text-dark-gray">
+                              {values.description.length}/{3000}
                             </span>
                           </div>
                         </div>
-                        <LineDivider className="my-5" />
-                        <div className="relative">
-                          <Input
-                            name="addressLabel"
-                            label="Address Label"
-                            value={values.addressLabel}
-                            onChange={handleChange}
-                            crossOrigin={undefined}
-                            maxLength={maxLength}
-                            className="tablet:text-base "
-                          />
-                          <p className={`text-red absolute top-full ${touched.addressLabel && errors.addressLabel ? "visible" : ""}`}>
-                            <ErrorMessage name="addressLabel" />
-                          </p>
-                          <div className="w-full flex justify-end mt-2">
-                            <span className="text-xs tablet:text-sm text-dark-gray">
-                              {values.addressLabel.length}/{maxLength}
-                            </span>
-                          </div>
-                        </div>
+
                         <div className="mt-5">
-                          {/* <DropdownWithSpinner
-                                    touched={touched}
-                                    errors={errors}
-                                    name="addressProvince"
-                                    label="Select Province"
-                                    options={provinces}
-                                    isLoading={isLoadingProvinces}
-                                    onSelect={(provinceId: number, provinceName: string) => {
-                                      setFieldValue("addressProvince", provinceName);
-                                      setFieldValue("addressCity", "");
-                                      setCities([]);
-                                      setDistricts([]);
-                                      setSubdistricts([]);
-                                      fetchCities(provinceId);
-                                    }}
-                                  /> */}
                           <Select
-                            name="adressProvince"
+                            name="shop_address_province"
                             onChange={(value) => {
-                              setFieldValue("addressProvince", value);
-                              setFieldValue("addressCity", "");
+                              setFieldValue("shop_address_province", value);
+                              setFieldValue("shop_address_city", "");
                               setCities([]);
                               setDistricts([]);
                               setSubdistricts([]);
                             }}
-                            defaultValue={values.addressProvince}
                             label="Select Province"
                             className="h-20 capitalize"
                           >
@@ -234,23 +250,23 @@ export default function ShopInfoModal({ isOpen, handleCloseModal, initialValues,
                               </div>
                             ) : (
                               provinces.map((province: any) => (
-                                <Option value={province.id} onClick={() => fetchCities(province.id)} className="capitalize" key={province.id}>
+                                <Option value={province.name} onClick={() => fetchCities(province.id)} className="capitalize" key={province.id}>
                                   {province.name.toLowerCase()}
                                 </Option>
                               ))
                             )}
                           </Select>
 
-                          {values.addressProvince && (
+                          {values.shop_address_province && (
                             <DropdownWithSpinner
                               touched={touched}
                               errors={errors}
-                              name="addressCity"
+                              name="shop_address_city"
                               label="Select City"
                               options={cities}
                               isLoading={isLoadingCities}
                               onSelect={(cityId: number, cityName: string) => {
-                                setFieldValue("addressCity", cityName);
+                                setFieldValue("shop_address_city", cityName);
                                 setDistricts([]);
                                 setSubdistricts([]);
                                 fetchDistricts(cityId);
@@ -258,167 +274,122 @@ export default function ShopInfoModal({ isOpen, handleCloseModal, initialValues,
                             />
                           )}
 
-                          {values.addressCity && (
+                          {values.shop_address_city && (
                             <DropdownWithSpinner
                               touched={touched}
                               errors={errors}
-                              name="addressDistrict"
+                              name="shop_address_district"
                               label="Select District"
                               options={districts}
                               isLoading={isLoadingDistricts}
                               onSelect={(districtId: number, districtName: string) => {
-                                setFieldValue("addressDistrict", districtName);
+                                setFieldValue("shop_address_district", districtName);
                                 setSubdistricts([]);
                                 fetchSubdistricts(districtId);
                               }}
                             />
                           )}
 
-                          {values.addressDistrict && (
+                          {values.shop_address_district && (
                             <DropdownWithSpinner
                               touched={touched}
                               errors={errors}
-                              name="addressSubdistrict"
+                              name="shop_address_subdistrict"
                               label="Select Subdistrict"
                               options={subdistricts}
                               isLoading={isLoadingSubdistricts}
                               onSelect={(subdistrictId: number, subdistrictName: string) => {
-                                setFieldValue("addressSubdistrict", subdistrictName);
+                                setFieldValue("shop_address_subdistrict", subdistrictName);
                               }}
                             />
                           )}
                         </div>
-                        {values.addressSubdistrict && (
-                          <div className="mt-10 relative">
-                            <Input
-                              name="zipCode"
-                              label="Zip Code"
-                              value={values.zipCode}
-                              onChange={handleChange}
-                              crossOrigin={undefined}
-                              maxLength={6}
-                              type="text"
-                            />
-                            <p className={`text-red absolute top-full ${touched.zipCode && errors.zipCode ? "visible" : ""}`}>
-                              <ErrorMessage name="zipCode" />
-                            </p>
-                            <div className="w-full flex justify-end mt-2">
-                              <span className="text-xs text-dark-gray">
-                                {values.zipCode.length}/{6}
-                              </span>
-                            </div>
-                          </div>
-                        )}
-                        {values.zipCode && (
+                        {values.shop_address_subdistrict && (
                           <div className="mt-10 mb-5">
                             <Textarea
-                              name="addressStreet"
+                              name="shop_address_street"
                               label="Address Street"
-                              value={values.addressStreet}
+                              value={values.shop_address_street}
                               onChange={handleChange}
                               maxLength={streetMaxLength}
                             />
-                            <p className={`text-red absolute top-full ${touched.addressStreet && errors.addressStreet ? "visible" : ""}`}>
-                              <ErrorMessage name="addressStreet" />
+                            <p className={`text-red absolute top-full ${touched.shop_address_street && errors.shop_address_street ? "visible" : ""}`}>
+                              <ErrorMessage name="shop_address_street" />
                             </p>
                             <div className="w-full flex justify-end mt-2">
                               <span className="text-xs text-dark-gray">
-                                {values.addressStreet.length}/{streetMaxLength}
+                                {values.shop_address_street.length}/{streetMaxLength}
                               </span>
                             </div>
                           </div>
                         )}
-                        {values.addressStreet && (
-                          <Select
-                            name="shippingChannel"
-                            onChange={(value) => setFieldValue("shippingChannel", value)}
-                            label="Select Shipping"
-                            className="h-20 capitalize"
-                          >
-                            {shippingOptions.map((option: any, index) => (
-                              <Option value={option} className="capitalize" key={index}>
-                                {option}
-                              </Option>
-                            ))}
-                          </Select>
-                        )}
-                        <LineDivider className="my-5" />
-                        {values.shippingChannel && (
-                          <div className="relative ">
+                        {values.shop_address_street && (
+                          <div className="relative">
                             <Input
-                              name="email"
-                              label="Email"
-                              value={values.email}
+                              type="number"
+                              name="shop_zip_code"
+                              label="Zip Code"
+                              value={values.shop_zip_code}
                               onChange={handleChange}
                               crossOrigin={undefined}
-                              maxLength={maxLength}
+                              maxLength={6}
                               className="tablet:text-base "
                             />
-                            <p className={`text-red absolute top-full ${touched.addressLabel && errors.addressLabel ? "visible" : ""}`}>
-                              <ErrorMessage name="email" />
+                            <p className={`text-red absolute top-full ${touched.shop_zip_code && errors.shop_zip_code ? "visible" : ""}`}>
+                              <ErrorMessage name="shop_zip_code" />
                             </p>
                           </div>
                         )}
-                        {values.email && (
+                        <LineDivider className="my-10" />
+                        {values.shop_zip_code && (
                           <>
-                            <div className="relative mt-10">
+                            <div className="relative">
                               <Input
-                                name="phoneNumber"
-                                label="Phone Number"
-                                value={values.phoneNumber}
+                                name="shop_email"
+                                label="Shop Email"
+                                value={values.shop_email}
                                 onChange={handleChange}
                                 crossOrigin={undefined}
                                 maxLength={maxLength}
                                 className="tablet:text-base "
+                                type="email"
                               />
-                              <p className={`text-red absolute top-full ${touched.addressLabel && errors.addressLabel ? "visible" : ""}`}>
-                                <ErrorMessage name="phoneNumber" />
+                              <p className={`text-red absolute top-full ${touched.shop_zip_code && errors.shop_zip_code ? "visible" : ""}`}>
+                                <ErrorMessage name="shop_email" />
                               </p>
                             </div>
-                            <LineDivider className="my-5" />
+                            <div className="relative mt-10">
+                              <Input
+                                name="shop_phone_number"
+                                label="Shop Phone Number"
+                                value={values.shop_phone_number}
+                                onChange={handleChange}
+                                crossOrigin={undefined}
+                                maxLength={maxLength}
+                                className="tablet:text-base "
+                                type="number"
+                              />
+                              <p className={`text-red absolute top-full ${touched.shop_phone_number && errors.shop_phone_number ? "visible" : ""}`}>
+                                <ErrorMessage name="shop_phone_number" />
+                              </p>
+                            </div>
                           </>
-                        )}
-                        {values.phoneNumber && (
-                          <div className="relative mt-10">
-                            <Input
-                              name="openingHours"
-                              label="Opening Hours"
-                              value={values.openingHours}
-                              onChange={handleChange}
-                              crossOrigin={undefined}
-                              maxLength={maxLength}
-                              className="tablet:text-base "
-                            />
-                            <p className={`text-red absolute top-full ${touched.addressLabel && errors.addressLabel ? "visible" : ""}`}>
-                              <ErrorMessage name="openingHours" />
-                            </p>
-                          </div>
-                        )}
-                        {values.openingHours && (
-                          <div className="relative mt-10">
-                            <Input
-                              name="closingHours"
-                              label="Closing Hours"
-                              value={values.closingHours}
-                              onChange={handleChange}
-                              crossOrigin={undefined}
-                              maxLength={maxLength}
-                              className="tablet:text-base "
-                            />
-                            <p className={`text-red absolute top-full ${touched.addressLabel && errors.addressLabel ? "visible" : ""}`}>
-                              <ErrorMessage name="closingHours" />
-                            </p>
-                          </div>
                         )}
                       </div>
                     </div>
                     <div className="w-full mt-10 flex justify-between gap-5">
-                      <button onClick={handleCloseModal} className="w-full border-gray border rounded font-semibold py-3">
-                        Cancel
-                      </button>
-                      <button type="submit" className="w-full bg-primary text-white rounded font-semibold py-3">
-                        Next
-                      </button>
+                      {editShopStatus === "loading" ? (
+                        <div className="w-full py-3  flex items-center justify-center">
+                          <Spinner color="green" />
+                        </div>
+                      ) : (
+                        <>
+                          <button onClick={handleCloseModal} className="w-full border-gray border rounded font-semibold py-3">
+                            Cancel
+                          </button>
+                          <button className="w-full bg-primary text-white rounded font-semibold py-3">Edit</button>
+                        </>
+                      )}
                     </div>
                   </Form>
                 )}
