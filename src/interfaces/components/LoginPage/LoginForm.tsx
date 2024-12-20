@@ -1,19 +1,19 @@
-"use client"; 
+"use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation"; 
-import { HiOutlineUser } from "react-icons/hi2"; 
-import { HiOutlineKey } from "react-icons/hi"; 
-import { HiMiniEyeSlash } from "react-icons/hi2"; 
-import { FcGoogle } from "react-icons/fc"; 
+import { useRouter } from "next/navigation";
+import { HiOutlineUser } from "react-icons/hi2";
+import { HiOutlineKey } from "react-icons/hi";
+import { HiMiniEyeSlash } from "react-icons/hi2";
+import { FcGoogle } from "react-icons/fc";
 
 export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({ username: "", password: "" });
-  const router = useRouter(); 
+  const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     let hasError = false;
     const newErrors = { username: "", password: "" };
@@ -36,7 +36,7 @@ export default function LoginForm() {
   };
 
   const navigateToRegister = () => {
-    router.push("/register"); 
+    router.push("/register");
   };
 
   return (
@@ -79,10 +79,7 @@ export default function LoginForm() {
         </div>
 
         {/* Submit Button */}
-        <button
-          type="submit"
-          className="w-full bg-[#5B5B5B] hover:bg-[#969696] text-white font-serif font-semibold py-7 rounded"
-        >
+        <button type="submit" className="w-full bg-[#5B5B5B] hover:bg-[#969696] text-white font-serif font-semibold py-7 rounded">
           Sign In
         </button>
 
@@ -94,10 +91,7 @@ export default function LoginForm() {
         </div>
 
         {/* Google Login */}
-        <button
-          type="button"
-          className="w-full flex items-center justify-center border border-gray-300 py-7 rounded"
-        >
+        <button type="button" className="w-full flex items-center justify-center border border-gray-300 py-7 rounded">
           <FcGoogle className="mr-2 text-x2" />
           Login with Google
         </button>

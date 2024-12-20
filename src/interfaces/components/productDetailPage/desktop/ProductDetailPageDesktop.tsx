@@ -1,14 +1,8 @@
 import "@/styles/detailProductpage.css";
 import ImagesSectionDesktop from "./ImageSectionDesktop";
-import ImagesSection from "@/interfaces/components/productDetailPage/ImagesSection";
-import ProductInfo from "@/interfaces/components/productDetailPage/ProductInfo";
 import ReviewSection from "@/interfaces/components/productDetailPage/ReviewSection";
 import ShopInfo from "@/interfaces/components/productDetailPage/ShopInfo";
-import ProductListByCategory from "@/interfaces/components/homepage/productListByCategory/ProductListByCategory";
-import api from "@/services/api/api";
-import uriHelpers from "@/utils/uriHelpers";
 import React from "react";
-import FloatingDrawer from "@/interfaces/components/productDetailPage/FloatingDrawer";
 import { Product, ProductDetail } from "@/types/types";
 import ProductInfoDesktop from "./ProductInfoDesktop";
 import ProductListByCategoryDesktop from "../../homepage/homeForDesktop/ProductListByCategoryDesktop";

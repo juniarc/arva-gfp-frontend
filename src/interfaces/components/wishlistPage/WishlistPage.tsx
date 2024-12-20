@@ -1,4 +1,4 @@
-import { Product, WishlistItem } from "@/types/types";
+import { WishlistItem } from "@/types/types";
 import ProductList from "./ProductList";
 import ItemNotFound from "../error/ItemNotFound";
 

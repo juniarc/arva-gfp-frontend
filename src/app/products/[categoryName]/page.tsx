@@ -2,7 +2,6 @@ import ProductsPageWrapper from "@/interfaces/components/productsPage/ProductsPa
 import api from "@/services/api/api";
 import { convertCategoryNameToId } from "@/utils/elementHelpers";
 import { cookies } from "next/headers";
-// import { products } from "@/services/api/dummyProducts";
 export default async function Page({ params }: { params: Promise<{ categoryName: string }> }) {
   const categoryName = (await params).categoryName;
   const categoryId = convertCategoryNameToId(categoryName);

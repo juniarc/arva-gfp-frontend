@@ -6,7 +6,6 @@ import { MdOutlineShoppingBag } from "react-icons/md";
 import AddToCartModal from "../modals/AddToCartModal";
 import BuyNowModal from "../modals/BuyNowModal";
 import { Discount, Shop, Variant } from "@/types/types";
-import { useWishlist, WishlistProvider } from "@/hooks/WishlistContext";
 import api from "@/services/api/api";
 
 interface FloatingRawerProps {

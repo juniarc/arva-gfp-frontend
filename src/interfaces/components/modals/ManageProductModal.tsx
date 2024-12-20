@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Form, Formik, Field, ErrorMessage, FieldArray } from "formik";
-import { object, string, number, boolean, array, date } from "yup";
-import { Dialog, DialogBody, Input, Option, Popover, PopoverContent, PopoverHandler, Select, Spinner, Textarea } from "@material-tailwind/react";
+import React, { useEffect } from "react";
+import { Form, Formik, ErrorMessage, FieldArray } from "formik";
+import { object, string, number, array, date } from "yup";
+import { Dialog, DialogBody, Input, Option, Select, Spinner, Textarea } from "@material-tailwind/react";
 import { customeTheme } from "@/interfaces/theme/customTheme";
 import dynamic from "next/dynamic";
-import { avaibleCategories, avaibleProductType, shippingOptions } from "@/services/fixedData";
+import { avaibleCategories, avaibleProductType } from "@/services/fixedData";
 import LineDivider from "../dividers/LineDivider";
-import { CreateDiscountBody, Product, ReqProductBody, ShippingInfo } from "@/types/types";
+import { CreateDiscountBody, ReqProductBody, ShippingInfo } from "@/types/types";
 import Image from "next/image";
 import { LuX } from "react-icons/lu";
 import { formatPrice } from "@/utils/elementHelpers";

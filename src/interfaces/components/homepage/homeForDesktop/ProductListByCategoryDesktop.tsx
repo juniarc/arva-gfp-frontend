@@ -5,7 +5,6 @@ import { Product } from "@/types/types";
 import Link from "next/link";
 import React from "react";
 import ProductItem from "../productListByCategory/ProductItem";
-import { Swiper, SwiperSlide } from "swiper/react";
 
 interface ProductListByCategoryProps {
   products: Product[];

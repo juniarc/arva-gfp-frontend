@@ -1,10 +1,7 @@
 "use client";
 
 import { Product } from "@/types/types";
-import FilterAndSort from "../FilterAndSort";
 import ProductList from "../ProductList";
-import RecommendFilter from "../RecommendFilter";
-import { useEffect, useState } from "react";
 import FilterMenu from "./FilterMenu";
 
 interface ProducstPageProps {

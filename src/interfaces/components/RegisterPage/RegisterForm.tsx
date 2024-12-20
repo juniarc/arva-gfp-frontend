@@ -17,7 +17,7 @@ export default function RegisterForm() {
   const [errors, setErrors] = useState({ username: "", email: "", password: "", confirmPassword: "" });
   const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     let hasError = false;
     const newErrors = { username: "", email: "", password: "", confirmPassword: "" };
@@ -77,7 +77,7 @@ export default function RegisterForm() {
         {/* Email Field */}
         <div className="mb-6">
           <div className="flex items-center border-b-2 border-gray-300 py-7">
-          <TfiEmail className="mr-2 text-gray-500" />
+            <TfiEmail className="mr-2 text-gray-500" />
             <input
               type="email"
               id="email"
@@ -128,10 +128,7 @@ export default function RegisterForm() {
         </div>
 
         {/* Submit Button */}
-        <button
-          type="submit"
-          className="w-full bg-[#5B5B5B] hover:bg-[#969696] text-white font-serif font-semibold py-7 rounded"
-        >
+        <button type="submit" className="w-full bg-[#5B5B5B] hover:bg-[#969696] text-white font-serif font-semibold py-7 rounded">
           Sign Up
         </button>
 
@@ -143,10 +140,7 @@ export default function RegisterForm() {
         </div>
 
         {/* Google Signup */}
-        <button
-          type="button"
-          className="w-full flex items-center justify-center border border-gray-300 py-7 rounded"
-        >
+        <button type="button" className="w-full flex items-center justify-center border border-gray-300 py-7 rounded">
           <FcGoogle className="mr-2 text-xl" />
           Sign up with Google
         </button>
@@ -154,11 +148,7 @@ export default function RegisterForm() {
         {/* Login Prompt */}
         <p className="text-center text-gray-600 mt-4 py-7">
           Already have an account?{" "}
-          <button
-            type="button"
-            onClick={navigateToLogin}
-            className="text-primary hover:underline"
-          >
+          <button type="button" onClick={navigateToLogin} className="text-primary hover:underline">
             <Link href="/login">Log In</Link>
           </button>
         </p>

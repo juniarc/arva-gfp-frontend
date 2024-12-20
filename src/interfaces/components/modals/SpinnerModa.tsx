@@ -1,9 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { Dialog, DialogBody, Radio, select, Spinner } from "@material-tailwind/react";
-import { LuX } from "react-icons/lu";
-import Image from "next/image";
-import LineDivider from "../dividers/LineDivider";
-import SuccessAlert from "../alerts/SuccessAlert";
+import { Dialog, DialogBody, Spinner } from "@material-tailwind/react";
 
 interface SpinnerModalProps {
   isOpen: boolean;

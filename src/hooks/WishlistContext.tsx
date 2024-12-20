@@ -1,6 +1,6 @@
 "use client";
 
-import { Variants } from "@/types/types";
+import { Variant } from "@/types/types";
 import React, { createContext, useContext, useState, useEffect } from "react";
 
 export interface ProductItemProps {
@@ -15,7 +15,7 @@ export interface ProductItemProps {
   rating: number;
   shop: { id: number; name: string; addressCity: string };
   sold: number;
-  variants: Variants[];
+  variant: Variant[];
   tags: string[];
 }
 

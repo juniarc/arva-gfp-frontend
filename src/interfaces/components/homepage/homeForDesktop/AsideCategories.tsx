@@ -1,5 +1,4 @@
 import React from "react";
-import LineDivider from "../../dividers/LineDivider";
 import { CiCoffeeBean } from "react-icons/ci";
 import SpinachIcon from "@/../public/icons/spinach-icon.svg";
 import FruitsIcon from "@/../public/icons/fruits-icon.svg";

@@ -6,10 +6,8 @@ import Image from "next/image";
 import { FaStar } from "react-icons/fa6";
 import { FaLocationDot } from "react-icons/fa6";
 import AddToCartModal from "../../modals/AddToCartModal";
-import Link from "next/link";
 import uriHelpers from "@/utils/uriHelpers";
 import CartIcon from "@/../public/icons/shopping-bag-white.svg";
-import ErrorProductImageFallback from "@/../public/images/24493070_6962884.jpg";
 
 interface ProductItemProps extends Product {
   token?: string | undefined;

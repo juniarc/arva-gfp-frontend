@@ -1,4 +1,4 @@
-import { Product, WishlistItem } from "@/types/types";
+import { WishlistItem } from "@/types/types";
 import ProductItem from "./ProductItem";
 
 interface ProductListProps {

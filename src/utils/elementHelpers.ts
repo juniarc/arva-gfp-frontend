@@ -17,11 +17,11 @@ export const formatPrice = (value: string) => {
   return numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 
-export const paginateArray = (array, itemsPerPage) => {
+export const paginateArray = (array: any, itemsPerPage: any) => {
   if (array.length === 0) {
     return "Products not found";
   }
-  return array.reduce((result, item, index) => {
+  return array.reduce((result: any, item: any, index: number) => {
     const pageIndex = Math.floor(index / itemsPerPage);
     if (!result[pageIndex]) {
       result[pageIndex] = [];
@@ -31,18 +31,18 @@ export const paginateArray = (array, itemsPerPage) => {
   }, []);
 };
 
-export const startPage = (currentPage, maxIndicators, totalPages) => {
+export const startPage = (currentPage: any, maxIndicators: any, totalPages: any) => {
   return Math.max(0, Math.min(currentPage - Math.floor(maxIndicators / 2), totalPages - maxIndicators));
 };
 
-export const endPage = (startPage, maxIndicators, totalPages) => {
+export const endPage = (startPage: any, maxIndicators: any, totalPages: any) => {
   return Math.min(startPage + maxIndicators, totalPages);
 };
 
-export const calculateAverageRatingShop = (products) => {
-  const validRatings = products.map((product) => (product.ratings === "number" && !isNaN(product.ratings) ? product.ratings : 0));
+export const calculateAverageRatingShop = (products: any) => {
+  const validRatings = products.map((product: any) => (product.ratings === "number" && !isNaN(product.ratings) ? product.ratings : 0));
 
-  const totalRating = validRatings.reduce((sum, rating) => sum + rating, 0);
+  const totalRating = validRatings.reduce((sum: any, rating: any) => sum + rating, 0);
 
   const averageRating = validRatings.length > 0 ? totalRating / validRatings.length : 0;
 

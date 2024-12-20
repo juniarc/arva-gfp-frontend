@@ -1,4 +1,3 @@
-import { Checkbox } from "@material-tailwind/react";
 import { LuMinus, LuPlus } from "react-icons/lu";
 import LineDivider from "../dividers/LineDivider";
 

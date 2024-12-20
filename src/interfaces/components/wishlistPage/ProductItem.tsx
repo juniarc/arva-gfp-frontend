@@ -1,11 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { FaStar, FaLocationDot, FaHeart, FaRegHeart } from "react-icons/fa6";
 import ShopIcon from "@/../public/icons/shopping-bag-white.svg";
 import AddToCartModal from "../modals/AddToCartModal";
-import { Discount, Product, Variant, WishlistItem } from "@/types/types";
+import { WishlistItem } from "@/types/types";
 import { useMemo, useState } from "react";
 import uriHelpers from "@/utils/uriHelpers";
 

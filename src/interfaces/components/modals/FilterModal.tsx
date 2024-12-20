@@ -1,18 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react";
-import { LuX, LuMinus, LuPlus } from "react-icons/lu";
-import { CartItem, Product } from "@/types/types";
+import React, { useState } from "react";
+import { Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
+import { LuX } from "react-icons/lu";
 import Image from "next/image";
-import LineDivider from "../dividers/LineDivider";
-import SuccessAlert from "../alerts/SuccessAlert";
-import { Variant } from "@/types/types";
 import { CiCoffeeBean } from "react-icons/ci";
-import SpinachIcon from "@/../public/icons/spinach-icon.svg";
-import FruitsIcon from "@/../public/icons/fruits-icon.svg";
-import FertilizersIcon from "@/../public/icons/fertilizer-icon.svg";
-import EquipmentsIcon from "@/../public/icons/gardening-icon.svg";
 import { avaibleCategoriesWithIcon } from "@/services/fixedData";
 
 interface FilterModalProps {

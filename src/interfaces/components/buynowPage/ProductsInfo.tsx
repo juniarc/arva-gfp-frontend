@@ -6,9 +6,8 @@ import { Checkbox } from "@material-tailwind/react";
 import { LuMinus, LuPlus } from "react-icons/lu";
 import { GoShieldCheck } from "react-icons/go";
 import LineDivider from "../dividers/LineDivider";
-import { Product, ShopingItem } from "@/types/types";
+import { ShopingItem } from "@/types/types";
 import { currencyFormater } from "@/utils/elementHelpers";
-import defaultImage from "@/../public/images/24493070_6962884.jpg";
 
 interface ProductsInfoProps extends ShopingItem {
   handleQuantityChange: (newQuantity: number, maxStock: number) => void;

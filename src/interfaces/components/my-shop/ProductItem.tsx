@@ -1,6 +1,5 @@
 import { CreateDiscountBody, Discount, Product, ReqProductBody, Shop, Tag, Variant } from "@/types/types";
 import Image from "next/image";
-import LineDivider from "../dividers/LineDivider";
 import { FaStar, FaRegTrashCan } from "react-icons/fa6";
 import ManageProductModal, { ManageProductValuesProps } from "../modals/ManageProductModal";
 import { useEffect, useMemo, useState } from "react";
@@ -8,7 +7,7 @@ import { convertCategoryIdToName, convertCategoryNameToId } from "@/utils/elemen
 import api from "@/services/api/api";
 import SuccessAlert from "../alerts/SuccessAlert";
 import FailAlert from "../alerts/FailAlert";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 import { LuX } from "react-icons/lu";
 import TagModal from "../modals/TagModal";
 import ConfirmationModal from "../modals/ConfirmationModal";

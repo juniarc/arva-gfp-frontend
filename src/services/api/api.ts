@@ -9,7 +9,6 @@ import {
   ReqShopBody,
   User,
 } from "@/types/types";
-import { mockApiRequest, mockApiRequestShop, mockApiRequestUser } from "./dummyData";
 
 const api = (() => {
   const BASE_URL = "http://127.0.0.1:5000";

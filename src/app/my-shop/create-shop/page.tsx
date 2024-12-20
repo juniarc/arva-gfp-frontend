@@ -1,7 +1,5 @@
 import CreateShopPage from "@/interfaces/components/createShopPage/CreateShopPage";
-import api from "@/services/api/api";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export default async function Page() {
   const cookiesList = await cookies();

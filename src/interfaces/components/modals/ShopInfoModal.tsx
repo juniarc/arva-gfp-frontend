@@ -2,12 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react";
-import { Form, Formik, Field, ErrorMessage } from "formik";
-import { object, string, number, boolean } from "yup";
+import { Dialog, DialogBody } from "@material-tailwind/react";
+import { Form, Formik, ErrorMessage } from "formik";
+import { object, string } from "yup";
 import { Input, Option, Select, Spinner, Textarea } from "@material-tailwind/react";
 import { customeTheme } from "@/interfaces/theme/customTheme";
-import { shippingOptions } from "@/services/fixedData";
 import LineDivider from "../dividers/LineDivider";
 import { LuX } from "react-icons/lu";
 import { ReqShopBody } from "@/types/types";

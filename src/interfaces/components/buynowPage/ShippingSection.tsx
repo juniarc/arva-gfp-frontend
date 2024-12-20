@@ -1,5 +1,4 @@
 import { BsChevronRight } from "react-icons/bs";
-import LineDivider from "../dividers/LineDivider";
 import ShippingOptionsModal from "../modals/ShippingOptionsModal";
 import { useState } from "react";
 

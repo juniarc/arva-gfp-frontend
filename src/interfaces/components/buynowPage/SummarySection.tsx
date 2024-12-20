@@ -1,4 +1,3 @@
-import { ShopingItem } from "@/types/types";
 import LineDivider from "../dividers/LineDivider";
 import { currencyFormater } from "@/utils/elementHelpers";
 

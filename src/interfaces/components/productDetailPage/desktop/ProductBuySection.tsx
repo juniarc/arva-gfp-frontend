@@ -1,11 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { LuMinus, LuPlus } from "react-icons/lu";
 import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import ShopingBag from "@/../public/icons/shopping-bag-white.svg";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { Discount, Variant } from "@/types/types";
-import { currencyFormater } from "@/utils/elementHelpers";
 import api from "@/services/api/api";
 interface ProductBuySectionProps {
   product_id: number;

@@ -1,5 +1,5 @@
 import { Form, Formik, Field, ErrorMessage } from "formik";
-import { object, string, number, boolean } from "yup";
+import { object, string, boolean } from "yup";
 import { Input } from "@material-tailwind/react";
 import { customeTheme } from "@/interfaces/theme/customTheme";
 import dynamic from "next/dynamic";

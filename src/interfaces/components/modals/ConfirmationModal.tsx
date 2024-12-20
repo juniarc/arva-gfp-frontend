@@ -1,12 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react";
-import { LuX, LuMinus, LuPlus } from "react-icons/lu";
-import { CartItem, Product } from "@/types/types";
-import Image from "next/image";
-import LineDivider from "../dividers/LineDivider";
-import SuccessAlert from "../alerts/SuccessAlert";
+import { Dialog, DialogBody } from "@material-tailwind/react";
+import { LuX } from "react-icons/lu";
 
 interface ConfirmationModalProps {
   isOpen: boolean;

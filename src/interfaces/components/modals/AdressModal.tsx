@@ -1,16 +1,13 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
-import { Dialog, DialogHeader, DialogBody, DialogFooter, Spinner, Textarea, Input, Select, Option, ThemeProvider } from "@material-tailwind/react";
+import React, { useEffect, useState } from "react";
+import { Dialog, DialogBody, Spinner, Textarea, Input, Select, Option } from "@material-tailwind/react";
 import { LuX } from "react-icons/lu";
-import LineDivider from "../dividers/LineDivider";
 import { customeTheme } from "@/interfaces/theme/customTheme";
-import SuccessAlert from "../alerts/SuccessAlert";
-import { mockApiRequestPostUser } from "@/services/api/dummyData";
-import { ReqUserBody, User } from "@/types/types";
 import { object, string } from "yup";
 import dynamic from "next/dynamic";
 import { ErrorMessage, Form, Formik } from "formik";
+import { ReqUserBody } from "@/types/types";
 
 const DynamicThemeProvider = dynamic(() => import("@material-tailwind/react").then((mod) => mod.ThemeProvider), { ssr: false });
 

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { CartItem } from "@/types/types";
 import CartPage from "./CartPage";
 import { useRouter } from "next/navigation";
@@ -35,7 +35,7 @@ export default function CartPageWrapper({ separatedByShop, cart, viewport }: Car
     setCheckedShops((prev) => {
       const updatedShops = { ...prev, [shop_id]: checked };
       const updatedProducts = separatedByShop[shop_id].products.reduce(
-        (acc, item) => {
+        (acc: any, item: any) => {
           acc[item.product_id] = checked;
           return acc;
         },

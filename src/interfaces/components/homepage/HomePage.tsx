@@ -5,7 +5,6 @@ import HomeCategories from "@/interfaces/components/homepage/HomeCategories";
 import ProductListByCategory from "@/interfaces/components/homepage/productListByCategory/ProductListByCategory";
 import HomeAds from "@/interfaces/components/homepage/homeAds/HomeAds";
 import api from "@/services/api/api";
-import { Product } from "@/types/types";
 import { convertCategoryNameToId } from "@/utils/elementHelpers";
 
 interface HomePageProps {

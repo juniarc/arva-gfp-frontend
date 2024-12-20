@@ -1,9 +1,4 @@
-import { poppins } from "@/interfaces/fonts/fonts";
-import { ShopDevelop } from "@/services/api/dummyShop";
-import { FaLocationDot, FaStar } from "react-icons/fa6";
-import Image from "next/image";
 import LineDivider from "../../dividers/LineDivider";
-import ShopInfo from "../ShopInfo";
 import ProductList from "../ProductList";
 import ShopInfoDesktop from "./ShopInfoDesktop";
 import { Product, ReqShopBody, ShopDetail, Voucher } from "@/types/types";

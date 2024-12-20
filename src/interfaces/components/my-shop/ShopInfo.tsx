@@ -1,12 +1,10 @@
-import { ShopDevelop } from "@/services/api/dummyShop";
 import Image from "next/image";
 import { FaLocationDot, FaStar } from "react-icons/fa6";
 import { poppins } from "@/interfaces/fonts/fonts";
 import LineDivider from "../dividers/LineDivider";
-import { shippingOptions } from "@/services/fixedData";
 import ShopInfoModal from "../modals/ShopInfoModal";
-import { useEffect, useState } from "react";
-import { Product, ReqShopBody, ShopDetail } from "@/types/types";
+import { useState } from "react";
+import { ReqShopBody, ShopDetail } from "@/types/types";
 import { format } from "date-fns";
 
 interface ShopInfoProps extends ShopDetail {

@@ -1,7 +1,6 @@
 import ItemNotFound from "@/interfaces/components/error/ItemNotFound";
 import ShopPageWrapper from "@/interfaces/components/shopPage/ShopPageWrapper";
 import api from "@/services/api/api";
-import { dummyShop } from "@/services/api/dummyShop";
 import { cookies } from "next/headers";
 export default async function Page({ params }: { params: Promise<{ shopName: string }> }) {
   const urlName = (await params).shopName;

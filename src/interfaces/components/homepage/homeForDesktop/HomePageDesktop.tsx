@@ -1,9 +1,7 @@
-import { Product } from "@/types/types";
 import api from "@/services/api/api";
 import HomeHeroDesktop from "./HomeHeroDesktop";
 import ProductListByCategoryDesktop from "./ProductListByCategoryDesktop";
 import HomeAds from "../homeAds/HomeAds";
-import HomeCategories from "../HomeCategories";
 import HomeCategoriesDesktop from "./HomeCategoriesDesktop";
 import AsideCategories from "./AsideCategories";
 

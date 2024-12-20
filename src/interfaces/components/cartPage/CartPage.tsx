@@ -1,4 +1,3 @@
-import { useState } from "react";
 import ProductList from "./ProductList";
 import LineDivider from "../dividers/LineDivider";
 import { CartItem } from "@/types/types";

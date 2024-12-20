@@ -1,9 +1,8 @@
 "use client";
 
-import { ShopDevelop } from "@/services/api/dummyShop";
 import MyShopPage from "./MyShopPage";
 import { calculateAverageRatingShop } from "@/utils/elementHelpers";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MyShopPageDesktop from "./desktop/MyShopPageDesktop";
 import { CreateDiscountBody, Product, ReqProductBody, ReqShopBody, ShopDetail, Voucher } from "@/types/types";
 import api from "@/services/api/api";

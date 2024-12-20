@@ -1,6 +1,6 @@
 "use client";
 import { Stepper, Step, Button, Typography } from "@material-tailwind/react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import IdentityFrom from "./IdentityForm";
 import ShopProfile from "./ShopProfileForm";
 import { FaCheck } from "react-icons/fa6";

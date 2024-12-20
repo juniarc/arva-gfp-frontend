@@ -1,6 +1,6 @@
 import AddressSection from "../buynowPage/AddressSection";
 import PaymentMehtod from "../buynowPage/PaymentMethod";
-import { CartItem, User, UserInShipmentPage } from "@/types/types";
+import { CartItem, UserInShipmentPage } from "@/types/types";
 import ProductsInfo from "./ProductsInfo";
 import ShoppingSummary from "./ShoppingSummary";
 import PaynowBtn from "../buynowPage/PaynowBtn";
