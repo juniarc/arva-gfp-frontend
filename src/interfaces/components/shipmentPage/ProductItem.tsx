@@ -1,7 +1,6 @@
 import { LuMinus, LuPlus } from "react-icons/lu";
 import { CartItem } from "@/types/types";
 import Image from "next/image";
-import Foto from "@/../public/images/dummy-photo-product.jpg";
 import { currencyFormater } from "@/utils/elementHelpers";
 interface ProductItemProps extends CartItem {
   cart: CartItem[];

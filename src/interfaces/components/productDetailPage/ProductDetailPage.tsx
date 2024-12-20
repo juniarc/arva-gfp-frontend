@@ -4,12 +4,9 @@ import ProductInfo from "@/interfaces/components/productDetailPage/ProductInfo";
 import ReviewSection from "@/interfaces/components/productDetailPage/ReviewSection";
 import ShopInfo from "@/interfaces/components/productDetailPage/ShopInfo";
 import ProductListByCategory from "@/interfaces/components/homepage/productListByCategory/ProductListByCategory";
-import api from "@/services/api/api";
-import uriHelpers from "@/utils/uriHelpers";
 import React from "react";
 import FloatingDrawer from "@/interfaces/components/productDetailPage/FloatingDrawer";
 import { Product, ProductDetail } from "@/types/types";
-import { WishlistProvider } from "@/hooks/WishlistContext";
 
 interface ProductDetailPageProps {
   productDetail: ProductDetail;

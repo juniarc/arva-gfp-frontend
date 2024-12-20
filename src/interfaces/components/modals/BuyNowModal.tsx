@@ -1,12 +1,11 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
-import { Dialog, DialogHeader, DialogBody, DialogFooter } from "@material-tailwind/react";
+import React, { useMemo, useState } from "react";
+import { Dialog, DialogBody, DialogFooter } from "@material-tailwind/react";
 import { LuX, LuMinus, LuPlus } from "react-icons/lu";
-import { CartItem, Discount, Product, Shop, Variant } from "@/types/types";
+import { Discount, Shop, Variant } from "@/types/types";
 import Image from "next/image";
 import LineDivider from "../dividers/LineDivider";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { currencyFormater } from "@/utils/elementHelpers";
 interface BuyNowModalProps {

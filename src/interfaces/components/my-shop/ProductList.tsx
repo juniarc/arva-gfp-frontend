@@ -1,4 +1,4 @@
-import { Product, ReqProductBody } from "@/types/types";
+import { Product } from "@/types/types";
 import ProductItem from "./ProductItem";
 import { useState } from "react";
 import ManageProductModal from "../modals/ManageProductModal";

@@ -1,7 +1,5 @@
 import { Checkbox } from "@material-tailwind/react";
 import Image from "next/image";
-import Foto from "@/../public/images/dummy-photo-product.jpg";
-import { FaHeart, FaRegHeart } from "react-icons/fa6";
 import { LuMinus, LuPlus } from "react-icons/lu";
 import { CartItem } from "@/types/types";
 import { useMemo } from "react";

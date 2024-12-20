@@ -1,12 +1,10 @@
 import { poppins } from "@/interfaces/fonts/fonts";
-import { ShopDevelop } from "@/services/api/dummyShop";
 import { FaLocationDot, FaStar } from "react-icons/fa6";
 import Image from "next/image";
 import ProductList from "./ProductList";
 import LineDivider from "../dividers/LineDivider";
 import { Product, ShopDetail } from "@/types/types";
 import { format } from "date-fns";
-import ItemNotFound from "../error/ItemNotFound";
 
 interface ShopPageProps extends ShopDetail {
   totalRatings: number;

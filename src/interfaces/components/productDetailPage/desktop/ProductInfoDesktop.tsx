@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { FaStar, FaLocationDot } from "react-icons/fa6";
+import { FaStar } from "react-icons/fa6";
 import { BsChevronDown } from "react-icons/bs";
 import { checkIsTextClamped, currencyFormater } from "@/utils/elementHelpers";
 import gsap from "gsap";

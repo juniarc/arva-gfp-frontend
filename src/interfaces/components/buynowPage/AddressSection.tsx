@@ -5,7 +5,7 @@ import { BsChevronRight } from "react-icons/bs";
 import { FaLocationDot, FaCircle } from "react-icons/fa6";
 import LineDivider from "../dividers/LineDivider";
 import AddressModal from "../modals/AdressModal";
-import { User, UserInShipmentPage } from "@/types/types";
+import { UserInShipmentPage } from "@/types/types";
 
 interface AddressSectionProps extends UserInShipmentPage {
   handleUpdateAddress: (updatedAddress: any) => void;

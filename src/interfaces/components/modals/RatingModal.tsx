@@ -1,15 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { Dialog, DialogBody, Radio, select, Spinner, Textarea } from "@material-tailwind/react";
+import React, { useState } from "react";
+import { Dialog, DialogBody, Spinner, Textarea } from "@material-tailwind/react";
 import { LuX } from "react-icons/lu";
-import Image from "next/image";
-import LineDivider from "../dividers/LineDivider";
-import SuccessAlert from "../alerts/SuccessAlert";
 import { FaStar } from "react-icons/fa6";
 import dynamic from "next/dynamic";
 import { customeTheme } from "@/interfaces/theme/customTheme";
-import api from "@/services/api/api";
 
 interface SpinnerModalProps {
   isOpen: boolean;

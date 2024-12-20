@@ -1,7 +1,6 @@
 "use client";
 
 import { customeTheme } from "@/interfaces/theme/customTheme";
-import { CreateVoucherBody } from "@/types/types";
 import { Dialog, DialogBody, Input, Spinner } from "@material-tailwind/react";
 import { format } from "date-fns";
 import { ErrorMessage, Form, Formik } from "formik";

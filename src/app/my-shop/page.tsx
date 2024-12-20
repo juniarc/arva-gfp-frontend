@@ -1,4 +1,3 @@
-import { dummyShop } from "@/services/api/dummyShop";
 import { cookies } from "next/headers";
 import CreateShop from "@/interfaces/components/my-shop/CreateShop";
 import MyShopPageWrapper from "@/interfaces/components/my-shop/MyShopPageWrapper";

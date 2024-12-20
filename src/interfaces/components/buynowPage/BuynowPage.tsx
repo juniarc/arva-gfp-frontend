@@ -1,4 +1,4 @@
-import { Product, ShopingItem, User, UserInShipmentPage } from "@/types/types";
+import { ShopingItem, UserInShipmentPage } from "@/types/types";
 import AddressSection from "./AddressSection";
 import ProductsInfo from "./ProductsInfo";
 import ShippingSection from "./ShippingSection";

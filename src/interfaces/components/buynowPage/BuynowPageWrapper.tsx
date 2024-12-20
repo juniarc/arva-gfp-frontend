@@ -1,16 +1,8 @@
 "use client";
 
 import React, { useEffect, useState, useMemo } from "react";
-import AddressSection from "@/interfaces/components/buynowPage/AddressSection";
-import PaynowBtn from "@/interfaces/components/buynowPage/PaynowBtn";
-import PaymentMehtod from "@/interfaces/components/buynowPage/PaymentMethod";
-import ProductsInfo from "@/interfaces/components/buynowPage/ProductsInfo";
-import ShippingSection from "@/interfaces/components/buynowPage/ShippingSection";
-import SummarySection from "@/interfaces/components/buynowPage/SummarySection";
-import VoucherSection from "@/interfaces/components/buynowPage/VoucherSection";
-import LineDivider from "@/interfaces/components/dividers/LineDivider";
-import { mockApiRequestPostUser } from "@/services/api/dummyData";
-import { Product, ReqOrderItemBody, ReqUserBody, ShopingItem, User, UserInShipmentPage } from "@/types/types";
+
+import { ReqOrderItemBody, ReqUserBody, ShopingItem, User, UserInShipmentPage } from "@/types/types";
 import BuynowPage from "./BuynowPage";
 import BuynowPageDesktop from "./desktop/BuynowPageDesktop";
 import { InitialValues } from "../modals/AdressModal";

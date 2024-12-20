@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { Form, Formik, Field, ErrorMessage, FieldArray } from "formik";
-import { object, string, number, boolean, array, date } from "yup";
-import { Input, Option, Select, Spinner, Textarea, Popover, PopoverHandler, PopoverContent } from "@material-tailwind/react";
+import { Form, Formik, ErrorMessage, FieldArray } from "formik";
+import { object, string, number, array, date } from "yup";
+import { Input, Option, Select, Textarea, Popover, PopoverHandler, PopoverContent } from "@material-tailwind/react";
 import { customeTheme } from "@/interfaces/theme/customTheme";
 import dynamic from "next/dynamic";
-import { avaibleCategories, avaibleProductType, shippingOptions } from "@/services/fixedData";
+import { avaibleCategories, avaibleProductType } from "@/services/fixedData";
 import LineDivider from "../dividers/LineDivider";
 import { CreateDiscountBody, Discount, Product, ReqProductBody, ShippingInfo } from "@/types/types";
 import Image from "next/image";
 import { LuX } from "react-icons/lu";
 import { formatPrice } from "@/utils/elementHelpers";
 import { format } from "date-fns";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/style.css";
 
-const DatePicker = ({ name, selectedDate, onDateChange, label }) => {
+const DatePicker = ({ selectedDate, onDateChange, label }: any) => {
   return (
     <div className="mt-10">
       <Popover placement="bottom">
@@ -141,7 +140,7 @@ export default function UploadProductForm({ initialValues, handleSubmit, handleP
     }
   };
   const handleRemoveImage = (index: number, values: any, setFieldValue: (field: string, value: any) => void) => {
-    const updatedUrls = values.images.filter((_, i) => i !== index);
+    const updatedUrls = values.images.filter((_: any, i: any) => i !== index);
     setFieldValue("images", updatedUrls);
   };
 

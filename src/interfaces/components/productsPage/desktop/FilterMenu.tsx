@@ -1,5 +1,5 @@
-import { FaChevronDown, FaChevronRight } from "react-icons/fa6";
-import { useState, useRef } from "react";
+import { FaChevronDown } from "react-icons/fa6";
+import { useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Collapse } from "@material-tailwind/react";

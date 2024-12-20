@@ -1,13 +1,11 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
-import { MdOutlineShoppingBag } from "react-icons/md";
 import ShopIcon from "@/../public/icons/shopping-bag-white.svg";
 import Image from "next/image";
 import CartDrawer from "./CartDrawer";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import useDeviceCategory from "@/hooks/useDeviceCategory";
 
 gsap.registerPlugin(useGSAP);
 

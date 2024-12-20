@@ -1,6 +1,4 @@
-import Image from "next/image";
 import ProductItem from "./ProductItem";
-import Foto from "@/../public/images/dummy-photo-product.jpg";
 import { Checkbox } from "@material-tailwind/react";
 import { CartItem } from "@/types/types";
 

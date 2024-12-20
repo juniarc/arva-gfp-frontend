@@ -1,6 +1,6 @@
 import ShopInfo from "./ShopInfo";
 import ProductList from "./ProductList";
-import { Product, ReqProductBody, ReqShopBody, ShopDetail, Voucher } from "@/types/types";
+import { Product, ReqShopBody, ShopDetail, Voucher } from "@/types/types";
 import SuccessAlert from "../alerts/SuccessAlert";
 import FailAlert from "../alerts/FailAlert";
 import { ManageProductValuesProps } from "../modals/ManageProductModal";

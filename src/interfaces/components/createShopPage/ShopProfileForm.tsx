@@ -4,7 +4,6 @@ import { object, string, number, boolean } from "yup";
 import { Input, Option, Select, Spinner, Textarea } from "@material-tailwind/react";
 import { customeTheme } from "@/interfaces/theme/customTheme";
 import dynamic from "next/dynamic";
-import { shippingOptions } from "@/services/fixedData";
 import LineDivider from "../dividers/LineDivider";
 import Image from "next/image";
 import { FaCamera } from "react-icons/fa6";
