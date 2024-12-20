@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse, userAgent } from "next/server";
-import { boolean } from "yup";
 
 const protectedRoutes = ["/my-shop", "/my-shop/create-shop", "/my-shop/:shopId", "/buy-now", "/cart", "/cart/shipment"];
 const publicRoutes = ["/login", "/signup", "/", "/:shopName/:productInfo", "/buy-now", "/:shopInfo"];
