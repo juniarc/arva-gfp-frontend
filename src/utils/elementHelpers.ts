@@ -35,7 +35,7 @@ export const startPage = (currentPage: any, maxIndicators: any, totalPages: any)
   return Math.max(0, Math.min(currentPage - Math.floor(maxIndicators / 2), totalPages - maxIndicators));
 };
 
-export const endPage = ({ startPage, maxIndicators, totalPages }: any) => {
+export const endPage = (startPage: any, maxIndicators: any, totalPages: any) => {
   return Math.min(startPage + maxIndicators, totalPages);
 };
 
