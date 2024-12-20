@@ -8,5 +8,5 @@ export default async function Page() {
   const token = cookiesList.get("token")?.value || undefined;
   const wishlistProducts = await api.getWishlist(userId);
 
-  return <WishlistPage products={wishlistProducts} token={token} isWishlist={true} />;
+  return <WishlistPage products={wishlistProducts} token={token} isWishlist={true} userId={userId} />;
 }

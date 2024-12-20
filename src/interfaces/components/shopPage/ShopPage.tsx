@@ -12,6 +12,7 @@ import { BsChevronDown } from "react-icons/bs";
 interface ShopPageProps extends ShopDetail {
   products: Product[];
   userId: number;
+  token: string | undefined;
 }
 export default function ShopPage({
   shop_name,
@@ -29,6 +30,7 @@ export default function ShopPage({
   created_at,
   products,
   userId,
+  token,
 }: ShopPageProps) {
   const descRef = useRef<HTMLParagraphElement | null>(null);
   const [isTexClamped, setIsTexClamped] = useState<boolean>(false);
@@ -113,7 +115,7 @@ export default function ShopPage({
       <section className="mt-10">
         <h2 className="text-xl tablet:text-[1.75rem] mb-5 tablet:mb-10">Products</h2>
         {products.length > 0 ? (
-          <ProductList products={products} userId={userId} />
+          <ProductList products={products} userId={userId} token={token} />
         ) : (
           <div className="w-full flex items-center justify-center">
             <p className="w-3/4 text-center text-dark-gray mt-5">This shop has not added any products yet</p>

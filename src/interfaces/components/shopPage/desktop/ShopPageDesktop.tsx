@@ -12,6 +12,7 @@ import { BsChevronDown } from "react-icons/bs";
 interface ShopPageProps extends ShopDetail {
   products: Product[];
   userId: number;
+  token: string | undefined;
 }
 export default function ShopPageDesktop({
   shop_name,
@@ -29,6 +30,7 @@ export default function ShopPageDesktop({
   created_at,
   products,
   userId,
+  token,
 }: ShopPageProps) {
   const formatedDate = format(new Date(created_at), "dd MMMM yyyy");
   const { totalRating, averageRating } = calculateRatings(products);
@@ -116,7 +118,7 @@ export default function ShopPageDesktop({
       </section>
       <section className="mt-10">
         <h2 className="mb-10">Products</h2>
-        <ProductList products={products} userId={userId} />
+        <ProductList products={products} userId={userId} token={token} />
       </section>
     </main>
   );

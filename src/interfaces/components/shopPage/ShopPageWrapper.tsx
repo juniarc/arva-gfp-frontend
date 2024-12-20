@@ -10,10 +10,11 @@ interface ShopPageWrapperProps {
   viewport: string | undefined;
   products: Product[];
   userId: number;
+  token: string | undefined;
 }
-export default function ShopPageWrapper({ shop, viewport, products, userId }: ShopPageWrapperProps) {
+export default function ShopPageWrapper({ shop, viewport, products, userId, token }: ShopPageWrapperProps) {
   // const { totalRating, averageRating } = calculateAverageRatingShop(shop.products);
-  if (viewport === "mobile") return <ShopPage {...shop} products={products} userId={userId} />;
+  if (viewport === "mobile") return <ShopPage {...shop} products={products} userId={userId} token={token} />;
 
-  return <ShopPageDesktop {...shop} products={products} userId={userId} />;
+  return <ShopPageDesktop {...shop} products={products} userId={userId} token={token} />;
 }
