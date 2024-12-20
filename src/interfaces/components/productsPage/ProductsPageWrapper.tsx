@@ -8,7 +8,7 @@ import ProductsPageDesktop from "./desktop/ProductsPageDesktop";
 interface ProductsPageWrapperProps {
   products: Product[];
   viewport: string | undefined;
-  categoryName: string | undefined;
+  categoryName?: string | undefined;
 }
 
 export default function ProductsPageWrapper({ products, viewport, categoryName }: ProductsPageWrapperProps) {
