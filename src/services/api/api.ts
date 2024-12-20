@@ -2,7 +2,9 @@ import {
   CreateDiscountBody,
   CreateTagBody,
   CreateVoucherBody,
+  LoginBody,
   Product,
+  RegisterBody,
   ReqCartbody,
   ReqOrderItemBody,
   ReqProductBody,
@@ -11,7 +13,7 @@ import {
 } from "@/types/types";
 
 const api = (() => {
-  const BASE_URL = "http://127.0.0.1:5000";
+  const BASE_URL = "https://capitalist-corliss-revoustudents-ed34d764.koyeb.app";
 
   async function getAllProducts(limit?: number): Promise<Product[] | undefined> {
     try {
@@ -35,6 +37,19 @@ const api = (() => {
   async function getAllProductsByCategory(category_id: number, limit?: number): Promise<Product[] | undefined> {
     try {
       const response = await fetch(`${BASE_URL}/product/getproductbycategory/${category_id}`);
+      if (!response.ok) {
+        throw Error("failed to fetch");
+      }
+      return response.json();
+    } catch (error) {
+      console.error(error);
+      return undefined;
+    }
+  }
+
+  async function getProductsByName(product_name: string): Promise<Product[] | undefined> {
+    try {
+      const response = await fetch(`${BASE_URL}/product/searchproduct/${product_name}`);
       if (!response.ok) {
         throw Error("failed to fetch");
       }
@@ -217,6 +232,38 @@ const api = (() => {
     }
   }
 
+  async function regiser(body: RegisterBody) {
+    try {
+      const response = await fetch(`${BASE_URL}/user/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+
+      return response.json();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function login(body: LoginBody) {
+    try {
+      const response = await fetch(`${BASE_URL}/user/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+
+      return response.json();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async function createShop(userId: number, token: string | undefined, shop: ReqShopBody) {
     console.log(shop);
     try {
@@ -377,6 +424,38 @@ const api = (() => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(reqCartbody),
+      });
+      return response.json();
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
+
+  async function removeProductFromCart(productId: number, token: string | undefined) {
+    try {
+      const response = await fetch(`${BASE_URL}/cart/removefromcart/${productId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.json();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function updateCart(cartId: number, token: string | undefined, quantity: number) {
+    try {
+      const response = await fetch(`${BASE_URL}/cart/updatecart/${cartId}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ quantity: quantity }),
       });
       return response.json();
     } catch (error) {
@@ -582,10 +661,20 @@ const api = (() => {
     }
   }
 
+  async function getAllVoucherShop(shop_id: number) {
+    try {
+      const response = await fetch(`${BASE_URL}/voucher/getvouchershop/${shop_id}`);
+      return response.json();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return {
     getAllProducts,
     getAllProductsByCategory,
     // getProductById,
+    getProductsByName,
     getDetailProductById,
     getProductByShopId,
     createProduct,
@@ -606,6 +695,8 @@ const api = (() => {
     deleteProductTag,
     addProductToCart,
     getCart,
+    updateCart,
+    removeProductFromCart,
     calculateDistance,
     createOrder,
     createMultipleOrderItem,
@@ -620,6 +711,9 @@ const api = (() => {
     getVoucher,
     createVoucher,
     deleteVoucher,
+    getAllVoucherShop,
+    login,
+    regiser,
   };
 })();
 

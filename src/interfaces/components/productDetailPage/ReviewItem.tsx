@@ -13,7 +13,7 @@ interface ReviewItemProps {
 export default function ReviewItem({ name, rating, date, review, imageUrl }: ReviewItemProps) {
   const dateTimeAgo = formatDistanceToNow(new Date(date), { addSuffix: true });
   return (
-    <div className="border-solid border border-gray rounded-lg p-5 desktop:p-10">
+    <div className="border-solid border border-gray rounded-lg p-5 desktop:p-10 min-h-[172px]">
       <div>
         <div className="flex items-center gap-5">
           <div className="w-12 aspect-square">

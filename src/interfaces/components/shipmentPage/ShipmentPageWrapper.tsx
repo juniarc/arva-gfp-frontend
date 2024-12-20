@@ -17,7 +17,12 @@ interface ShipmentPageWrapperProps {
 export default function ShipmentPageWrapper({ user, viewport, userId, token }: ShipmentPageWrapperProps) {
   const router = useRouter();
   const [selectedItems, setSelectedItems] = useState<CartItem[]>([]);
-  const [currentUser, setCurrentUser] = useState<UserInShipmentPage>({ ...user, address_label: "Home", address_street: user.address_street ?? "" });
+  const [currentUser, setCurrentUser] = useState<UserInShipmentPage>({
+    ...user,
+    address_label: "Home",
+    address_street: user.address_street ?? "",
+    zip_code: user.zip_code ?? "",
+  });
   const separatedByShop = selectedItems.reduce(
     (acc, item) => {
       const { shop_id } = item.shop;
@@ -174,7 +179,13 @@ export default function ShipmentPageWrapper({ user, viewport, userId, token }: S
     calculateCartSummary();
   }, [selectedItems]);
 
+  const [selectedVoucher, setSelectedVoucher] = useState<{ voucher_id: number; voucher_name: string; voucher_value: number; shop_id?: number }[]>([]);
+  const handleSelectedVoucher = (voucher: { voucher_id: number; voucher_name: string; voucher_value: number; shop_id?: number }[]) => {
+    setSelectedVoucher(voucher);
+  };
+
   const [orderStatus, setOrderStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+
   const isCompleted = useMemo(() => {
     const allShippingSelected = Object.keys(selectedShipping).length > 0 && Object.values(selectedShipping).every((value) => value !== "");
     return currentUser && totalItems >= 1 && allShippingSelected && paymentMethod && paymentMethod.name !== "";
@@ -184,11 +195,13 @@ export default function ShipmentPageWrapper({ user, viewport, userId, token }: S
     const { shippingCosts } = await calculateTotalShippingCost();
     const requestBody = selectedItems.map((item) => {
       const shippingCost = shippingCosts.find((cost) => cost.product_id === item.product_id)?.shipping_cost ?? 0;
+      const voucher = selectedVoucher.find((v) => v.shop_id === item.shop.shop_id);
       return {
         product_id: item.product_id,
         variant_id: item.selectedVariant.variant_id,
         quantity: item.quantity,
         shipping_cost: shippingCost,
+        voucher_id: voucher?.voucher_id ?? 0,
       };
     });
 
@@ -250,6 +263,8 @@ export default function ShipmentPageWrapper({ user, viewport, userId, token }: S
         shippingPrice={totalShippingCost}
         handlePayBtn={handleOrder}
         orderStatus={orderStatus}
+        handleSelectedVoucher={handleSelectedVoucher}
+        selectedVocuher={selectedVoucher}
       />
     );
   return (
@@ -273,6 +288,8 @@ export default function ShipmentPageWrapper({ user, viewport, userId, token }: S
       shippingPrice={totalShippingCost}
       handlePayBtn={handleOrder}
       orderStatus={orderStatus}
+      handleSelectedVoucher={handleSelectedVoucher}
+      selectedVocuher={selectedVoucher}
     />
   );
 }

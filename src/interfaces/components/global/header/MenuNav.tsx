@@ -4,7 +4,12 @@ import React, { useState, useRef } from "react";
 import { LuMenu } from "react-icons/lu";
 import MenuDrawer from "./MenuDrawer";
 import gsap from "gsap";
-export default function MenuNav() {
+import { User } from "@/types/types";
+
+interface MenuNavProps {
+  user: User;
+}
+export default function MenuNav({ user }: MenuNavProps) {
   const menuDrawerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -31,7 +36,7 @@ export default function MenuNav() {
       <button onClick={handleOpenDrawer} className="w-15 h-15 border-solid border border-white rounded text-white flex items-center justify-center">
         <LuMenu />
       </button>
-      <MenuDrawer overlayRef={overlayRef} menuDrawerRef={menuDrawerRef} handleCloseDrawer={handleCloseDrawer} isOpen={isOpen} />
+      <MenuDrawer overlayRef={overlayRef} menuDrawerRef={menuDrawerRef} handleCloseDrawer={handleCloseDrawer} isOpen={isOpen} user={user} />
     </div>
   );
 }

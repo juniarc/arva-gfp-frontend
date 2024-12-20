@@ -1,6 +1,6 @@
 import api from "@/services/api/api";
 import { avaibleCategories } from "@/services/fixedData";
-import { CartItem, Discount, ProductDetail, ResponseGetCartUser, ResponseGetCartUserItem } from "@/types/types";
+import { CartItem, Discount, Product, ProductDetail, ResponseGetCartUser, ResponseGetCartUserItem } from "@/types/types";
 
 export const checkIsTextClamped = (element: HTMLElement): boolean => {
   return element.scrollHeight > element.clientHeight;
@@ -100,30 +100,30 @@ export const convertCartResponseToCartItems = async (cartResponse: ResponseGetCa
   }
 };
 
-export const separateCartByShop = async (cartResponse: ResponseGetCartUser, userId: number) => {
-  try {
-    const processedCart = await convertCartResponseToCartItems(cartResponse);
+export const separateCartItemsByShop = (cartItems: CartItem[]): Record<number, { shop_name: string; products: CartItem[] }> => {
+  return cartItems.reduce(
+    (acc, item) => {
+      const { shop_id } = item.shop;
+      if (!acc[shop_id]) {
+        acc[shop_id] = {
+          shop_name: item.shop.shop_name,
+          products: [],
+        };
+      }
+      acc[shop_id].products.push(item);
+      return acc;
+    },
+    {} as Record<number, { shop_name: string; products: CartItem[] }>,
+  );
+};
 
-    const userCart = processedCart.filter((item) => item.user_id === userId);
-
-    const separatedByShop = userCart.reduce(
-      (acc, item) => {
-        const { shop_id } = item.shop;
-        if (!acc[shop_id]) {
-          acc[shop_id] = {
-            shop_name: item.shop.shop_name,
-            products: [],
-          };
-        }
-        acc[shop_id].products.push(item);
-        return acc;
-      },
-      {} as Record<number, { shop_name: string; products: CartItem[] }>,
-    );
-
-    return separatedByShop;
-  } catch (error) {
-    console.log(error);
-    throw error;
+export const calculateRatings = (products: Product[]) => {
+  if (!Array.isArray(products) || products.length === 0) {
+    return { totalRating: 0, averageRating: 0 };
   }
+
+  const totalRating = products.reduce((sum, product) => sum + (Number(product.ratings) || 0), 0);
+  const averageRating = totalRating / products.length;
+
+  return { totalRating, averageRating };
 };

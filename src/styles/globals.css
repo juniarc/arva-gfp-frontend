@@ -19,6 +19,7 @@ h2,
 h3,
 h4 {
   font-family: var(--font-playfair-display), serif;
+  color: black;
 }
 
 h2 {

@@ -6,6 +6,8 @@ export default async function Page({ params }: { params: Promise<{ shopName: str
   const urlName = (await params).shopName;
   const cookiesList = await cookies();
   const viewport = cookiesList.get("viewport")?.value || undefined;
+  const userId = cookiesList.get("userId")?.value || undefined;
+  const token = cookiesList.get("token")?.value || undefined;
   const idMatch = urlName.match(/-(\d+)$/);
   const shopId = idMatch ? idMatch[1] : null;
   const shopData = await api.getShopById(Number(shopId));
@@ -17,5 +19,5 @@ export default async function Page({ params }: { params: Promise<{ shopName: str
       </div>
     );
   }
-  return <ShopPageWrapper shop={shopData} products={products} viewport={viewport} />;
+  return <ShopPageWrapper shop={shopData} products={products} viewport={viewport} userId={Number(userId)} token={token} />;
 }

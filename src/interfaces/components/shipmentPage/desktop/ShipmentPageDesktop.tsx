@@ -28,6 +28,8 @@ interface ShipmentPageProps {
   shippingPrice: number;
   handlePayBtn: () => void;
   orderStatus: "idle" | "loading" | "success" | "error";
+  selectedVocuher: { voucher_id: number; voucher_name: string; voucher_value: number; shop_id?: number }[];
+  handleSelectedVoucher: (voucher: { voucher_id: number; voucher_name: string; voucher_value: number; shop_id?: number }[]) => void;
 }
 
 export default function ShipmentPageDesktop({
@@ -50,6 +52,8 @@ export default function ShipmentPageDesktop({
   shippingPrice,
   handlePayBtn,
   orderStatus,
+  selectedVocuher,
+  handleSelectedVoucher,
 }: ShipmentPageProps) {
   return (
     <main className="px-[120px] flex justify-between gap-20 py-20 ">
@@ -67,6 +71,8 @@ export default function ShipmentPageDesktop({
             handleSelectedShipping={handleSelectedShipping}
             isProtected={isProtected}
             handleCheckbox={handleCheckbox}
+            handleSelectedVoucher={handleSelectedVoucher}
+            selectedVocuher={selectedVocuher}
           />
         </section>
         <section>
@@ -77,11 +83,11 @@ export default function ShipmentPageDesktop({
         <section>
           <ShoppingSummary
             totalPrice={totalPrice}
-            shippingPrice={1000}
-            appliedVoucher={null}
+            shippingPrice={shippingPrice}
             totalProtectedShop={totalProtectedShop}
             totalItems={totalItems}
-          />{" "}
+            selectedVocuher={selectedVocuher}
+          />
         </section>
         <PaynowBtn isCompleted={isCompleted} handlePayBtn={handlePayBtn} orderStatus={orderStatus} />
         <SuccessAlert isOpen={editAddressStatus === "success"} text="Success edit user" />

@@ -15,6 +15,7 @@ interface ProductDetailPageProps {
   wishlistId: number;
   isWishlist: boolean;
   token: string | undefined;
+  userId: number;
 }
 export default function ProductDetailPageDesktop({
   productDetail,
@@ -24,6 +25,7 @@ export default function ProductDetailPageDesktop({
   isWishlist,
   wishlistId,
   token,
+  userId,
 }: ProductDetailPageProps) {
   if (productDetail) {
     return (
@@ -36,7 +38,7 @@ export default function ProductDetailPageDesktop({
           </div>
           <div>
             <section>
-              <ProductInfoDesktop {...productDetail} isWishlist={isWishlist} token={token} wishlistId={wishlistId} />
+              <ProductInfoDesktop userId={userId} {...productDetail} isWishlist={isWishlist} token={token} wishlistId={wishlistId} />
             </section>
             <section className="mt-10">
               <ShopInfo {...productDetail.shop} />
@@ -48,10 +50,15 @@ export default function ProductDetailPageDesktop({
         </div>
         <div className="mt-10">
           <section className="w-full">
-            <ProductListByCategoryDesktop classname="grid-cols-5" products={anotherShopProducts} category={productDetail.shop.shop_name} />
+            <ProductListByCategoryDesktop
+              userId={userId}
+              classname="grid-cols-5"
+              products={anotherShopProducts}
+              category={productDetail.shop.shop_name}
+            />
           </section>
           <section className="w-full mt-10">
-            <ProductListByCategoryDesktop classname="grid-cols-5" products={categoryProducts} category="Fruit" />
+            <ProductListByCategoryDesktop userId={userId} classname="grid-cols-5" products={categoryProducts} category="Fruit" />
           </section>
         </div>
       </main>

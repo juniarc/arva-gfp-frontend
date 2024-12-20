@@ -15,38 +15,38 @@ export default function AsideCategories() {
       <h3 className="mb-10">Categories</h3>
       <div className="h-[1px] w-1/3 bg-[#76BF9B]"></div>
       <div className="flex flex-col gap-8 items-start mt-10">
-        <Link href="/products" className="flex items-center gap-8">
+        <a href="/products" className="flex items-center gap-8">
           All Products
-        </Link>
-        <Link href="/products/seeds" className="flex items-center gap-8">
+        </a>
+        <a href="/products/seeds" className="flex items-center gap-8">
           <CiCoffeeBean className="text-3xl" />
           <p className="hover:text-primary transition-colors">Seeds</p>
-        </Link>
-        <Link href="/products/vegetables" className="flex items-center gap-8 hover:text-primary transition-colors">
+        </a>
+        <a href="/products/vegetables" className="flex items-center gap-8 hover:text-primary transition-colors">
           <Image src={SpinachIcon} className="w-15 h-15" alt="Spinach Icon" />
           <p>Vegetables</p>
-        </Link>
-        <Link href="/products/fruits" className="flex items-center gap-8 hover:text-primary transition-colors">
+        </a>
+        <a href="/products/fruits" className="flex items-center gap-8 hover:text-primary transition-colors">
           <Image src={FruitsIcon} className="w-15 h-15" alt="Spinach Icon" />
           <p>Fruits</p>
-        </Link>
-        <Link href="/products/fertilizers" className="flex items-center gap-8 hover:text-primary transition-colors">
+        </a>
+        <a href="/products/fertilizers" className="flex items-center gap-8 hover:text-primary transition-colors">
           <Image src={FertilizersIcon} className="w-15 h-15" alt="Spinach Icon" />
           <p>Fertilizers</p>
-        </Link>
-        <Link href="/products/equipments" className="flex items-center gap-8 hover:text-primary transition-colors">
+        </a>
+        <a href="/products/equipments" className="flex items-center gap-8 hover:text-primary transition-colors">
           <Image src={EquipmentsIcon} className="w-15 h-15" alt="Spinach Icon" />
           <p>Equipments</p>
-        </Link>
+        </a>
         <div className="h-[1px] w-1/3 bg-[#76BF9B]"></div>
-        <Link href="*" className="flex items-center gap-8 hover:text-primary transition-colors">
+        <a href="*" className="flex items-center gap-8 hover:text-primary transition-colors">
           <Image src={MedalIcon} className="w-15 h-15" alt="Spinach Icon" />
           <p>Most Popular</p>
-        </Link>
-        <Link href="*" className="flex items-center gap-8">
+        </a>
+        <a href="*" className="flex items-center gap-8">
           <FiPercent className="text-3xl" />
           <p className="hover:text-primary transition-colors">Discount</p>
-        </Link>
+        </a>
       </div>
     </div>
   );

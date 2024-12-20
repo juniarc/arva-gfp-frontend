@@ -2,7 +2,7 @@ import LineDivider from "../dividers/LineDivider";
 import { currencyFormater } from "@/utils/elementHelpers";
 
 interface SummarySectionProps {
-  appliedVoucher: number | null;
+  appliedVoucher: { voucher_id: number; voucher_name: string; voucher_value: number };
   isProtected: boolean;
   totalPriceItem: number;
   totalShippingCost: number;
@@ -12,7 +12,7 @@ export default function SummarySection({ appliedVoucher, isProtected, totalShipp
   const shippingSubtotal = totalShippingCost;
   const applicationFee = 1000;
   const handlingFee = 1000;
-  const voucher = 1000;
+  const voucher = appliedVoucher.voucher_id !== 0 ? (appliedVoucher.voucher_value * productSubtotal) / 100 : 0;
   const protectionFee = 2000;
   let total = productSubtotal + shippingSubtotal + applicationFee + handlingFee - voucher;
   if (isProtected) {
@@ -46,10 +46,12 @@ export default function SummarySection({ appliedVoucher, isProtected, totalShipp
           <p className="text-dark-gray text-xs tablet:text-base desktop:text-base">Handling Fee</p>
           <p className="font-semibold text-xs tablet:text-base desktop:text-base">{formatedHandlingFee}</p>
         </div>
-        <div className="flex justify-between mb-5 text-primary">
-          <p className="text-xs tablet:text-base desktop:text-base">Voucher</p>
-          <p className="font-semibold text-xs tablet:text-base desktop:text-base">- {formatedVoucher}</p>
-        </div>
+        {appliedVoucher.voucher_id !== 0 && (
+          <div className="flex justify-between mb-5 text-primary">
+            <p className="text-xs tablet:text-base desktop:text-base">Voucher</p>
+            <p className="font-semibold text-xs tablet:text-base desktop:text-base">- {formatedVoucher}</p>
+          </div>
+        )}
         {isProtected && (
           <div className="flex justify-between mb-5 ">
             <p className="text-xs text-dark-gray tablet:text-base desktop:text-base">Protection Fee</p>

@@ -51,7 +51,7 @@ export default function ProductInfo({ product_name, category, description, shop,
         <p className="text-base font-semibold">{product_name}</p>
         <div className="flex items-center gap-5 tablet:gap-10">
           <div className="flex items-center gap-5">
-            <p className="font-bold text-primary tablet:text-[1.375rem]">{getFormatedPrice}</p>
+            <p className="font-bold text-primary text-xl tablet:text-[1.375rem]">{getFormatedPrice}</p>
             <p className="text-dark-gray text-xs tablet:text-sm capitalize">/{variant[0].variant_unit}</p>
           </div>
           <p className="text-red text-base bg-light-red px-3">{discountValue?.discount_value} %</p>
@@ -71,8 +71,7 @@ export default function ProductInfo({ product_name, category, description, shop,
       </div>
       <div className="mt-10">
         <h3 className="mb-6">Description</h3>
-        <p ref={descRef} className={`text-xs tablet:text-base ${descMoreOpen ? "" : "line-clamp-4"}`}>
-          {description}
+        <p ref={descRef} className={`text-xs tablet:text-base text-dark-gray leading-5 ${descMoreOpen ? "" : "line-clamp-4"}`}>
           {description}
         </p>
         {isTexClamped && (

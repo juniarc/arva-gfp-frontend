@@ -11,6 +11,7 @@ import uriHelpers from "@/utils/uriHelpers";
 interface ProductItemProps extends WishlistItem {
   isWishlist: boolean;
   token: string | undefined;
+  userId: number;
 }
 
 export default function ProductItem({
@@ -26,6 +27,7 @@ export default function ProductItem({
   product_type,
   token,
   isWishlist,
+  userId,
 }: ProductItemProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const formatedShopnameForUrl = uriHelpers.formatStringForUrl(shop.shop_name);
@@ -108,6 +110,7 @@ export default function ProductItem({
             category={category_name}
             token={token}
             variant={mappedVariant}
+            userId={userId}
           />
         </div>
       </div>

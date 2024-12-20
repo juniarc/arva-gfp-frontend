@@ -6,6 +6,11 @@ export default function SearchWrapper() {
   const [inputValue, setInputValue] = useState<string>("");
   const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value);
 
+  const submitSearch = () => {
+    if (inputValue) {
+      window.location.href = `/products?search=${inputValue.toLowerCase()}`;
+    }
+  };
   return (
     <div className="flex items-center max-w-[500px] w-full">
       <input
@@ -15,9 +20,9 @@ export default function SearchWrapper() {
         value={inputValue}
         onChange={onInputChange}
       />
-      <Link href="/" className=" w-20 h-20 px-3 bg-primary rounded-e-lg text-white flex items-center justify-center">
+      <button onClick={submitSearch} className=" w-20 h-20 px-3 bg-primary rounded-e-lg text-white flex items-center justify-center">
         <LuSearch />
-      </Link>
+      </button>
     </div>
   );
 }

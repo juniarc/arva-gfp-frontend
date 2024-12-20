@@ -8,8 +8,34 @@ import SearchWrapper from "./SearchWrapper";
 import CartNavDesktop from "./CartNavDesktop";
 import ShopNavDekstop from "./ShopNavDekstop";
 import UserNavDesktop from "./UserNavDesktop";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useCart } from "@/hooks/cart/CartContext";
+import { User } from "@/types/types";
 
-export default function HeaderDesktop() {
+export default function HeaderDesktop({ userId, user }: { userId: number; user: User }) {
+  const pathname = usePathname();
+
+  const { state, fetchCart } = useCart();
+  const { items: separatedByShop, loading, error } = state;
+
+  useEffect(() => {
+    if (userId && pathname !== "/cart") {
+      fetchCart(userId);
+    }
+  }, [userId]);
+
+  const [totalItems, setTotalItems] = useState(0);
+
+  useEffect(() => {
+    const calculateTotalItems = () => {
+      return Object.values(separatedByShop).reduce((total, shop) => {
+        return total + shop.products.length;
+      }, 0);
+    };
+
+    setTotalItems(calculateTotalItems);
+  }, [separatedByShop]);
   return (
     <div className="w-screen ">
       <div className="w-full flex items-center gap-10 justify-end bg-primary text-white  px-[120px] py-2">
@@ -36,14 +62,14 @@ export default function HeaderDesktop() {
           </Link>
           <SearchWrapper />
           <div className="flex items-center gap-10 ml-auto">
-            <button className="flex items-center gap-3">
+            <a href="/wishlist" className="flex items-center gap-3">
               <FaRegHeart className="text-xl" />
               Wishlist
-            </button>
-            <CartNavDesktop />
+            </a>
+            <CartNavDesktop cart={separatedByShop} userId={userId} totalItems={totalItems} />
             <div className="w-[1px] h-7 bg-black"></div>
             <ShopNavDekstop />
-            <UserNavDesktop />
+            <UserNavDesktop user={user} />
           </div>
         </div>
       </header>

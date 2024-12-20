@@ -11,6 +11,7 @@ import CartIcon from "@/../public/icons/shopping-bag-white.svg";
 
 interface ProductItemProps extends Product {
   token?: string | undefined;
+  userId: number;
 }
 
 export default function ProductItem({
@@ -25,6 +26,7 @@ export default function ProductItem({
   variant,
   product_type,
   token,
+  userId,
 }: ProductItemProps) {
   const firstImageUrl = useMemo(() => {
     const defaultUrl = "https://fastly.picsum.photos/id/44/200/200.jpg?hmac=W5KcqhapHjBgEIHGQpQnX6o9jdOXQEVCKEdGIohjisY";
@@ -116,6 +118,7 @@ export default function ProductItem({
           {...{ product_id, product_name, category, variant, discount }}
           imageUrl={firstImageUrl}
           token={token}
+          userId={userId}
         />
       </div>
     </div>

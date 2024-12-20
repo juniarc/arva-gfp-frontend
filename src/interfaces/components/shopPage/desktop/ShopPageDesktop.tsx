@@ -5,11 +5,14 @@ import ProductList from "../ProductList";
 import LineDivider from "../../dividers/LineDivider";
 import { Product, ShopDetail } from "@/types/types";
 import { format } from "date-fns";
+import { calculateRatings, checkIsTextClamped } from "@/utils/elementHelpers";
+import { useEffect, useRef, useState } from "react";
+import { BsChevronDown } from "react-icons/bs";
 
 interface ShopPageProps extends ShopDetail {
-  totalRatings: number;
-  averageRatings: number;
   products: Product[];
+  userId: number;
+  token: string | undefined;
 }
 export default function ShopPageDesktop({
   shop_name,
@@ -26,10 +29,23 @@ export default function ShopPageDesktop({
   shop_phone_number,
   created_at,
   products,
-  totalRatings,
-  averageRatings,
+  userId,
+  token,
 }: ShopPageProps) {
   const formatedDate = format(new Date(created_at), "dd MMMM yyyy");
+  const { totalRating, averageRating } = calculateRatings(products);
+
+  const descRef = useRef<HTMLParagraphElement | null>(null);
+  const [isTexClamped, setIsTexClamped] = useState<boolean>(false);
+  const [descMoreOpen, setDescMoreOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    const isTexClamped = descRef.current ? checkIsTextClamped(descRef.current) : false;
+    setIsTexClamped(isTexClamped);
+  }, [descRef]);
+  const handleDescMoreButton = () => {
+    setDescMoreOpen((prev) => !prev);
+  };
 
   return (
     <main className="min-h-[90vh] px-[120px] py-20">
@@ -54,7 +70,7 @@ export default function ShopPageDesktop({
               <div className="flex items-center gap-3 ">
                 <FaStar className="text-lg text-yellow" />
                 <p className=" font-semibold text-2xl">
-                  {averageRatings} ({totalRatings})
+                  {averageRating} ({totalRating})
                 </p>
               </div>
               <p>Ratings & Reviews</p>
@@ -64,7 +80,17 @@ export default function ShopPageDesktop({
         <LineDivider className="my-10" />
         <div className="mt-10">
           <h2 className="mb-10">Shop Description</h2>
-          <p className="text-dark-gray">{description}</p>
+          <p ref={descRef} className={` ${descMoreOpen ? "" : "line-clamp-3"}`}>
+            {description}
+          </p>
+          {isTexClamped && (
+            <button onClick={handleDescMoreButton} className="w-full bg-secondary text-xs flex items-center justify-center py-5 rounded mt-5">
+              <span className="flex items-center gap-2">
+                <p className="font-light">{descMoreOpen ? "Hide description" : "Read description"}</p>
+                <BsChevronDown className={descMoreOpen ? "rotate-180" : ""} />
+              </span>
+            </button>
+          )}
         </div>
         <LineDivider className="my-10" />
         <div className="mt-5">
@@ -92,7 +118,7 @@ export default function ShopPageDesktop({
       </section>
       <section className="mt-10">
         <h2 className="mb-10">Products</h2>
-        <ProductList products={products} />
+        <ProductList products={products} userId={userId} token={token} />
       </section>
     </main>
   );

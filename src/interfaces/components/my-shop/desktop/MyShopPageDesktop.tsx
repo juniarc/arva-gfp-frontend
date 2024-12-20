@@ -38,8 +38,8 @@ export default function MyShopPageDesktop({
           editShopStatus={editShopStatus}
           {...shop}
           totalProducts={products.length}
-          totalRatings={10}
-          averageRatings={20}
+          totalRatings={totalRatings}
+          averageRatings={averageRatings}
           handleEditShop={handleEditShop}
         />
       </section>

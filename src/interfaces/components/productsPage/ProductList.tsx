@@ -1,28 +1,57 @@
 "use client";
 
-import { Product } from "@/types/types";
+import { Product, Variant } from "@/types/types";
 import { endPage, paginateArray, startPage } from "@/utils/elementHelpers";
 import { useState } from "react";
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
-import ProductItem from "./ProductItem";
+import ProductItem, { productTest } from "./ProductItem";
 import ItemNotFound from "../error/ItemNotFound";
 
 interface ProductListProps {
   products: Product[];
+  userId: number;
+  token: string | undefined;
 }
-export default function ProductList({ products }: ProductListProps) {
+export default function ProductList({ products, userId, token }: ProductListProps) {
   const ITEMS_PER_PAGE = 6;
   const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
   const MAX_INDICATORS = 4;
   const paginatedData = paginateArray(products, ITEMS_PER_PAGE);
   const [currentPage, setCurrentPage] = useState<number>(0);
 
-  const getItemProps = (index: number) =>
-    ({
-      variant: currentPage === index ? "filled" : "text",
-      color: "gray",
-      onClick: () => setCurrentPage(index),
-    }) as any;
+  // const getItemProps = (index: number) =>
+  //   ({
+  //     variant: currentPage === index ? "filled" : "text",
+  //     color: "gray",
+  //     onClick: () => setCurrentPage(index),
+  //   }) as any;
+
+  function mapProduct(original: Product): productTest {
+    return {
+      product_id: original.product_id,
+      product_name: original.product_name,
+      description: original.description,
+      product_type: original.product_type,
+      images: original.image,
+      category: original.category,
+      discounts: original.discount,
+      ratings: original.ratings,
+      shipping_cost: original.shipping_cost,
+      shop: original.shop,
+      sold: original.sold,
+      variants: original.variant.map((variant: Variant) => ({
+        price: variant.variant_price,
+        product_id: original.product_id,
+        stock: variant.variant_stock,
+        unit: variant.variant_unit,
+        variant_id: variant.variant_id,
+        variant_name: variant.variant_name,
+      })),
+      status: original.status,
+      created_at: original.created_at,
+      tag: original.tag,
+    };
+  }
 
   const handleNext = () => {
     setCurrentPage((prev) => prev + 1);
@@ -41,7 +70,7 @@ export default function ProductList({ products }: ProductListProps) {
       {Array.isArray(paginatedData) ? (
         <div className="grid grid-cols-2 gap-5 w-full tablet:grid-cols-3 desktop:grid-cols-4">
           {paginatedData[currentPage].map((item: Product, index: number) => (
-            <ProductItem {...item} key={index} />
+            <ProductItem {...mapProduct(item)} key={index} userId={userId} token={token} />
           ))}
         </div>
       ) : (

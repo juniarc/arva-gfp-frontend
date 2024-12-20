@@ -4,24 +4,35 @@ import { CartItem } from "@/types/types";
 import CartPage from "./CartPage";
 import { useRouter } from "next/navigation";
 import CartPageDesktop from "./desktop/CartPageDekstop";
+import { useCart } from "@/hooks/cart/CartContext";
+import LoadingSkeleton from "./LoadingSkeleton";
 
 interface CartPageWrapperProps {
-  separatedByShop: any;
-  cart: CartItem[];
+  separatedByShop?: any;
   viewport: string | undefined;
+  userId: number;
+  token: string | undefined;
 }
 
-export default function CartPageWrapper({ separatedByShop, cart, viewport }: CartPageWrapperProps) {
+export default function CartPageWrapper({ viewport, token, userId }: CartPageWrapperProps) {
   const router = useRouter();
-  const [userCart, setUserCart] = useState<CartItem[]>(cart);
+  const { state, fetchCart, updateCart, removeItemFromCart } = useCart();
+  const { items: separatedByShop, loading, error } = state;
+
+  useEffect(() => {
+    if (userId) {
+      fetchCart(userId);
+    }
+  }, [userId]);
   const initializeCheckedState = () => {
     const initialCheckedProducts: { [key: number]: boolean } = {};
     const initialCheckedShops: { [key: number]: boolean } = {};
 
-    userCart.forEach((item) => {
-      initialCheckedProducts[item.product_id] = false;
-
-      initialCheckedShops[item.shop.shop_id] = false;
+    Object.values(separatedByShop).forEach((shop) => {
+      shop.products.forEach((item) => {
+        initialCheckedProducts[item.product_id] = false;
+        initialCheckedShops[item.shop.shop_id] = false;
+      });
     });
 
     return { initialCheckedProducts, initialCheckedShops };
@@ -31,10 +42,11 @@ export default function CartPageWrapper({ separatedByShop, cart, viewport }: Car
   const [checkedShops, setCheckedShops] = useState<{ [shopId: number]: boolean }>(initialCheckedShops);
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [selectedItems, setSelectedItems] = useState<CartItem[]>([]);
+
   const handleShopCheckboxChange = (shop_id: number, checked: boolean) => {
     setCheckedShops((prev) => {
       const updatedShops = { ...prev, [shop_id]: checked };
-      const updatedProducts = separatedByShop[shop_id].products.reduce(
+      const updatedProducts = separatedByShop[shop_id]?.products.reduce(
         (acc: any, item: any) => {
           acc[item.product_id] = checked;
           return acc;
@@ -44,7 +56,7 @@ export default function CartPageWrapper({ separatedByShop, cart, viewport }: Car
 
       setCheckedProducts((prev) => ({
         ...prev,
-        ...updatedProducts,
+        ...(updatedProducts || {}),
       }));
 
       return updatedShops;
@@ -59,8 +71,8 @@ export default function CartPageWrapper({ separatedByShop, cart, viewport }: Car
   };
 
   const calculatedTotalPrice = () => {
-    const selectedItemsWithDiscount = userCart
-      .filter((item) => checkedProducts[item.product_id])
+    const selectedItemsWithDiscount = Object.values(separatedByShop)
+      .flatMap((shop) => shop.products.filter((item) => checkedProducts[item.product_id]))
       .map((item) => {
         let priceAfterDiscount = item.selectedVariant.variant_price;
 
@@ -86,7 +98,7 @@ export default function CartPageWrapper({ separatedByShop, cart, viewport }: Car
 
   useEffect(() => {
     calculatedTotalPrice();
-  }, [checkedProducts, userCart]);
+  }, [checkedProducts, state.items]);
 
   const handleButtonCO = () => {
     if (selectedItems.length > 0) {
@@ -97,19 +109,31 @@ export default function CartPageWrapper({ separatedByShop, cart, viewport }: Car
     }
   };
 
+  const handleDeleteCart = (cartId: number) => {
+    removeItemFromCart(cartId, token);
+  };
+
   const handleQuantityChange = (product_id: number, newQuantity: number, maxStock: number) => {
     if (newQuantity >= 1 && newQuantity <= maxStock) {
-      const updatedCart = userCart
-        .map((item) => {
+      const updatedItem = JSON.parse(JSON.stringify(state.items)); // Deep copy
+      let selectedCartId = 0;
+
+      for (const shopId in updatedItem) {
+        const shop = updatedItem[shopId];
+
+        shop.products = shop.products.map((item: any) => {
           if (item.product_id === product_id) {
-            return { ...item, quantity: newQuantity };
+            item.quantity = newQuantity;
+            selectedCartId = item.cart_id;
           }
           return item;
-        })
-        .filter((item) => item.quantity > 0);
-      setUserCart(updatedCart);
+        });
+      }
+
+      updateCart(selectedCartId, newQuantity, token, updatedItem);
     }
   };
+
   if (viewport === "mobile")
     return (
       <CartPage
@@ -122,9 +146,10 @@ export default function CartPageWrapper({ separatedByShop, cart, viewport }: Car
         totalItems={selectedItems.length}
         totalPrice={totalPrice}
         handleQuantityChange={handleQuantityChange}
-        cart={userCart}
+        handleDeleteCart={handleDeleteCart}
       />
     );
+
   return (
     <CartPageDesktop
       separatedByShop={separatedByShop}
@@ -136,7 +161,7 @@ export default function CartPageWrapper({ separatedByShop, cart, viewport }: Car
       totalItems={selectedItems.length}
       totalPrice={totalPrice}
       handleQuantityChange={handleQuantityChange}
-      cart={userCart}
+      handleDeleteCart={handleDeleteCart}
     />
   );
 }

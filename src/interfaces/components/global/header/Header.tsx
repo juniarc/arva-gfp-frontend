@@ -9,8 +9,14 @@ import Logo from "@/../public/logos/logo.svg";
 import SearchNav from "./SearchNav";
 import CartNav from "./CartNav";
 import MenuNav from "./MenuNav";
+import { User } from "@/types/types";
 
-export default function Header() {
+interface HeaderProps {
+  token: string | undefined;
+  userId: number;
+  user: User;
+}
+export default function Header({ userId, token, user }: HeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -27,8 +33,8 @@ export default function Header() {
       )}
       <div className="flex items-center gap-10">
         <SearchNav />
-        <CartNav />
-        <MenuNav />
+        <CartNav userId={userId} />
+        <MenuNav user={user} />
       </div>
     </header>
   );

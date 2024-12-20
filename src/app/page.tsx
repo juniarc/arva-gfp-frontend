@@ -6,6 +6,7 @@ export default async function Page() {
   const cookiesList = await cookies();
   const viewport = cookiesList.get("viewport")?.value || undefined;
   const token = cookiesList.get("token")?.value || undefined;
-  if (viewport === "mobile") return <HomePage token={token} />;
-  return <HomePageDesktop token={token} />;
+  const userId = cookiesList.get("userId")?.value || 0;
+  if (viewport === "mobile") return <HomePage token={token} userId={Number(userId)} />;
+  return <HomePageDesktop token={token} userId={Number(userId)} />;
 }

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, useMemo } from "react";
 
-import { ReqOrderItemBody, ReqUserBody, ShopingItem, User, UserInShipmentPage } from "@/types/types";
+import { ReqOrderItemBody, ReqUserBody, ShopingItem, User, UserInShipmentPage, Voucher } from "@/types/types";
 import BuynowPage from "./BuynowPage";
 import BuynowPageDesktop from "./desktop/BuynowPageDesktop";
 import { InitialValues } from "../modals/AdressModal";
@@ -54,13 +54,26 @@ export default function BuynowPageWrapper({ user, viewport, token, userId }: Buy
   const [shopingItem, setShopingItem] = useState<ShopingItem>(initialShopingItem);
   const [totalPriceItem, setTotalPriceItem] = useState<number>(shopingItem.priceAfterDiscount);
   const [totalShippingCost, setTotalShippingCost] = useState(shopingItem.shipping_cost * shopingItem.quantity);
+  const [vouhcerShop, setVoucherShop] = useState<Voucher[]>([]);
 
+  const getVoucherShop = async () => {
+    const response = await api.getAllVoucherShop(shopingItem.shop.shop_id);
+    setVoucherShop(response);
+  };
   useEffect(() => {
     const itemFromStorage = sessionStorage.getItem("shopingItem");
     const parsedItem = itemFromStorage ? JSON.parse(itemFromStorage) : null;
     setShopingItem(parsedItem);
     setTotalPriceItem(parsedItem.priceAfterDiscount);
   }, []);
+
+  useEffect(() => {
+    if (shopingItem.shop.shop_id) {
+      getVoucherShop();
+    }
+  }, [shopingItem.shop.shop_id]);
+
+  console.log(vouhcerShop);
 
   const [currentUser, setCurrentUser] = useState({ ...user, address_label: "Home", address_street: user.address_street ?? "" });
   const [editAddressStatus, setEditAddressStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -162,18 +175,33 @@ export default function BuynowPageWrapper({ user, viewport, token, userId }: Buy
     setPaymentMethod(method);
   };
 
+  const [selectedVoucher, setSelectedVoucher] = useState<{ voucher_id: number; voucher_name: string; voucher_value: number }>({
+    voucher_id: 0,
+    voucher_name: "",
+    voucher_value: 0,
+  });
+  const handleSelectedVoucher = (voucher: { voucher_id: number; voucher_name: string; voucher_value: number }) => {
+    setSelectedVoucher(voucher);
+  };
+
   const isCompleted = useMemo(() => {
     return currentUser && shopingItem.quantity >= 1 && selectedShipping !== "" && paymentMethod && paymentMethod.name !== "";
   }, [currentUser, selectedShipping, paymentMethod]);
 
   const [orderStatus, setOrderStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const createReqOrderBody = (): ReqOrderItemBody => {
-    return {
+    const orderBody: ReqOrderItemBody = {
       product_id: shopingItem.product_id,
       quantity: shopingItem.quantity,
       variant_id: shopingItem.selectedVariant.variant_id,
       shipping_cost: totalShippingCost,
     };
+
+    if (selectedVoucher.voucher_id !== 0) {
+      orderBody.voucher_id = selectedVoucher.voucher_id;
+    }
+
+    return orderBody;
   };
 
   const router = useRouter();
@@ -225,6 +253,9 @@ export default function BuynowPageWrapper({ user, viewport, token, userId }: Buy
         orderStatus={orderStatus}
         totalPriceItem={totalPriceItem}
         totalShippingCost={totalShippingCost}
+        handleSelectedVoucher={handleSelectedVoucher}
+        selectedVocuher={selectedVoucher}
+        voucherShop={vouhcerShop}
       />
     );
   }
@@ -246,6 +277,9 @@ export default function BuynowPageWrapper({ user, viewport, token, userId }: Buy
       orderStatus={orderStatus}
       totalPriceItem={totalPriceItem}
       totalShippingCost={totalShippingCost}
+      handleSelectedVoucher={handleSelectedVoucher}
+      selectedVocuher={selectedVoucher}
+      voucherShop={vouhcerShop}
     />
   );
 }

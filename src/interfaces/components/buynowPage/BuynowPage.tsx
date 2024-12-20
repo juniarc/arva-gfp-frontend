@@ -1,4 +1,4 @@
-import { ShopingItem, UserInShipmentPage } from "@/types/types";
+import { ShopingItem, UserInShipmentPage, Voucher } from "@/types/types";
 import AddressSection from "./AddressSection";
 import ProductsInfo from "./ProductsInfo";
 import ShippingSection from "./ShippingSection";
@@ -29,6 +29,9 @@ interface BuynowPageProps {
   orderStatus: "idle" | "loading" | "success" | "error";
   totalPriceItem: number;
   totalShippingCost: number;
+  selectedVocuher: { voucher_id: number; voucher_name: string; voucher_value: number; shop_id?: number };
+  handleSelectedVoucher: (voucher: { voucher_id: number; voucher_name: string; voucher_value: number; shop_id?: number }) => void;
+  voucherShop: Voucher[];
 }
 
 export default function BuynowPage({
@@ -48,6 +51,9 @@ export default function BuynowPage({
   orderStatus,
   totalPriceItem,
   totalShippingCost,
+  voucherShop,
+  selectedVocuher,
+  handleSelectedVoucher,
 }: BuynowPageProps) {
   return (
     <main className="px-10 py-5 tablet:p-15">
@@ -69,14 +75,19 @@ export default function BuynowPage({
         <LineDivider className="my-5 tablet:my-10" />
       </section>
       <section>
-        <VoucherSection />
+        <VoucherSection voucherShop={voucherShop} selectedVocuher={selectedVocuher} handleSelectedVoucher={handleSelectedVoucher} />
         <LineDivider className="my-5 tablet:my-10" />
       </section>
       <section>
         <PaymentMehtod handleSelectedPayment={handleSelectedPayment} selectedPayment={paymentMethod} />
       </section>
       <section>
-        <SummarySection totalPriceItem={totalPriceItem} totalShippingCost={totalShippingCost} appliedVoucher={null} isProtected={isProtected} />
+        <SummarySection
+          totalPriceItem={totalPriceItem}
+          totalShippingCost={totalShippingCost}
+          appliedVoucher={selectedVocuher}
+          isProtected={isProtected}
+        />
       </section>
       <PaynowBtn isCompleted={isCompleted} handlePayBtn={handlePayBtn} orderStatus={orderStatus} />
       <SuccessAlert isOpen={editAddressStatus === "success"} text="Success edit user" />

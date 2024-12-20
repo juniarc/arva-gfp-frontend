@@ -1,113 +1,147 @@
 "use client";
 
-import React, { useState } from "react";
+import { customeTheme } from "@/interfaces/theme/customTheme";
+import { LoginBody } from "@/types/types";
+import { ErrorMessage, Form, Formik } from "formik";
+import dynamic from "next/dynamic";
+import { object, string } from "yup";
+import Image from "next/image";
+import { Input, Spinner } from "@material-tailwind/react";
+import { useState } from "react";
+import { IoMailOutline } from "react-icons/io5";
+import { RiKey2Line } from "react-icons/ri";
+import Link from "next/link";
+import SuccessAlert from "../alerts/SuccessAlert";
+import FailAlert from "../alerts/FailAlert";
 import { useRouter } from "next/navigation";
-import { HiOutlineUser } from "react-icons/hi2";
-import { HiOutlineKey } from "react-icons/hi";
-import { HiMiniEyeSlash } from "react-icons/hi2";
-import { FcGoogle } from "react-icons/fc";
+import api from "@/services/api/api";
+
+const DynamicThemeProvider = dynamic(() => import("@material-tailwind/react").then((mod) => mod.ThemeProvider), { ssr: false });
 
 export default function LoginForm() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [errors, setErrors] = useState({ username: "", password: "" });
   const router = useRouter();
+  const [status, setStatus] = useState<"loading" | "error" | "idle" | "success">("idle");
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    let hasError = false;
-    const newErrors = { username: "", password: "" };
-
-    if (!username) {
-      newErrors.username = "Username cannot be empty";
-      hasError = true;
-    }
-
-    if (!password) {
-      newErrors.password = "Password cannot be empty";
-      hasError = true;
-    }
-
-    if (hasError) {
-      setErrors(newErrors);
-    } else {
-      console.log("Form submitted successfully");
-    }
+  const initialValues = {
+    email: "",
+    password: "",
   };
 
-  const navigateToRegister = () => {
-    router.push("/register");
-  };
+  const validationSchema = object({
+    email: string().email().required("Email is required"),
+    password: string().required("Password is required"),
+  });
 
+  const handleSubmit = async (values: LoginBody) => {
+    setStatus("loading");
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (response.ok) {
+        setStatus("success");
+        setTimeout(() => {
+          setStatus("idle");
+        }, 2000);
+        window.location.href = "/";
+      }
+    } catch (error) {
+      setStatus("error");
+      setTimeout(() => {
+        setStatus("idle");
+      }, 2000);
+    }
+  };
   return (
-    <div className="w-full max-w-sm p-4">
-      <h2 className="text-2xl font-bold mb-6 text-center">Login to Your Account</h2>
-      <form onSubmit={handleSubmit}>
-        {/* Username Field */}
-        <div className="mb-6">
-          <div className="flex items-center border-b-2 border-gray-300 py-7">
-            <HiOutlineUser className="mr-2 text-gray-500" />
-            <input
-              type="text"
-              id="username"
-              name="username"
-              className="w-full bg-transparent outline-none"
-              placeholder="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
-          {errors.username && <p className="text-red-500 text-xs mt-1">{errors.username}</p>}
-        </div>
-
-        {/* Password Field */}
-        <div className="mb-6">
-          <div className="flex items-center border-b-2 border-gray-300 py-7">
-            <HiOutlineKey className="mr-2 text-gray-500" />
-            <input
-              type="password"
-              id="password"
-              name="password"
-              className="w-full bg-transparent outline-none"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <HiMiniEyeSlash className="ml-2 text-gray-500 cursor-pointer" />
-          </div>
-          {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password}</p>}
-        </div>
-
-        {/* Submit Button */}
-        <button type="submit" className="w-full bg-[#5B5B5B] hover:bg-[#969696] text-white font-serif font-semibold py-7 rounded">
-          Sign In
-        </button>
-
-        {/* Divider with Lines */}
-        <div className="flex items-center my-6">
-          <hr className="flex-grow border-gray-300" />
-          <span className="px-4 text-gray-500 py-7">or login with</span>
-          <hr className="flex-grow border-gray-300" />
-        </div>
-
-        {/* Google Login */}
-        <button type="button" className="w-full flex items-center justify-center border border-gray-300 py-7 rounded">
-          <FcGoogle className="mr-2 text-x2" />
-          Login with Google
-        </button>
-
-        {/* Sign Up Prompt */}
-        <p className="text-center text-gray-600 mb-4 py-7">Don't have an account?</p>
-
-        {/* Sign Up Button */}
-        <button
-          type="button"
-          onClick={navigateToRegister}
-          className="w-full bg-secondary hover:bg-primary text-black font-serif font-semibold py-7 rounded mb-4"
-        >
-          Sign Up
-        </button>
-      </form>
-    </div>
+    <>
+      <div className="w-full mt-10 px-20">
+        <DynamicThemeProvider value={customeTheme}>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={(values) => {
+              handleSubmit(values);
+            }}
+          >
+            {({ errors, touched, values, handleChange, isValid, dirty }) => (
+              <Form>
+                <div className="flex flex-col gap-5">
+                  <div>
+                    <div className="flex items-center gap-10 ">
+                      <div className="pt-6 w-20 h-20 flex items-center justify-center">
+                        <IoMailOutline className="text-xl" />
+                      </div>
+                      <Input
+                        name="email"
+                        label="Enter your email"
+                        value={values.email}
+                        onChange={handleChange}
+                        crossOrigin={undefined}
+                        className="tablet:text-base "
+                        variant="standard"
+                      />
+                    </div>
+                    <p className={`text-red mt-5 pl-[50px] ${touched.email && errors.email ? "visible" : ""}`}>
+                      <ErrorMessage name="email" />
+                    </p>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-10">
+                      <div className="pt-4 w-20 h-20 flex items-center justify-center">
+                        <RiKey2Line className="text-xl" />
+                      </div>
+                      <Input
+                        name="password"
+                        type="password"
+                        label="Enter your password"
+                        value={values.password}
+                        onChange={handleChange}
+                        crossOrigin={undefined}
+                        className="tablet:text-base "
+                        variant="standard"
+                      />
+                    </div>
+                    <p className={`text-red mt-5 pl-[50px] ${touched.password && errors.password ? "visible" : ""}`}>
+                      <ErrorMessage name="password" />
+                    </p>
+                  </div>
+                  <div className="w-full mt-5 flex justify-between gap-5">
+                    {status === "loading" ? (
+                      <div className="w-full py-3  flex items-center justify-center">
+                        <Spinner color="green" />
+                      </div>
+                    ) : (
+                      <>
+                        <button
+                          className={`${!(isValid && dirty) ? "bg-gray" : "bg-primary hover:bg-dark-green transition-colors ease-in"}  w-full text-white font-bold rounded py-5 px-5}`}
+                          disabled={!(isValid && dirty)}
+                        >
+                          Login
+                        </button>
+                      </>
+                    )}
+                  </div>
+                  <div className="w-full mt-5">
+                    <p className="w-full text-center text-xs">Don’t have an account ?</p>
+                    <div className="w-full bg-secondary hover:bg-secondary/80 transition-colors ease-in rounded flex items-center justify-center py-5 mt-10">
+                      <Link href="/register" className="text-center font-semibold text-primary ">
+                        Sign Up
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              </Form>
+            )}
+          </Formik>
+        </DynamicThemeProvider>
+      </div>
+      <SuccessAlert isOpen={status === "success"} text="Registration successful" />
+      <FailAlert isOpen={status === "error"} text="Registration failed. Try again" />
+    </>
   );
 }

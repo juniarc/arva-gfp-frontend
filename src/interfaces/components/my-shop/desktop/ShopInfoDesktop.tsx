@@ -6,6 +6,7 @@ import ShopInfoModal from "../../modals/ShopInfoModal";
 import { useState } from "react";
 import { ReqShopBody, ShopDetail } from "@/types/types";
 import { format } from "date-fns";
+import uriHelpers from "@/utils/uriHelpers";
 
 interface ShopInfoProps extends ShopDetail {
   totalRatings: number;
@@ -57,6 +58,8 @@ export default function ShopInfoDesktop({
     handleEditShop({ ...values });
   };
 
+  const formatedShopnameForUrl = uriHelpers.formatStringForUrl(shop_name ?? "shop");
+
   return (
     <div>
       <div className="flex items-center justify-between">
@@ -65,7 +68,9 @@ export default function ShopInfoDesktop({
             <Image src={shop_image} width={60} height={60} alt="Shop Image" className="w-full h-full object-cover object-center rounded-full" />
           </div>
           <div className="h-full flex flex-col gap-2">
-            <h3 className={`${poppins.className} font-bold capitalize`}>{shop_name}</h3>
+            <a href={`/${formatedShopnameForUrl}-${shop_id}`} className={`${poppins.className} font-bold capitalize text-2xl cursor-pointer`}>
+              {shop_name}
+            </a>
             <span className="flex items-center gap-2 text-dark-gray capitalize">
               <FaLocationDot /> {shop_address_city}
             </span>

@@ -14,9 +14,10 @@ interface TagModalProps {
   product_id: number;
   token: string | undefined;
   setNewTag: (newTag: Tag) => void;
+  handleReqTagStatus: (status: "idle" | "loading" | "success" | "error") => void;
 }
 
-export default function TagModal({ isOpen, handleCloseModal, product_id, token, setNewTag }: TagModalProps) {
+export default function TagModal({ isOpen, handleCloseModal, product_id, token, setNewTag, handleReqTagStatus }: TagModalProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [allTags, setAllTags] = useState<Tag[]>([]);
   useEffect(() => {
@@ -37,46 +38,58 @@ export default function TagModal({ isOpen, handleCloseModal, product_id, token, 
       try {
         setNewTag(existingTag);
         await api.createProductTag(product_id, token, { tag_id: existingTag.tag_id });
-        alert("Success add tag to product");
+        setIsLoading(false);
+        handleReqTagStatus("success");
+        setTimeout(() => {
+          handleReqTagStatus("idle");
+        }, 3000);
+      } catch (error) {
+        setIsLoading(false);
+
+        handleReqTagStatus("error");
+        setTimeout(() => {
+          handleReqTagStatus("idle");
+        }, 3000);
+      }
+    } else {
+      try {
+        const createTag = await api.createTag(token, { tag_name: tag.toLowerCase() });
+
+        if (createTag.error) {
+          alert(createTag.error);
+        }
+
+        const updatedTagList: Tag[] = await api.getAllTags();
+        setAllTags(updatedTagList);
+
+        const newTag = updatedTagList.find((item) => item.tag_name.toLowerCase() === tag.toLowerCase());
+
+        if (newTag) {
+          try {
+            await api.createProductTag(product_id, token, { tag_id: newTag.tag_id });
+            setNewTag(newTag);
+            setIsLoading(false);
+            handleReqTagStatus("success");
+            setTimeout(() => {
+              handleReqTagStatus("idle");
+            }, 3000);
+          } catch (error) {
+            setIsLoading(false);
+
+            handleReqTagStatus("error");
+            setTimeout(() => {
+              handleReqTagStatus("idle");
+            }, 3000);
+          }
+        } else {
+          throw new Error("Tag baru tidak ditemukan di daftar terbaru.");
+        }
       } catch (error) {
         console.log(error);
-        alert("Fail add tag to product");
+        alert("error");
       } finally {
         setIsLoading(false);
       }
-    }
-
-    try {
-      const createTag = await api.createTag(token, { tag_name: tag.toLowerCase() });
-
-      if (createTag.error) {
-        alert(createTag.error);
-      }
-
-      const updatedTagList: Tag[] = await api.getAllTags();
-      setAllTags(updatedTagList);
-
-      const newTag = updatedTagList.find((item) => item.tag_name.toLowerCase() === tag.toLowerCase());
-
-      if (newTag) {
-        try {
-          await api.createProductTag(product_id, token, { tag_id: newTag.tag_id });
-          setNewTag(newTag);
-          alert("Success add tag to product");
-        } catch (error) {
-          console.log(error);
-          alert("Fail add tag to product");
-        } finally {
-          setIsLoading(false);
-        }
-      } else {
-        throw new Error("Tag baru tidak ditemukan di daftar terbaru.");
-      }
-    } catch (error) {
-      console.log(error);
-      alert("error");
-    } finally {
-      setIsLoading(false);
     }
   };
 
