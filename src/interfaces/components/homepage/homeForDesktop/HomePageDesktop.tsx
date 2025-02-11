@@ -13,10 +13,10 @@ interface HomePageProps {
 export default async function HomePageDesktop({ token, userId }: HomePageProps) {
   const fruitId = convertCategoryNameToId("fruits");
   const seedId = convertCategoryNameToId("seeds");
-  const vegetableId = convertCategoryNameToId("vegetables");
-  const [popularProducts, fruitProducts, seedProducts] = await Promise.all([
-    api.getAllProducts(6),
+  const eqId = convertCategoryNameToId("equipments");
+  const [popularProducts, eqProducts, seedProducts] = await Promise.all([
     api.getAllProductsByCategory(fruitId),
+    api.getAllProductsByCategory(eqId),
     api.getAllProductsByCategory(seedId),
   ]);
   const slicedProducts = popularProducts?.slice(0, 6);
@@ -41,7 +41,7 @@ export default async function HomePageDesktop({ token, userId }: HomePageProps) 
             <HomeAds />
           </section>
           <section className="w-full">
-            <ProductListByCategoryDesktop userId={userId} classname="grid-cols-4" products={fruitProducts ?? []} category="fruit" token={token} />
+            <ProductListByCategoryDesktop userId={userId} classname="grid-cols-4" products={eqProducts ?? []} category="fruit" token={token} />
           </section>
           <section className="w-full mt-10">
             <HomeCategoriesDesktop />
