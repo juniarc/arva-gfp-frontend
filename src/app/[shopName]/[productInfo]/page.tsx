@@ -63,12 +63,14 @@ export default async function Page({ params }: { params: Promise<{ productInfo: 
   const productId = idMatch ? idMatch[1] : null;
   const categoryId = convertCategoryNameToId("fruits");
 
+  // const detailProduct = await api.getDetailProductById(Number(productId));
   const detailProduct = await api.getDetailProductById(Number(productId));
 
-  const [anotherShopProducts, categoryProducts] = await Promise.all([
-    // api.getProductByShopId(detailProduct.shop.shop_id),
-    api.getAllProductsByCategory(categoryId),
-  ]);
+  const anotherShopProducts = detailProduct?.shop?.shop_id ? await api.getProductByShopId(Number(detailProduct.shop.shop_id)) : [];
+  // const [anotherShopProducts, categoryProducts] = await Promise.all([
+  //   api.getProductByShopId(detailProduct.shop.shop_id),
+  //   api.getAllProductsByCategory(categoryId),
+  // ]);
 
   let wisthlist = false;
   let wishlistId = 0;
