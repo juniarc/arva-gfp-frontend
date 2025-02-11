@@ -41,7 +41,7 @@ export default async function HomePage({ token, userId }: HomePageProps) {
         <ProductListByCategory userId={userId} products={fruitProducts} category="fruit" token={token} />
       </section>
       <section className="w-full">
-        <ProductListByCategory userId={userId} products={seedId} category="vegetable" token={token} />
+        <ProductListByCategory userId={userId} products={seedProducts} category="vegetable" token={token} />
       </section>
     </main>
   );
