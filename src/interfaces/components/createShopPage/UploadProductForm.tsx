@@ -154,7 +154,7 @@ export default function UploadProductForm({ initialValues, handleSubmit, handleP
   };
   return (
     <div className="mt-10 ">
-      <h5 className="font-bold text-center w-full mb-10 ">Shop Information</h5>
+      <h5 className="font-bold text-center w-full mb-10 ">Product Information</h5>
       <div>
         <DynamicThemeProvider value={customeTheme}>
           <Formik
