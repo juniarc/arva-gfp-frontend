@@ -4,6 +4,7 @@ import ProductListByCategoryDesktop from "./ProductListByCategoryDesktop";
 import HomeAds from "../homeAds/HomeAds";
 import HomeCategoriesDesktop from "./HomeCategoriesDesktop";
 import AsideCategories from "./AsideCategories";
+import { convertCategoryNameToId } from "@/utils/elementHelpers";
 
 interface HomePageProps {
   token?: string | undefined;
@@ -12,6 +13,14 @@ interface HomePageProps {
 export default async function HomePageDesktop({ token, userId }: HomePageProps) {
   const products = (await api.getAllProducts()) || [];
   const slicedProducts = products?.slice(0, 6);
+
+  const fruitId = convertCategoryNameToId("fruits");
+  const seedId = convertCategoryNameToId("seeds");
+  const vegetableId = convertCategoryNameToId("vegetables");
+  // const popularProducts: Product[] = (await api.getAllProducts(6)) || [];
+  const fruitProducts = (await api.getAllProductsByCategory(fruitId)) || [];
+  const seedProducts = (await api.getAllProductsByCategory(seedId)) || [];
+  // const vegetableProducts = (await api.getAllProductsByCategory(vegetableId)) || [];
 
   return (
     <main className="w-full bg-white desktop:px-[120px]">
@@ -33,13 +42,13 @@ export default async function HomePageDesktop({ token, userId }: HomePageProps) 
             <HomeAds />
           </section>
           <section className="w-full">
-            <ProductListByCategoryDesktop userId={userId} classname="grid-cols-4" products={slicedProducts} category="fruit" token={token} />
+            <ProductListByCategoryDesktop userId={userId} classname="grid-cols-4" products={fruitProducts} category="fruit" token={token} />
           </section>
           <section className="w-full mt-10">
             <HomeCategoriesDesktop />
           </section>
           <section className="w-full mt-10">
-            <ProductListByCategoryDesktop userId={userId} classname="grid-cols-4" products={slicedProducts} category="vegetable" />
+            <ProductListByCategoryDesktop userId={userId} classname="grid-cols-4" products={seedProducts} category="vegetable" />
           </section>
         </div>
       </div>
