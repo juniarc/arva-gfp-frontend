@@ -37,6 +37,7 @@ export default function AddToCartModal({
   token,
   userId,
 }: AddToCartModalProps) {
+  console.log(variant);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedVariant, setSelectedVariant] = useState<Variant>(variant[0]);

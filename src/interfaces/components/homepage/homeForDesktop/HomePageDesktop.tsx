@@ -11,7 +11,10 @@ interface HomePageProps {
 }
 export default async function HomePageDesktop({ token, userId }: HomePageProps) {
   const products = (await api.getAllProducts()) || [];
-  const slicedProducts = products?.slice(0, 6);
+  const fruitProducts = (await api.getAllProductsByCategory(2))?.slice(0, 8) || [];
+  const seedProducts = (await api.getAllProductsByCategory(1))?.slice(0, 8) || [];
+  // const vegetableProducts = (await api.getAllProductsByCategory(3))?.slice(0, 8) || [];
+  const slicedProducts = products?.slice(0, 8);
 
   return (
     <main className="w-full bg-white desktop:px-[120px]">
@@ -37,13 +40,13 @@ export default async function HomePageDesktop({ token, userId }: HomePageProps) 
             <HomeAds />
           </section>
           <section className="w-full">
-            <ProductListByCategoryDesktop userId={userId} classname="grid-cols-4" products={slicedProducts} category="fruit" token={token} />
+            <ProductListByCategoryDesktop userId={userId} classname="grid-cols-4" products={fruitProducts} category="fruit" token={token} />
           </section>
           <section className="w-full mt-10">
             <HomeCategoriesDesktop />
           </section>
           <section className="w-full mt-10">
-            <ProductListByCategoryDesktop userId={userId} classname="grid-cols-4" products={slicedProducts} category="vegetable" />
+            <ProductListByCategoryDesktop userId={userId} classname="grid-cols-4" products={seedProducts} category="vegetable" />
           </section>
         </div>
       </div>

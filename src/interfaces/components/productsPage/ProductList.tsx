@@ -13,6 +13,7 @@ interface ProductListProps {
   token: string | undefined;
 }
 export default function ProductList({ products, userId, token }: ProductListProps) {
+  console.log(products);
   const ITEMS_PER_PAGE = 6;
   const totalPages = Math.ceil(products.length / ITEMS_PER_PAGE);
   const MAX_INDICATORS = 4;
@@ -32,18 +33,18 @@ export default function ProductList({ products, userId, token }: ProductListProp
       product_name: original.product_name,
       description: original.description,
       product_type: original.product_type,
-      images: original.image,
+      images: original.images,
       category: original.category,
-      discounts: original.discount,
+      discounts: original.discounts,
       ratings: original.ratings,
       shipping_cost: original.shipping_cost,
       shop: original.shop,
       sold: original.sold,
-      variants: original.variant.map((variant: Variant) => ({
-        price: variant.variant_price,
+      variants: original.variants.map((variant: Variant) => ({
+        price: variant.price,
         product_id: original.product_id,
-        stock: variant.variant_stock,
-        unit: variant.variant_unit,
+        stock: variant.stock,
+        unit: variant.unit,
         variant_id: variant.variant_id,
         variant_name: variant.variant_name,
       })),
