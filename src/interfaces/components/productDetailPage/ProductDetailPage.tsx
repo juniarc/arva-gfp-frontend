@@ -44,10 +44,10 @@ export default function ProductDetailPage({
           <ReviewSection reviews={dummyReviews} />
         </section>
         <section className="w-full">
-          <ProductListByCategory userId={userId} products={anotherShopProducts} category={productDetail.shop.shop_name} />
+          <ProductListByCategory userId={userId} products={anotherShopProducts} category={productDetail.shop.shop_name} token={token} />
         </section>
         <section className="w-full">
-          <ProductListByCategory userId={userId} products={categoryProducts} category="Fruit" />
+          <ProductListByCategory userId={userId} products={categoryProducts} category="Fruit" token={token} />
         </section>
         <FloatingDrawer
           userId={userId}

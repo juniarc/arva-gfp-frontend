@@ -6,6 +6,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FaStar } from "react-icons/fa6";
 import { Shop } from "@/types/types";
 import uriHelpers from "@/utils/uriHelpers";
+import Placeholder from "@/../public/images/dummy-photo-product.jpg";
 
 interface ShopInfoProps extends Shop {}
 export default function ShopInfo({ shop_image, shop_name, shop_address_city, shop_id }: ShopInfoProps) {
@@ -14,7 +15,13 @@ export default function ShopInfo({ shop_image, shop_name, shop_address_city, sho
     <div className="px-10 desktop:p-0 flex items-center justify-between desktop:justify-normal desktop:gap-20 tablet:px-[150px]">
       <div className="flex items-center gap-5 tablet:gap-10">
         <div className="h-[65px] tablet:h-[72px] aspect-square">
-          <Image src={shop_image} width={60} height={60} alt="Shop Image" className="w-full h-full object-cover object-center rounded-full" />
+          <Image
+            src={shop_image ? shop_image : Placeholder}
+            width={60}
+            height={60}
+            alt="Shop Image"
+            className="w-full h-full object-cover object-center rounded-full"
+          />
         </div>
         <div className="h-full flex flex-col gap-2">
           <h3 className={`${poppins.className} font-bold capitalize`}>{shop_name}</h3>

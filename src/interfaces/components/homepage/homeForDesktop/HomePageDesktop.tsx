@@ -23,10 +23,6 @@ export default async function HomePageDesktop({ token, userId }: HomePageProps) 
           <div className=" bg-light-gray rounded-lg p-10">
             <AsideCategories />
           </div>
-          <div>
-            <div className="w-full h-[300px] bg-light-gray mt-10"></div>
-            <div className="w-full h-[300px] bg-light-gray mt-10"></div>
-          </div>
         </div>
 
         <div className="max-w-[78%]">

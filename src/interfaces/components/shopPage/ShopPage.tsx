@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import { calculateRatings, checkIsTextClamped } from "@/utils/elementHelpers";
 import { useEffect, useRef, useState } from "react";
 import { BsChevronDown } from "react-icons/bs";
+import PlaceHolder from "@/../public/images/dummy-photo-product.jpg";
 
 interface ShopPageProps extends ShopDetail {
   products: Product[];
@@ -52,7 +53,13 @@ export default function ShopPage({
       <section>
         <div className="flex items-center gap-5 tablet:gap-10">
           <div className="h-[65px] tablet:h-[72px] aspect-square">
-            <Image src={shop_image} width={60} height={60} alt="Shop Image" className="w-full h-full object-cover object-center rounded-full" />
+            <Image
+              src={shop_image ? shop_image : PlaceHolder}
+              width={60}
+              height={60}
+              alt="Shop Image"
+              className="w-full h-full object-cover object-center rounded-full"
+            />
           </div>
           <div className="h-full flex flex-col gap-2">
             <h3 className={`${poppins.className} font-bold capitalize`}>{shop_name}</h3>
@@ -86,7 +93,7 @@ export default function ShopPage({
                 <BsChevronDown className={descMoreOpen ? "rotate-180" : ""} />
               </span>
             </button>
-          )}{" "}
+          )}
         </div>
         <LineDivider className="my-5 tablet:my-10" />
         <div className="mt-5">

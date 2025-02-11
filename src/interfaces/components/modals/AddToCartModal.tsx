@@ -72,7 +72,7 @@ export default function AddToCartModal({
     setIsLoading(true);
     if (token && userId) {
       try {
-        addItemToCart(product_id, quantity, selectedVariant?.variant_id ?? 0, token, userId);
+        await addItemToCart(product_id, quantity, selectedVariant?.variant_id ?? 0, token, userId);
       } catch (error) {
         alert("Failed");
       } finally {
@@ -81,7 +81,7 @@ export default function AddToCartModal({
       }
     } else {
       router.push("/login");
-      handleCloseModal();
+      // handleCloseModal();
     }
   };
   if (isOpen) {

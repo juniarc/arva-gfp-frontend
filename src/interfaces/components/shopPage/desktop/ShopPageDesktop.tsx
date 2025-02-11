@@ -8,6 +8,7 @@ import { format } from "date-fns";
 import { calculateRatings, checkIsTextClamped } from "@/utils/elementHelpers";
 import { useEffect, useRef, useState } from "react";
 import { BsChevronDown } from "react-icons/bs";
+import Placeholder from "@/../public/images/dummy-photo-product.jpg";
 
 interface ShopPageProps extends ShopDetail {
   products: Product[];
@@ -56,7 +57,13 @@ export default function ShopPageDesktop({
           "
           >
             <div className="h-[65px] tablet:h-[72px] aspect-square">
-              <Image src={shop_image} width={60} height={60} alt="Shop Image" className="w-full h-full object-cover object-center rounded-full" />
+              <Image
+                src={shop_image ? shop_image : Placeholder}
+                width={60}
+                height={60}
+                alt="Shop Image"
+                className="w-full h-full object-cover object-center rounded-full"
+              />
             </div>
             <div className="h-full flex flex-col gap-2">
               <h3 className={`${poppins.className} font-bold capitalize`}>{shop_name}</h3>

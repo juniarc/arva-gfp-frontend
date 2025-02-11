@@ -46,7 +46,7 @@ export default function LoadingSkeletonDesktop() {
                     <button>
                       <LuMinus />
                     </button>
-                    <div className="w-55 text-center text-black"></div>
+                    <div className="w-55 text-center text-black">1</div>
                     <button>
                       <LuPlus />
                     </button>

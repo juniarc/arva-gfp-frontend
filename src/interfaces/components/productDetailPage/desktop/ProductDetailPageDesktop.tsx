@@ -55,10 +55,11 @@ export default function ProductDetailPageDesktop({
               classname="grid-cols-5"
               products={anotherShopProducts}
               category={productDetail.shop.shop_name}
+              token={token}
             />
           </section>
           <section className="w-full mt-10">
-            <ProductListByCategoryDesktop userId={userId} classname="grid-cols-5" products={categoryProducts} category="Fruit" />
+            <ProductListByCategoryDesktop userId={userId} classname="grid-cols-5" products={categoryProducts} category="Fruit" token={token} />
           </section>
         </div>
       </main>
