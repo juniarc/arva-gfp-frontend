@@ -16,12 +16,12 @@ export default async function HomePage({ token, userId }: HomePageProps) {
   const fruitId = convertCategoryNameToId("fruits");
   const seedId = convertCategoryNameToId("seeds");
   const vegetableId = convertCategoryNameToId("vegetables");
-  const products = (await api.getAllProducts()) || [];
-  const slicedProducts = products?.slice(0, 6);
-  // const popularProducts: Product[] = (await api.getAllProducts(6)) || [];
-  const fruitProducts = (await api.getAllProductsByCategory(fruitId)) || [];
-  const seedProducts = (await api.getAllProductsByCategory(seedId)) || [];
-  // const vegetableProducts = (await api.getAllProductsByCategory(vegetableId)) || [];
+  const [popularProducts, fruitProducts, seedProducts] = await Promise.all([
+    api.getAllProducts(6),
+    api.getAllProductsByCategory(fruitId),
+    api.getAllProductsByCategory(seedId),
+  ]);
+  const slicedProducts = popularProducts?.slice(0, 6);
 
   return (
     <main className="w-full bg-white desktop:px-[120px]">
@@ -32,16 +32,16 @@ export default async function HomePage({ token, userId }: HomePageProps) {
         <HomeCategories />
       </section>
       <section className="w-full mt-6">
-        <ProductListByCategory userId={userId} products={slicedProducts} category="popular" token={token} />
+        <ProductListByCategory userId={userId} products={slicedProducts ?? []} category="popular" token={token} />
       </section>
       <section className="w-full">
         <HomeAds />
       </section>
       <section className="w-full">
-        <ProductListByCategory userId={userId} products={fruitProducts} category="fruit" token={token} />
+        <ProductListByCategory userId={userId} products={fruitProducts ?? []} category="fruit" token={token} />
       </section>
       <section className="w-full">
-        <ProductListByCategory userId={userId} products={seedProducts} category="vegetable" token={token} />
+        <ProductListByCategory userId={userId} products={seedProducts ?? []} category="vegetable" token={token} />
       </section>
     </main>
   );

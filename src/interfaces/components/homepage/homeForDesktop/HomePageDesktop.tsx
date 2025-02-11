@@ -11,16 +11,15 @@ interface HomePageProps {
   userId: number;
 }
 export default async function HomePageDesktop({ token, userId }: HomePageProps) {
-  const products = (await api.getAllProducts()) || [];
-  const slicedProducts = products?.slice(0, 6);
-
   const fruitId = convertCategoryNameToId("fruits");
   const seedId = convertCategoryNameToId("seeds");
   const vegetableId = convertCategoryNameToId("vegetables");
-  // const popularProducts: Product[] = (await api.getAllProducts(6)) || [];
-  const fruitProducts = (await api.getAllProductsByCategory(fruitId)) || [];
-  const seedProducts = (await api.getAllProductsByCategory(seedId)) || [];
-  // const vegetableProducts = (await api.getAllProductsByCategory(vegetableId)) || [];
+  const [popularProducts, fruitProducts, seedProducts] = await Promise.all([
+    api.getAllProducts(6),
+    api.getAllProductsByCategory(fruitId),
+    api.getAllProductsByCategory(seedId),
+  ]);
+  const slicedProducts = popularProducts?.slice(0, 6);
 
   return (
     <main className="w-full bg-white desktop:px-[120px]">
