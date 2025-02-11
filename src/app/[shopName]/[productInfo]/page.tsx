@@ -65,10 +65,10 @@ export default async function Page({ params }: { params: Promise<{ productInfo: 
 
   const detailProduct = await api.getDetailProductById(Number(productId));
 
-  // const [anotherShopProducts, categoryProducts] = await Promise.all([
-  //   api.getProductByShopId(detailProduct.shop.shop_id),
-  //   api.getAllProductsByCategory(categoryId),
-  // ]);
+  const [anotherShopProducts, categoryProducts] = await Promise.all([
+    // api.getProductByShopId(detailProduct.shop.shop_id),
+    api.getAllProductsByCategory(categoryId),
+  ]);
 
   let wisthlist = false;
   let wishlistId = 0;
@@ -88,7 +88,7 @@ export default async function Page({ params }: { params: Promise<{ productInfo: 
         <ProductDetailPage
           productDetail={detailProduct}
           dummyReviews={dummyReviews}
-          anotherShopProducts={[]}
+          anotherShopProducts={anotherShopProducts ?? []}
           categoryProducts={[]}
           isWishlist={wisthlist}
           token={token}
@@ -101,7 +101,7 @@ export default async function Page({ params }: { params: Promise<{ productInfo: 
       <ProductDetailPageDesktop
         productDetail={detailProduct}
         dummyReviews={dummyReviews}
-        anotherShopProducts={[]}
+        anotherShopProducts={anotherShopProducts ?? []}
         categoryProducts={[]}
         isWishlist={wisthlist}
         token={token}
