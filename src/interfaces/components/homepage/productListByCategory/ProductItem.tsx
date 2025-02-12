@@ -59,6 +59,19 @@ export default function ProductItem({
 
   const discountValue = useMemo(() => discount?.find((item) => item.discount_type === "percentage"), [discount]);
   const formattedRatings = ratings ? parseFloat(parseFloat(ratings).toFixed(2)) : 0;
+  if (!product_id)
+    return (
+      <div className="animate-pulse shadow-lg w-56 min-w-56 h-[330px] tablet:w-[224px] tablet:h-[350px] rounded-lg">
+        <div className="w-full h-1/2 bg-gray animate-pulse"></div>
+        <div className="w-full flex-grow p-5 tablet:p-7 flex flex-col desktop:gap-3">
+          <div className="bg-gray w-20 h-6 animate-pulse rounded mb-3"></div>
+          <div className="bg-gray w-full h-8 animate-pulse rounded mb-15"></div>
+          <div className="bg-gray w-30 h-7 animate-pulse rounded mb-3"></div>
+          <div className="bg-gray w-24 h-8 animate-pulse rounded mb-3"></div>
+          <div className="bg-gray w-15 h-8 animate-pulse rounded mb-3"></div>
+        </div>
+      </div>
+    );
   return (
     <div className="shadow-md w-56 h-[330px] desktop:h-auto desktop:w-full bg-white rounded-lg flex flex-col relative mr-10">
       {product_type === "organic" && (
@@ -69,9 +82,9 @@ export default function ProductItem({
       <div className="w-full h-[176px] overflow-hidden">
         <Image
           src={firstImageUrl}
-          width={224}
-          height={176}
-          quality={100}
+          width={112}
+          height={88}
+          quality={30}
           className="w-full h-full object-cover object-center rounded-t-lg"
           alt="Product Image"
         />
