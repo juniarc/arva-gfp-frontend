@@ -4,6 +4,7 @@ import "@/styles/globals.css";
 import HeaderWrapper from "@/interfaces/components/global/header/HeaderWrapper";
 import Footer from "@/interfaces/components/global/footer/Footer";
 import { CartProvider } from "@/hooks/cart/CartContext";
+import { ScreenSizeProvider } from "@/hooks/cart/ScreenSizeProvider";
 
 export const metadata: Metadata = {
   title: "Arva",
@@ -18,11 +19,13 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${poppins.variable} ${playfairDisplay.variable}`}>
       <body className="w-screen min-h-screen antialiased overflow-x-hidden">
-        <CartProvider>
-          <HeaderWrapper />
-          {children}
-          <Footer />
-        </CartProvider>
+        <ScreenSizeProvider>
+          <CartProvider>
+            <HeaderWrapper />
+            {children}
+            <Footer />
+          </CartProvider>
+        </ScreenSizeProvider>
         <div id="modal-root"></div>
       </body>
     </html>

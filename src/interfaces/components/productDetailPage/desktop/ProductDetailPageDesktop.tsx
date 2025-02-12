@@ -5,7 +5,7 @@ import ShopInfo from "@/interfaces/components/productDetailPage/ShopInfo";
 import React from "react";
 import { Product, ProductDetail } from "@/types/types";
 import ProductInfoDesktop from "./ProductInfoDesktop";
-// import ProductListByCategoryDesktop from "../../homepage/homeForDesktop/ProductListByCategoryDesktop";
+import ProductListByCategoryDesktop from "../../homepage/homeForDesktop/ProductListByCategoryDesktop";
 
 interface ProductDetailPageProps {
   productDetail: ProductDetail;
@@ -49,7 +49,7 @@ export default function ProductDetailPageDesktop({
           </div>
         </div>
         <div className="mt-10">
-          {/* <section className="w-full">
+          <section className="w-full">
             <ProductListByCategoryDesktop
               userId={userId}
               classname="grid-cols-5"
@@ -60,7 +60,7 @@ export default function ProductDetailPageDesktop({
           </section>
           <section className="w-full mt-10">
             <ProductListByCategoryDesktop userId={userId} classname="grid-cols-5" products={categoryProducts} category="Fruit" token={token} />
-          </section> */}
+          </section>
         </div>
       </main>
     );
