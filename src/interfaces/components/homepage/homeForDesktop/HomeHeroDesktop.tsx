@@ -1,9 +1,12 @@
+"use client";
+
 import HomeHero from "../homeHero/HomeHero";
 import dummyBanner1 from "@/../public/images/dummy-banner.jpg";
 import dummyBanner2 from "@/../public/images/dummy-banner-2.jpg";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 
-export default async function HomeHeroDesktop() {
+export default function HomeHeroDesktop() {
   return (
     <div className="w-full my-10 flex items-start gap-10">
       <div className="max-w-[66%] h-[460px] overflow-hidden rounded-lg">
